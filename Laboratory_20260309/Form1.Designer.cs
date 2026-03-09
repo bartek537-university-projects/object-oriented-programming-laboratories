@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             lbAddStudent = new Label();
             gbBasicDetails = new GroupBox();
-            cbStudyLevel = new ComboBox();
+            cbCollegeLevel = new ComboBox();
             dtpBirthDate = new DateTimePicker();
-            lbStudyLevel = new Label();
+            lbCollegeLevel = new Label();
             lbBirthDate = new Label();
             tbLastName = new TextBox();
             lbLastName = new Label();
@@ -50,17 +51,19 @@
             lbPostalCode = new Label();
             lbCity = new Label();
             tbCity = new TextBox();
-            listView1 = new ListView();
             lbStudentList = new Label();
             btnAddStudent = new Button();
             btnEditStudent = new Button();
             btnDeleteStudent = new Button();
             btnSaveStudentList = new Button();
             btnLoadStudentList = new Button();
+            lstStudents = new ListBox();
+            errorProvider = new ErrorProvider(components);
             gbBasicDetails.SuspendLayout();
             gbAddressDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudFlatNumber).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudBuildingNumber).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // lbAddStudent
@@ -75,9 +78,9 @@
             // 
             // gbBasicDetails
             // 
-            gbBasicDetails.Controls.Add(cbStudyLevel);
+            gbBasicDetails.Controls.Add(cbCollegeLevel);
             gbBasicDetails.Controls.Add(dtpBirthDate);
-            gbBasicDetails.Controls.Add(lbStudyLevel);
+            gbBasicDetails.Controls.Add(lbCollegeLevel);
             gbBasicDetails.Controls.Add(lbBirthDate);
             gbBasicDetails.Controls.Add(tbLastName);
             gbBasicDetails.Controls.Add(lbLastName);
@@ -92,11 +95,11 @@
             // 
             // cbStudyLevel
             // 
-            cbStudyLevel.FormattingEnabled = true;
-            cbStudyLevel.Location = new Point(136, 112);
-            cbStudyLevel.Name = "cbStudyLevel";
-            cbStudyLevel.Size = new Size(78, 23);
-            cbStudyLevel.TabIndex = 7;
+            cbCollegeLevel.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbCollegeLevel.Location = new Point(136, 112);
+            cbCollegeLevel.Name = "cbStudyLevel";
+            cbCollegeLevel.Size = new Size(78, 23);
+            cbCollegeLevel.TabIndex = 7;
             // 
             // dtpBirthDate
             // 
@@ -106,15 +109,16 @@
             dtpBirthDate.Name = "dtpBirthDate";
             dtpBirthDate.Size = new Size(140, 23);
             dtpBirthDate.TabIndex = 5;
+            dtpBirthDate.Validating += dtpBirthDate_Validating;
             // 
             // lbStudyLevel
             // 
-            lbStudyLevel.AutoSize = true;
-            lbStudyLevel.Location = new Point(6, 115);
-            lbStudyLevel.Name = "lbStudyLevel";
-            lbStudyLevel.Size = new Size(72, 15);
-            lbStudyLevel.TabIndex = 6;
-            lbStudyLevel.Text = "Rok studiów";
+            lbCollegeLevel.AutoSize = true;
+            lbCollegeLevel.Location = new Point(6, 115);
+            lbCollegeLevel.Name = "lbStudyLevel";
+            lbCollegeLevel.Size = new Size(72, 15);
+            lbCollegeLevel.TabIndex = 6;
+            lbCollegeLevel.Text = "Rok studiów";
             // 
             // lbBirthDate
             // 
@@ -128,9 +132,11 @@
             // tbLastName
             // 
             tbLastName.Location = new Point(136, 54);
+            tbLastName.MaxLength = 64;
             tbLastName.Name = "tbLastName";
             tbLastName.Size = new Size(159, 23);
             tbLastName.TabIndex = 3;
+            tbLastName.Validating += tbLastName_Validating;
             // 
             // lbLastName
             // 
@@ -153,9 +159,11 @@
             // tbFirstName
             // 
             tbFirstName.Location = new Point(136, 25);
+            tbFirstName.MaxLength = 32;
             tbFirstName.Name = "tbFirstName";
             tbFirstName.Size = new Size(159, 23);
             tbFirstName.TabIndex = 1;
+            tbFirstName.Validating += tbFirstName_Validating;
             // 
             // gbAddressDetails
             // 
@@ -186,9 +194,11 @@
             cbFlatNumberEnabled.TabIndex = 9;
             cbFlatNumberEnabled.Text = "Posiada";
             cbFlatNumberEnabled.UseVisualStyleBackColor = true;
+            cbFlatNumberEnabled.CheckedChanged += cbFlatNumberEnabled_CheckedChanged;
             // 
             // nudFlatNumber
             // 
+            nudFlatNumber.Enabled = false;
             nudFlatNumber.Location = new Point(136, 143);
             nudFlatNumber.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nudFlatNumber.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -214,6 +224,7 @@
             mtbPostalCode.Name = "mtbPostalCode";
             mtbPostalCode.Size = new Size(51, 23);
             mtbPostalCode.TabIndex = 3;
+            mtbPostalCode.Validating += mtbPostalCode_Validating;
             // 
             // lbFlatNumber
             // 
@@ -245,9 +256,11 @@
             // tbStreet
             // 
             tbStreet.Location = new Point(136, 84);
+            tbStreet.MaxLength = 80;
             tbStreet.Name = "tbStreet";
             tbStreet.Size = new Size(159, 23);
             tbStreet.TabIndex = 5;
+            tbStreet.Validating += tbStreet_Validating;
             // 
             // lbPostalCode
             // 
@@ -270,17 +283,11 @@
             // tbCity
             // 
             tbCity.Location = new Point(136, 26);
+            tbCity.MaxLength = 64;
             tbCity.Name = "tbCity";
             tbCity.Size = new Size(159, 23);
             tbCity.TabIndex = 1;
-            // 
-            // listView1
-            // 
-            listView1.Location = new Point(342, 52);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(318, 339);
-            listView1.TabIndex = 7;
-            listView1.UseCompatibleStateImageBehavior = false;
+            tbCity.Validating += tbCity_Validating;
             // 
             // lbStudentList
             // 
@@ -302,6 +309,7 @@
             btnAddStudent.TabIndex = 3;
             btnAddStudent.Text = "Dodaj studenta";
             btnAddStudent.UseVisualStyleBackColor = false;
+            btnAddStudent.Click += btnAddStudent_Click;
             // 
             // btnEditStudent
             // 
@@ -347,11 +355,24 @@
             btnLoadStudentList.Text = "Wczytaj listę studentów";
             btnLoadStudentList.UseVisualStyleBackColor = false;
             // 
+            // lstStudents
+            // 
+            lstStudents.FormattingEnabled = true;
+            lstStudents.Location = new Point(342, 52);
+            lstStudents.Name = "lstStudents";
+            lstStudents.Size = new Size(318, 334);
+            lstStudents.TabIndex = 7;
+            // 
+            // errorProvider
+            // 
+            errorProvider.ContainerControl = this;
+            // 
             // ManageStudentsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(672, 490);
+            Controls.Add(lstStudents);
             Controls.Add(btnLoadStudentList);
             Controls.Add(btnSaveStudentList);
             Controls.Add(btnDeleteStudent);
@@ -359,7 +380,6 @@
             Controls.Add(btnAddStudent);
             Controls.Add(lbStudentList);
             Controls.Add(gbAddressDetails);
-            Controls.Add(listView1);
             Controls.Add(gbBasicDetails);
             Controls.Add(lbAddStudent);
             DoubleBuffered = true;
@@ -371,6 +391,7 @@
             gbAddressDetails.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudFlatNumber).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudBuildingNumber).EndInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -384,11 +405,10 @@
         private Label lbFirstName;
         private TextBox tbFirstName;
         private TextBox tbLastName;
-        private Label lbStudyLevel;
+        private Label lbCollegeLevel;
         private Label lbBirthDate;
         private DateTimePicker dtpBirthDate;
-        private ComboBox cbStudyLevel;
-        private ListView listView1;
+        private ComboBox cbCollegeLevel;
         private Label lbFlatNumber;
         private Label lbBuildingNumber;
         private Label lbStreet;
@@ -406,5 +426,7 @@
         private Button btnDeleteStudent;
         private Button btnSaveStudentList;
         private Button btnLoadStudentList;
+        private ListBox lstStudents;
+        private ErrorProvider errorProvider;
     }
 }
