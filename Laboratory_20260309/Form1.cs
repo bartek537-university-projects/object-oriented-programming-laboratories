@@ -1,3 +1,4 @@
+using Laboratory_20260309.Domain;
 using Laboratory_20260309.Domain.Models;
 using System.Text.RegularExpressions;
 
@@ -10,11 +11,29 @@ namespace Laboratory_20260309
         [GeneratedRegex(PostalCodePattern)]
         private static partial Regex PostalCodeRegex();
 
+        private readonly StudentRegister _students = new();
+
         public ManageStudentsForm()
         {
             InitializeComponent();
 
             cbCollegeLevel.DataSource = Enum.GetValues<CollegeLevel>();
+            lstStudents.DataSource = _students.Students;
+
+            _students.AddStudent(new Student
+            {
+                FirstName = "John",
+                LastName = "Pork",
+                CollegeLevel = CollegeLevel.I,
+                BirthDate = DateTime.Now,
+                HomeAddress = new Address
+                {
+                    City = "New York",
+                    PostalCode = "44-100",
+                    Street = "19 St.",
+                    BuildingNumber = 12,
+                }
+            });
         }
 
         private void AddStudent()
@@ -28,23 +47,106 @@ namespace Laboratory_20260309
             }
 
             var student = CreateStudent();
+            _students.AddStudent(student);
+
+            ClearForm();
         }
 
         private Student CreateStudent() => new()
         {
             FirstName = tbFirstName.Text.Trim(),
-            LastName = tbFirstName.Text.Trim(),
+            LastName = tbLastName.Text.Trim(),
             BirthDate = dtpBirthDate.Value,
-            CollegeLevel = (CollegeLevel) cbCollegeLevel.SelectedValue,
+            CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!,
             HomeAddress = new()
             {
                 City = tbCity.Text.Trim(),
                 PostalCode = mtbPostalCode.Text.Trim(),
                 Street = tbStreet.Text.Trim(),
-                BuildingNumber = (int) nudBuildingNumber.Value,
-                FlatNumber = cbFlatNumberEnabled.Checked ? (int) nudFlatNumber.Value : null
+                BuildingNumber = (int)nudBuildingNumber.Value,
+                FlatNumber = chkFlatNumberEnabled.Checked ? (int)nudFlatNumber.Value : null
             }
         };
+
+        private void EditSelectedStudent()
+        {
+            if (lstStudents.SelectedItem is not Student student)
+            {
+                MessageBox.Show("Nie wybrano żadnego studenta.");
+                return;
+            }
+
+            ValidateChildren();
+
+            if (errorProvider.HasErrors)
+            {
+                MessageBox.Show("Formularz zawiera błędy.");
+                return;
+            }
+
+            UpdateStudent(student);
+            lstStudents.DataSource = null;
+            lstStudents.DataSource = _students.Students;
+
+            ClearForm();
+        }
+
+        private void UpdateStudent(Student student)
+        {
+            student.FirstName = tbFirstName.Text.Trim();
+            student.LastName = tbLastName.Text.Trim();
+            student.CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!;
+            student.HomeAddress = new()
+            {
+                City = tbCity.Text.Trim(),
+                PostalCode = mtbPostalCode.Text.Trim(),
+                Street = tbStreet.Text.Trim(),
+                BuildingNumber = (int)nudBuildingNumber.Value,
+                FlatNumber = chkFlatNumberEnabled.Checked ? (int)nudFlatNumber.Value : null
+            };
+        }
+
+        private void DeleteSelectedStudent()
+        {
+            if (lstStudents.SelectedItem is not Student student)
+            {
+                MessageBox.Show("Nie wybrano żadnego studenta.");
+                return;
+            }
+
+            _students.RemoveStudent(student);
+            lstStudents.ClearSelected();
+        }
+
+        private void LoadStudent(Student student)
+        {
+            tbFirstName.Text = student.FirstName;
+            tbLastName.Text = student.LastName;
+            dtpBirthDate.Value = student.BirthDate;
+            cbCollegeLevel.SelectedIndex = (int)student.CollegeLevel - 1;
+            tbCity.Text = student.HomeAddress.City;
+            mtbPostalCode.Text = student.HomeAddress.PostalCode;
+            tbStreet.Text = student.HomeAddress.Street;
+            nudBuildingNumber.Value = student.HomeAddress.BuildingNumber;
+            chkFlatNumberEnabled.Checked = student.HomeAddress.FlatNumber is not null;
+            nudFlatNumber.Value = student.HomeAddress.FlatNumber ?? 1;
+            ValidateChildren();
+        }
+
+        private void ClearForm()
+        {
+            tbFirstName.Text = string.Empty;
+            tbLastName.Text = string.Empty;
+            dtpBirthDate.Value = DateTime.Now;
+            cbCollegeLevel.SelectedIndex = 0;
+            tbCity.Text = string.Empty;
+            mtbPostalCode.Text = string.Empty;
+            tbStreet.Text = string.Empty;
+            nudBuildingNumber.Value = 1;
+            chkFlatNumberEnabled.Checked = false;
+            nudFlatNumber.Value = 1;
+            errorProvider.Clear();
+        }
 
         private void ValidateFirstName()
         {
@@ -108,7 +210,7 @@ namespace Laboratory_20260309
 
         private void ToggleFlatNumberEnabledState()
         {
-            nudFlatNumber.Enabled = cbFlatNumberEnabled.Checked;
+            nudFlatNumber.Enabled = chkFlatNumberEnabled.Checked;
         }
 
         private void btnAddStudent_Click(object sender, EventArgs e)
@@ -116,7 +218,17 @@ namespace Laboratory_20260309
             AddStudent();
         }
 
-        private void cbFlatNumberEnabled_CheckedChanged(object sender, EventArgs e)
+        private void btnEditStudent_Click(object sender, EventArgs e)
+        {
+            EditSelectedStudent();
+        }
+
+        private void btnDeleteStudent_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedStudent();
+        }
+
+        private void chkFlatNumberEnabled_CheckedChanged(object sender, EventArgs e)
         {
             ToggleFlatNumberEnabledState();
         }
@@ -147,6 +259,44 @@ namespace Laboratory_20260309
         private void tbStreet_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ValidateStreet();
+        }
+
+        private void BlockInvalidTextCharacters(object sender, KeyPressEventArgs e)
+        {
+            if (!IsLetterOrSpace(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private static bool IsLetterOrSpace(char letter)
+        {
+            return char.IsLetter(letter) || char.IsWhiteSpace(letter)
+                || char.IsControl(letter); // Allow deleting characters.
+        }
+
+        private void lstStudents_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstStudents.SelectedItem is Student student)
+            {
+                LoadStudent(student);
+            }
+        }
+
+        private void lstStudents_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (lstStudents.SelectedItem is null)
+            {
+                return;
+            }
+
+            var selectedIndex = lstStudents.IndexFromPoint(e.Location);
+
+            if (selectedIndex == ListBox.NoMatches)
+            {
+                lstStudents.ClearSelected();
+                ClearForm();
+            }
         }
     }
 }

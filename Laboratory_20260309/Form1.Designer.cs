@@ -40,7 +40,7 @@
             lbFirstName = new Label();
             tbFirstName = new TextBox();
             gbAddressDetails = new GroupBox();
-            cbFlatNumberEnabled = new CheckBox();
+            chkFlatNumberEnabled = new CheckBox();
             nudFlatNumber = new NumericUpDown();
             nudBuildingNumber = new NumericUpDown();
             mtbPostalCode = new MaskedTextBox();
@@ -93,11 +93,11 @@
             gbBasicDetails.TabStop = false;
             gbBasicDetails.Text = "Dane podstawowe";
             // 
-            // cbStudyLevel
+            // cbCollegeLevel
             // 
             cbCollegeLevel.DropDownStyle = ComboBoxStyle.DropDownList;
             cbCollegeLevel.Location = new Point(136, 112);
-            cbCollegeLevel.Name = "cbStudyLevel";
+            cbCollegeLevel.Name = "cbCollegeLevel";
             cbCollegeLevel.Size = new Size(78, 23);
             cbCollegeLevel.TabIndex = 7;
             // 
@@ -111,11 +111,11 @@
             dtpBirthDate.TabIndex = 5;
             dtpBirthDate.Validating += dtpBirthDate_Validating;
             // 
-            // lbStudyLevel
+            // lbCollegeLevel
             // 
             lbCollegeLevel.AutoSize = true;
             lbCollegeLevel.Location = new Point(6, 115);
-            lbCollegeLevel.Name = "lbStudyLevel";
+            lbCollegeLevel.Name = "lbCollegeLevel";
             lbCollegeLevel.Size = new Size(72, 15);
             lbCollegeLevel.TabIndex = 6;
             lbCollegeLevel.Text = "Rok studiów";
@@ -136,6 +136,7 @@
             tbLastName.Name = "tbLastName";
             tbLastName.Size = new Size(159, 23);
             tbLastName.TabIndex = 3;
+            tbLastName.KeyPress += BlockInvalidTextCharacters;
             tbLastName.Validating += tbLastName_Validating;
             // 
             // lbLastName
@@ -163,11 +164,12 @@
             tbFirstName.Name = "tbFirstName";
             tbFirstName.Size = new Size(159, 23);
             tbFirstName.TabIndex = 1;
+            tbFirstName.KeyPress += BlockInvalidTextCharacters;
             tbFirstName.Validating += tbFirstName_Validating;
             // 
             // gbAddressDetails
             // 
-            gbAddressDetails.Controls.Add(cbFlatNumberEnabled);
+            gbAddressDetails.Controls.Add(chkFlatNumberEnabled);
             gbAddressDetails.Controls.Add(nudFlatNumber);
             gbAddressDetails.Controls.Add(nudBuildingNumber);
             gbAddressDetails.Controls.Add(mtbPostalCode);
@@ -185,16 +187,16 @@
             gbAddressDetails.TabStop = false;
             gbAddressDetails.Text = "Dane adresowe";
             // 
-            // cbFlatNumberEnabled
+            // chkFlatNumberEnabled
             // 
-            cbFlatNumberEnabled.AutoSize = true;
-            cbFlatNumberEnabled.Location = new Point(228, 147);
-            cbFlatNumberEnabled.Name = "cbFlatNumberEnabled";
-            cbFlatNumberEnabled.Size = new Size(67, 19);
-            cbFlatNumberEnabled.TabIndex = 9;
-            cbFlatNumberEnabled.Text = "Posiada";
-            cbFlatNumberEnabled.UseVisualStyleBackColor = true;
-            cbFlatNumberEnabled.CheckedChanged += cbFlatNumberEnabled_CheckedChanged;
+            chkFlatNumberEnabled.AutoSize = true;
+            chkFlatNumberEnabled.Location = new Point(228, 147);
+            chkFlatNumberEnabled.Name = "chkFlatNumberEnabled";
+            chkFlatNumberEnabled.Size = new Size(67, 19);
+            chkFlatNumberEnabled.TabIndex = 9;
+            chkFlatNumberEnabled.Text = "Posiada";
+            chkFlatNumberEnabled.UseVisualStyleBackColor = true;
+            chkFlatNumberEnabled.CheckedChanged += chkFlatNumberEnabled_CheckedChanged;
             // 
             // nudFlatNumber
             // 
@@ -260,6 +262,7 @@
             tbStreet.Name = "tbStreet";
             tbStreet.Size = new Size(159, 23);
             tbStreet.TabIndex = 5;
+            tbStreet.KeyPress += BlockInvalidTextCharacters;
             tbStreet.Validating += tbStreet_Validating;
             // 
             // lbPostalCode
@@ -287,6 +290,7 @@
             tbCity.Name = "tbCity";
             tbCity.Size = new Size(159, 23);
             tbCity.TabIndex = 1;
+            tbCity.KeyPress += BlockInvalidTextCharacters;
             tbCity.Validating += tbCity_Validating;
             // 
             // lbStudentList
@@ -321,6 +325,7 @@
             btnEditStudent.TabIndex = 4;
             btnEditStudent.Text = "Edytuj dane studenta";
             btnEditStudent.UseVisualStyleBackColor = false;
+            btnEditStudent.Click += btnEditStudent_Click;
             // 
             // btnDeleteStudent
             // 
@@ -332,6 +337,7 @@
             btnDeleteStudent.TabIndex = 5;
             btnDeleteStudent.Text = "Usuń studenta";
             btnDeleteStudent.UseVisualStyleBackColor = false;
+            btnDeleteStudent.Click += btnDeleteStudent_Click;
             // 
             // btnSaveStudentList
             // 
@@ -362,6 +368,8 @@
             lstStudents.Name = "lstStudents";
             lstStudents.Size = new Size(318, 334);
             lstStudents.TabIndex = 7;
+            lstStudents.SelectedIndexChanged += lstStudents_SelectedIndexChanged;
+            lstStudents.MouseDown += lstStudents_MouseDown;
             // 
             // errorProvider
             // 
@@ -419,7 +427,7 @@
         private MaskedTextBox mtbPostalCode;
         private NumericUpDown nudFlatNumber;
         private NumericUpDown nudBuildingNumber;
-        private CheckBox cbFlatNumberEnabled;
+        private CheckBox chkFlatNumberEnabled;
         private Label lbStudentList;
         private Button btnAddStudent;
         private Button btnEditStudent;
