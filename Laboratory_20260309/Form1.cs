@@ -11,16 +11,17 @@ namespace Laboratory_20260309
         [GeneratedRegex(PostalCodePattern)]
         private static partial Regex PostalCodeRegex();
 
-        private readonly StudentRegister _students = new();
+        private readonly StudentRegister _studentRegistry = new();
+        private readonly StudentJsonHelper _studentJsonHelper = new();
 
         public ManageStudentsForm()
         {
             InitializeComponent();
 
             cbCollegeLevel.DataSource = Enum.GetValues<CollegeLevel>();
-            lstStudents.DataSource = _students.Students;
+            lstStudents.DataSource = _studentRegistry.Students;
 
-            _students.AddStudent(new Student
+            _studentRegistry.AddStudent(new Student
             {
                 FirstName = "John",
                 LastName = "Pork",
@@ -47,7 +48,7 @@ namespace Laboratory_20260309
             }
 
             var student = CreateStudent();
-            _students.AddStudent(student);
+            _studentRegistry.AddStudent(student);
 
             ClearForm();
         }
@@ -86,7 +87,7 @@ namespace Laboratory_20260309
 
             UpdateStudent(student);
             lstStudents.DataSource = null;
-            lstStudents.DataSource = _students.Students;
+            lstStudents.DataSource = _studentRegistry.Students;
 
             ClearForm();
         }
@@ -114,8 +115,57 @@ namespace Laboratory_20260309
                 return;
             }
 
-            _students.RemoveStudent(student);
+            _studentRegistry.RemoveStudent(student);
             lstStudents.ClearSelected();
+        }
+
+        private void SaveStudentList()
+        {
+            if (saveStudentFileDialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            var outputFilePath = saveStudentFileDialog.FileName;
+            var students = _studentRegistry.Students;
+
+            try
+            {
+                _studentJsonHelper.SaveStudents(students, outputFilePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Failed to save student list", ex.Message);
+                return;
+            }
+        }
+
+        private void LoadStudentList()
+        {
+            if (openStudentFileDialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            var inputFilePath = saveStudentFileDialog.FileName;
+            IEnumerable<Student> students;
+
+            try
+            {
+                students = _studentJsonHelper.ReadStudents(inputFilePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Failed to read student list", ex.Message);
+                return;
+            }
+
+            _studentRegistry.Students.Clear();
+
+            foreach (var student in students)
+            {
+                _studentRegistry.Students.Add(student);
+            }
         }
 
         private void LoadStudent(Student student)
@@ -226,6 +276,16 @@ namespace Laboratory_20260309
         private void btnDeleteStudent_Click(object sender, EventArgs e)
         {
             DeleteSelectedStudent();
+        }
+
+        private void btnSaveStudentList_Click(object sender, EventArgs e)
+        {
+            SaveStudentList();
+        }
+
+        private void btnLoadStudentList_Click(object sender, EventArgs e)
+        {
+            LoadStudentList();
         }
 
         private void chkFlatNumberEnabled_CheckedChanged(object sender, EventArgs e)
