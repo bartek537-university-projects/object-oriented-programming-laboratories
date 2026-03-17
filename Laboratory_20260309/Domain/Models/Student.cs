@@ -8,7 +8,7 @@ internal class Student
     public required string LastName { get; set; }
 
     public required DateTime BirthDate { get; init; }
-    
+
     public required Address HomeAddress { get; set; }
 
     public CollegeLevel CollegeLevel { get; set; }
