@@ -9,6 +9,7 @@ public partial class StudentForm : Form, IStudentFormView
     private readonly IStudentFormPresenter _presenter;
 
     public event EventHandler? SaveStudentClicked;
+    public event EventHandler<Student?>? StudentSelected;
 
     public StudentForm()
     {
@@ -26,7 +27,7 @@ public partial class StudentForm : Form, IStudentFormView
         CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!,
         City = tbCity.Text,
         PostalCode = mtbPostalCode.Text,
-        Street = tbCity.Text,
+        Street = tbStreet.Text,
         BuildingNumber = (int)nudBuildingNumber.Value,
         FlatNumber = chkFlatNumberEnabled.Enabled ? (int)nudFlatNumber.Value : null,
     };
@@ -48,6 +49,7 @@ public partial class StudentForm : Form, IStudentFormView
             errorProvider.SetError(control, message);
         }
     }
+
     public void ClearForm()
     {
         tbFirstName.Clear();
@@ -60,12 +62,37 @@ public partial class StudentForm : Form, IStudentFormView
         nudBuildingNumber.Value = 1;
         chkFlatNumberEnabled.Checked = false;
         nudFlatNumber.Value = 1;
+
+        lstStudents.ClearSelected();
         errorProvider.Clear();
     }
 
-    private void btnAddStudent_Click(object sender, EventArgs e)
+    public void LoadStudent(Student student)
     {
-        OnSaveStudentClicked(EventArgs.Empty);
+        tbFirstName.Text = student.FirstName;
+        tbLastName.Text = student.LastName;
+        dtpBirthDate.Value = student.BirthDate;
+        cbCollegeLevel.SelectedIndex = (int)student.CollegeLevel - 1;
+        tbCity.Text = student.HomeAddress.City;
+        mtbPostalCode.Text = student.HomeAddress.PostalCode;
+        tbStreet.Text = student.HomeAddress.Street;
+        nudBuildingNumber.Value = student.HomeAddress.BuildingNumber;
+        chkFlatNumberEnabled.Checked = student.HomeAddress.FlatNumber != null;
+        nudFlatNumber.Value = student.HomeAddress.FlatNumber ?? 1;
+
+        tbFirstName.Focus();
+        errorProvider.Clear();
+    }
+
+    public void SetStudents(IReadOnlyList<Student> students)
+    {
+        lstStudents.DataSource = students;
+    }
+
+    private void ClearStudentSelection()
+    {
+        lstStudents.ClearSelected();
+        OnStudentSelected(null);
     }
 
     private void OnSaveStudentClicked(EventArgs e)
@@ -73,37 +100,47 @@ public partial class StudentForm : Form, IStudentFormView
         SaveStudentClicked?.Invoke(this, e);
     }
 
-    //private void AddStudent()
-    //{
-    //    ValidateChildren();
+    private void OnStudentSelected(Student? student)
+    {
+        StudentSelected?.Invoke(this, student);
+    }
 
-    //    if (errorProvider.HasErrors)
-    //    {
-    //        MessageBox.Show("Formularz zawiera błędy.");
-    //        return;
-    //    }
+    private void btnAddStudent_Click(object sender, EventArgs e)
+    {
+        OnSaveStudentClicked(EventArgs.Empty);
+    }
 
-    //    var student = CreateStudent();
-    //    _studentRegistry.AddStudent(student);
+    private void lstStudents_SelectedValueChanged(object sender, EventArgs e)
+    {
+        if (lstStudents.SelectedItem is Student student)
+        {
+            OnStudentSelected(student);
+        }
+    }
 
-    //    ClearForm();
-    //}
+    private void lstStudents_MouseDown(object sender, MouseEventArgs e)
+    {
+        if (lstStudents.SelectedItem is null)
+        {
+            return;
+        }
 
-    //private Student CreateStudent() => new()
-    //{
-    //    FirstName = tbFirstName.Text.Trim(),
-    //    LastName = tbLastName.Text.Trim(),
-    //    BirthDate = dtpBirthDate.Value,
-    //    CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!,
-    //    HomeAddress = new()
-    //    {
-    //        City = tbCity.Text.Trim(),
-    //        PostalCode = mtbPostalCode.Text.Trim(),
-    //        Street = tbStreet.Text.Trim(),
-    //        BuildingNumber = (int)nudBuildingNumber.Value,
-    //        FlatNumber = chkFlatNumberEnabled.Checked ? (int)nudFlatNumber.Value : null
-    //    }
-    //};
+        var selectedIndex = lstStudents
+            .IndexFromPoint(e.Location);
+
+        if (selectedIndex == ListBox.NoMatches)
+        {
+            ClearStudentSelection();
+        }
+    }
+
+    private void lstStudents_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.Escape)
+        {
+            ClearStudentSelection();
+        }
+    }
 
     //private void EditSelectedStudent()
     //{
@@ -204,21 +241,6 @@ public partial class StudentForm : Form, IStudentFormView
     //    }
     //}
 
-    //private void LoadStudent(Student student)
-    //{
-    //    tbFirstName.Text = student.FirstName;
-    //    tbLastName.Text = student.LastName;
-    //    dtpBirthDate.Value = student.BirthDate;
-    //    cbCollegeLevel.SelectedIndex = (int)student.CollegeLevel - 1;
-    //    tbCity.Text = student.HomeAddress.City;
-    //    mtbPostalCode.Text = student.HomeAddress.PostalCode;
-    //    tbStreet.Text = student.HomeAddress.Street;
-    //    nudBuildingNumber.Value = student.HomeAddress.BuildingNumber;
-    //    chkFlatNumberEnabled.Checked = student.HomeAddress.FlatNumber is not null;
-    //    nudFlatNumber.Value = student.HomeAddress.FlatNumber ?? 1;
-    //    ValidateChildren();
-    //}
-
     //private void ValidateTextBoxLength(TextBox textBox, int min, int max)
     //{
     //    var text = textBox.Text.Trim();
@@ -233,29 +255,6 @@ public partial class StudentForm : Form, IStudentFormView
     //    errorProvider.SetError(textBox, message);
     //}
 
-    //private void ValidateCity()
-    //{
-    //    ValidateTextBoxLength(tbCity, 1, tbCity.MaxLength);
-    //}
-
-    //private void ValidatePostalCode()
-    //{
-    //    var text = mtbPostalCode.Text;
-
-    //    if (PostalCodeRegex().IsMatch(text))
-    //    {
-    //        errorProvider.SetError(mtbPostalCode, null);
-    //        return;
-    //    }
-
-    //    errorProvider.SetError(mtbPostalCode, "Niepoprawny kod pocztowy.");
-    //}
-
-    //private void ValidateStreet()
-    //{
-    //    ValidateTextBoxLength(tbStreet, 1, tbStreet.MaxLength);
-    //}
-
     //private void ToggleFlatNumberEnabledState()
     //{
     //    nudFlatNumber.Enabled = chkFlatNumberEnabled.Checked;
@@ -266,36 +265,6 @@ public partial class StudentForm : Form, IStudentFormView
     //    if (!IsLetterOrSpace(e.KeyChar))
     //    {
     //        e.Handled = true;
-    //    }
-    //}
-
-    //private static bool IsLetterOrSpace(char letter)
-    //{
-    //    return char.IsLetter(letter) || char.IsWhiteSpace(letter)
-    //        || char.IsControl(letter); // Allow deleting characters.
-    //}
-
-    //private void lstStudents_SelectedIndexChanged(object sender, EventArgs e)
-    //{
-    //    if (lstStudents.SelectedItem is Student student)
-    //    {
-    //        LoadStudent(student);
-    //    }
-    //}
-
-    //private void lstStudents_MouseDown(object sender, MouseEventArgs e)
-    //{
-    //    if (lstStudents.SelectedItem is null)
-    //    {
-    //        return;
-    //    }
-
-    //    var selectedIndex = lstStudents.IndexFromPoint(e.Location);
-
-    //    if (selectedIndex == ListBox.NoMatches)
-    //    {
-    //        lstStudents.ClearSelected();
-    //        ClearForm();
     //    }
     //}
 }

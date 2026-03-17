@@ -365,7 +365,11 @@
             lstStudents.Location = new Point(342, 52);
             lstStudents.Name = "lstStudents";
             lstStudents.Size = new Size(318, 334);
+            lstStudents.Sorted = true;
             lstStudents.TabIndex = 7;
+            lstStudents.SelectedValueChanged += lstStudents_SelectedValueChanged;
+            lstStudents.KeyDown += lstStudents_KeyDown;
+            lstStudents.MouseDown += lstStudents_MouseDown;
             // 
             // errorProvider
             // 
@@ -397,6 +401,8 @@
             Controls.Add(gbBasicDetails);
             Controls.Add(lbAddStudent);
             DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "StudentForm";
             Text = "Zarządzaj studentami";
             gbBasicDetails.ResumeLayout(false);

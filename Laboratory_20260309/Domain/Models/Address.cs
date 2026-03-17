@@ -1,6 +1,6 @@
 ﻿namespace Laboratory_20260309.Domain.Models;
 
-internal class Address
+public class Address
 {
     public required string City { get; set; }
     public required string PostalCode { get; set; }

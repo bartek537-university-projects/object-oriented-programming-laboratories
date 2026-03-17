@@ -1,6 +1,6 @@
 ﻿namespace Laboratory_20260309.Domain.Models;
 
-internal class Student
+public class Student
 {
     public Guid Id { get; } = Guid.NewGuid();
 
