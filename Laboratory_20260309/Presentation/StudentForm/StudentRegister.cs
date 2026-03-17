@@ -7,12 +7,9 @@ internal class StudentRegister
 {
     public BindingList<Student> Students { get; } = [];
 
-    public void Add(Student student)
+    public void Upsert(Student student)
     {
-        if (Students.Contains(student))
-        {
-            return;
-        }
+        Students.Remove(student);
         Students.Add(student);
     }
 

@@ -8,7 +8,10 @@ public partial class StudentForm : Form, IStudentFormView
 {
     private readonly IStudentFormPresenter _presenter;
 
-    public event EventHandler? SaveStudentClicked;
+    public event EventHandler<StudentInput>? SaveStudentClicked;
+    public event EventHandler<StudentInput>? EditStudentClicked;
+    public event EventHandler? DeleteStudentClicked;
+
     public event EventHandler<Student?>? StudentSelected;
 
     public StudentForm()
@@ -19,20 +22,7 @@ public partial class StudentForm : Form, IStudentFormView
         _presenter = new StudentFormPresenter(this);
     }
 
-    public StudentFormDto GetStudent() => new()
-    {
-        FirstName = tbFirstName.Text,
-        LastName = tbLastName.Text,
-        BirthDate = dtpBirthDate.Value,
-        CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!,
-        City = tbCity.Text,
-        PostalCode = mtbPostalCode.Text,
-        Street = tbStreet.Text,
-        BuildingNumber = (int)nudBuildingNumber.Value,
-        FlatNumber = chkFlatNumberEnabled.Enabled ? (int)nudFlatNumber.Value : null,
-    };
-
-    public void SetErrors(Dictionary<string, string> errors)
+    public void SetFormErorrs(Dictionary<string, string> errors)
     {
         var controls = new[] { gbBasicDetails, gbAddressDetails }
             .SelectMany(group => group.Controls.Cast<Control>())
@@ -50,6 +40,23 @@ public partial class StudentForm : Form, IStudentFormView
         }
     }
 
+    public void PopulateForm(Student student)
+    {
+        tbFirstName.Text = student.FirstName;
+        tbLastName.Text = student.LastName;
+        dtpBirthDate.Value = student.BirthDate;
+        cbCollegeLevel.SelectedIndex = (int)student.CollegeLevel - 1;
+        tbCity.Text = student.HomeAddress.City;
+        mtbPostalCode.Text = student.HomeAddress.PostalCode;
+        tbStreet.Text = student.HomeAddress.Street;
+        nudBuildingNumber.Value = student.HomeAddress.BuildingNumber;
+        chkFlatNumberEnabled.Checked = student.HomeAddress.FlatNumber != null;
+        nudFlatNumber.Value = student.HomeAddress.FlatNumber ?? 1;
+        errorProvider.Clear();
+
+        tbFirstName.Focus();
+    }
+
     public void ClearForm()
     {
         tbFirstName.Clear();
@@ -62,26 +69,9 @@ public partial class StudentForm : Form, IStudentFormView
         nudBuildingNumber.Value = 1;
         chkFlatNumberEnabled.Checked = false;
         nudFlatNumber.Value = 1;
+        errorProvider.Clear();
 
         lstStudents.ClearSelected();
-        errorProvider.Clear();
-    }
-
-    public void LoadStudent(Student student)
-    {
-        tbFirstName.Text = student.FirstName;
-        tbLastName.Text = student.LastName;
-        dtpBirthDate.Value = student.BirthDate;
-        cbCollegeLevel.SelectedIndex = (int)student.CollegeLevel - 1;
-        tbCity.Text = student.HomeAddress.City;
-        mtbPostalCode.Text = student.HomeAddress.PostalCode;
-        tbStreet.Text = student.HomeAddress.Street;
-        nudBuildingNumber.Value = student.HomeAddress.BuildingNumber;
-        chkFlatNumberEnabled.Checked = student.HomeAddress.FlatNumber != null;
-        nudFlatNumber.Value = student.HomeAddress.FlatNumber ?? 1;
-
-        tbFirstName.Focus();
-        errorProvider.Clear();
     }
 
     public void SetStudents(IReadOnlyList<Student> students)
@@ -89,49 +79,58 @@ public partial class StudentForm : Form, IStudentFormView
         lstStudents.DataSource = students;
     }
 
-    private void ClearStudentSelection()
-    {
-        lstStudents.ClearSelected();
-        OnStudentSelected(null);
-    }
-
-    private void OnSaveStudentClicked(EventArgs e)
-    {
-        SaveStudentClicked?.Invoke(this, e);
-    }
-
-    private void OnStudentSelected(Student? student)
-    {
-        StudentSelected?.Invoke(this, student);
-    }
-
     private void btnAddStudent_Click(object sender, EventArgs e)
     {
-        OnSaveStudentClicked(EventArgs.Empty);
+        OnSaveStudentClicked();
+    }
+
+    private void OnSaveStudentClicked()
+    {
+        var student = GetStudent();
+        SaveStudentClicked?.Invoke(this, student);
+    }
+
+    private StudentInput GetStudent() => new()
+    {
+        FirstName = tbFirstName.Text,
+        LastName = tbLastName.Text,
+        BirthDate = dtpBirthDate.Value,
+        CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!,
+        City = tbCity.Text,
+        PostalCode = mtbPostalCode.Text,
+        Street = tbStreet.Text,
+        BuildingNumber = (int)nudBuildingNumber.Value,
+        FlatNumber = chkFlatNumberEnabled.Enabled ? (int)nudFlatNumber.Value : null,
+    };
+
+    private void btnEditStudent_Click(object sender, EventArgs e)
+    {
+        OnEditStudentClicked();
+    }
+
+    private void OnEditStudentClicked()
+    {
+        var student = GetStudent();
+        EditStudentClicked?.Invoke(this, student);
+    }
+
+    private void btnDeleteStudent_Click(object sender, EventArgs e)
+    {
+        OnDeleteStudentClicked();
+    }
+
+    private void OnDeleteStudentClicked()
+    {
+        DeleteStudentClicked?.Invoke(this, EventArgs.Empty);
     }
 
     private void lstStudents_SelectedValueChanged(object sender, EventArgs e)
     {
-        if (lstStudents.SelectedItem is Student student)
-        {
-            OnStudentSelected(student);
-        }
-    }
-
-    private void lstStudents_MouseDown(object sender, MouseEventArgs e)
-    {
-        if (lstStudents.SelectedItem is null)
+        if (lstStudents.SelectedItem is not Student student)
         {
             return;
         }
-
-        var selectedIndex = lstStudents
-            .IndexFromPoint(e.Location);
-
-        if (selectedIndex == ListBox.NoMatches)
-        {
-            ClearStudentSelection();
-        }
+        OnStudentSelected(student);
     }
 
     private void lstStudents_KeyDown(object sender, KeyEventArgs e)
@@ -140,6 +139,36 @@ public partial class StudentForm : Form, IStudentFormView
         {
             ClearStudentSelection();
         }
+    }
+
+    private void lstStudents_MouseDown(object sender, MouseEventArgs mouse)
+    {
+        if (lstStudents.SelectedItem is null)
+        {
+            return;
+        }
+
+        if (IsWhiteSpaceClick(lstStudents, mouse))
+        {
+            ClearStudentSelection();
+        }
+    }
+
+    private void ClearStudentSelection()
+    {
+        lstStudents.ClearSelected();
+        OnStudentSelected(null);
+    }
+
+    private void OnStudentSelected(Student? student)
+    {
+        StudentSelected?.Invoke(this, student);
+    }
+
+    private static bool IsWhiteSpaceClick(ListBox list, MouseEventArgs mouse)
+    {
+        var selection = list.IndexFromPoint(mouse.Location);
+        return selection == ListBox.NoMatches;
     }
 
     //private void EditSelectedStudent()

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Laboratory_20260309;
 
-public partial class StudentFormDto
+public partial class StudentInput
 {
     public required string FirstName { get; set => field = value.Trim(); }
     public required string LastName { get; set => field = value.Trim(); }

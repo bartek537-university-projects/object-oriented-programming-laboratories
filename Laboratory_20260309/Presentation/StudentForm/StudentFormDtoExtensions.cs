@@ -4,13 +4,13 @@ namespace Laboratory_20260309.Presentation.StudentForm;
 
 internal static class StudentFormDtoExtensions
 {
-    extension(StudentFormDto model)
+    extension(StudentInput model)
     {
-        public Student ToStudent()
+        public Student ToStudent(Guid? id = null)
         {
             Address address = new()
             {
-                City = model.Street,
+                City = model.City,
                 PostalCode = model.PostalCode,
                 Street = model.Street,
                 BuildingNumber = model.BuildingNumber,
@@ -19,6 +19,7 @@ internal static class StudentFormDtoExtensions
 
             return new()
             {
+                Id = id ?? Guid.NewGuid(),
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 BirthDate = model.BirthDate,

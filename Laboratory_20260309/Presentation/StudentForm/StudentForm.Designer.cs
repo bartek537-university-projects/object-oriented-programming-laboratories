@@ -325,6 +325,7 @@
             btnEditStudent.TabIndex = 4;
             btnEditStudent.Text = "Edytuj dane studenta";
             btnEditStudent.UseVisualStyleBackColor = false;
+            btnEditStudent.Click += btnEditStudent_Click;
             // 
             // btnDeleteStudent
             // 
@@ -336,6 +337,7 @@
             btnDeleteStudent.TabIndex = 5;
             btnDeleteStudent.Text = "Usuń studenta";
             btnDeleteStudent.UseVisualStyleBackColor = false;
+            btnDeleteStudent.Click += btnDeleteStudent_Click;
             // 
             // btnSaveStudentList
             // 
