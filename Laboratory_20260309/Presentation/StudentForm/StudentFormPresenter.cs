@@ -11,6 +11,8 @@ internal class StudentFormPresenter : IStudentFormPresenter
     private readonly IStudentRepository _studentRepository;
     private readonly StudentRegister _studentRegister = new();
 
+    private readonly StudentValidator _studentValidator = new();
+
     private Student? _selectedStudent = null;
 
     public StudentFormPresenter(IStudentFormView view, IStudentRepository studentRepository)
@@ -31,7 +33,7 @@ internal class StudentFormPresenter : IStudentFormPresenter
 
     private void OnAddStudentClicked(object? sender, StudentInput input)
     {
-        var errors = input.Validate();
+        var errors = _studentValidator.Validate(input);
         _view.SetFormErorrs(errors);
 
         if (errors.Count > 0)
@@ -52,7 +54,7 @@ internal class StudentFormPresenter : IStudentFormPresenter
             return;
         }
 
-        var errors = input.Validate();
+        var errors = _studentValidator.Validate(input);
         _view.SetFormErorrs(errors);
 
         if(errors.Count > 0)
