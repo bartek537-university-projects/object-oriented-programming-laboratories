@@ -4,14 +4,14 @@ public class Student : IEquatable<Student>
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
+    public required string Imie { get; set; }
+    public required string Nazwisko { get; set; }
 
-    public required DateTime BirthDate { get; init; }
+    public required DateTime DataUrodzenia { get; init; }
 
-    public required Address HomeAddress { get; set; }
+    public required Adres AdresZamieszkania { get; set; }
 
-    public CollegeLevel CollegeLevel { get; set; }
+    public RokStudiow RokStudiow { get; set; }
 
     public bool Equals(Student? other)
     {
@@ -20,6 +20,6 @@ public class Student : IEquatable<Student>
 
     public override string ToString()
     {
-        return $"{FirstName} {LastName} (ID: {Id})";
+        return $"{Imie} {Nazwisko} (ID: {Id})";
     }
 }

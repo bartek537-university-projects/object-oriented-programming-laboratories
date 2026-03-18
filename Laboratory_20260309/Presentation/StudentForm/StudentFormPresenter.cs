@@ -9,7 +9,7 @@ internal class StudentFormPresenter : IStudentFormPresenter
     private readonly IStudentFormView _view;
 
     private readonly IStudentRepository _studentRepository;
-    private readonly StudentRegister _studentRegister = new();
+    private readonly DziennikStudentow _studentRegister = new();
 
     private readonly StudentValidator _studentValidator = new();
 

@@ -1,6 +1,6 @@
 ﻿namespace Laboratory_20260309.Domain.Models;
 
-public enum CollegeLevel
+public enum RokStudiow
 {
     I = 1,
     II = 2,

@@ -20,7 +20,7 @@ public partial class StudentForm : Form, IStudentFormView
     public StudentForm()
     {
         InitializeComponent();
-        cbCollegeLevel.DataSource = Enum.GetValues<CollegeLevel>();
+        cbCollegeLevel.DataSource = Enum.GetValues<RokStudiow>();
 
         var studentRepository = new InMemoryStudentRepository();
         _presenter = new StudentFormPresenter(this, studentRepository);
@@ -46,16 +46,16 @@ public partial class StudentForm : Form, IStudentFormView
 
     public void PopulateForm(Student student)
     {
-        tbFirstName.Text = student.FirstName;
-        tbLastName.Text = student.LastName;
-        dtpBirthDate.Value = student.BirthDate;
-        cbCollegeLevel.SelectedIndex = (int)student.CollegeLevel - 1;
-        tbCity.Text = student.HomeAddress.City;
-        mtbPostalCode.Text = student.HomeAddress.PostalCode;
-        tbStreet.Text = student.HomeAddress.Street;
-        nudBuildingNumber.Value = student.HomeAddress.BuildingNumber;
-        chkFlatNumberEnabled.Checked = student.HomeAddress.FlatNumber != null;
-        nudFlatNumber.Value = student.HomeAddress.FlatNumber ?? 1;
+        tbFirstName.Text = student.Imie;
+        tbLastName.Text = student.Nazwisko;
+        dtpBirthDate.Value = student.DataUrodzenia;
+        cbCollegeLevel.SelectedIndex = (int)student.RokStudiow - 1;
+        tbCity.Text = student.AdresZamieszkania.Miasto;
+        mtbPostalCode.Text = student.AdresZamieszkania.KodPocztowy;
+        tbStreet.Text = student.AdresZamieszkania.lica;
+        nudBuildingNumber.Value = student.AdresZamieszkania.NumerBudynku;
+        chkFlatNumberEnabled.Checked = student.AdresZamieszkania.NumerMieszkania != null;
+        nudFlatNumber.Value = student.AdresZamieszkania.NumerMieszkania ?? 1;
         errorProvider.Clear();
 
         tbFirstName.Focus();
@@ -109,7 +109,7 @@ public partial class StudentForm : Form, IStudentFormView
         FirstName = tbFirstName.Text,
         LastName = tbLastName.Text,
         BirthDate = dtpBirthDate.Value,
-        CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!,
+        CollegeLevel = (RokStudiow)cbCollegeLevel.SelectedValue!,
         City = tbCity.Text,
         PostalCode = mtbPostalCode.Text,
         Street = tbStreet.Text,
