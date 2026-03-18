@@ -8,9 +8,11 @@ internal interface IStudentFormView
     void PopulateForm(Student student);
     void ClearForm();
 
-    event EventHandler<StudentInput> SaveStudentClicked;
+    event EventHandler<StudentInput> AddStudentClicked;
     event EventHandler<StudentInput> EditStudentClicked;
     event EventHandler DeleteStudentClicked;
+    event EventHandler<string> SaveStudentListClicked;
+    event EventHandler<string> LoadStudentListClicked;
 
     void SetStudents(IReadOnlyList<Student> students);
 

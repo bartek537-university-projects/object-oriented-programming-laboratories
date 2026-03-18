@@ -1,3 +1,4 @@
+using Laboratory_20260309.Data.Sources;
 using Laboratory_20260309.Domain.Models;
 using Laboratory_20260309.Presentation.StudentForm;
 using Laboratory_20260309.Presentation.StudentForm.Interfaces;
@@ -8,9 +9,11 @@ public partial class StudentForm : Form, IStudentFormView
 {
     private readonly IStudentFormPresenter _presenter;
 
-    public event EventHandler<StudentInput>? SaveStudentClicked;
+    public event EventHandler<StudentInput>? AddStudentClicked;
     public event EventHandler<StudentInput>? EditStudentClicked;
     public event EventHandler? DeleteStudentClicked;
+    public event EventHandler<string>? SaveStudentListClicked;
+    public event EventHandler<string>? LoadStudentListClicked;
 
     public event EventHandler<Student?>? StudentSelected;
 
@@ -19,7 +22,8 @@ public partial class StudentForm : Form, IStudentFormView
         InitializeComponent();
         cbCollegeLevel.DataSource = Enum.GetValues<CollegeLevel>();
 
-        _presenter = new StudentFormPresenter(this);
+        var studentRepository = new InMemoryStudentRepository();
+        _presenter = new StudentFormPresenter(this, studentRepository);
     }
 
     public void SetFormErorrs(Dictionary<string, string> errors)
@@ -79,15 +83,25 @@ public partial class StudentForm : Form, IStudentFormView
         lstStudents.DataSource = students;
     }
 
-    private void btnAddStudent_Click(object sender, EventArgs e)
+    private void chkFlatNumberEnabled_CheckedChanged(object sender, EventArgs e)
     {
-        OnSaveStudentClicked();
+        ToggleFlatNumberVisibility();
     }
 
-    private void OnSaveStudentClicked()
+    private void ToggleFlatNumberVisibility()
+    {
+        nudFlatNumber.Enabled = chkFlatNumberEnabled.Checked;
+    }
+
+    private void btnAddStudent_Click(object sender, EventArgs e)
+    {
+        OnAddStudentClicked();
+    }
+
+    private void OnAddStudentClicked()
     {
         var student = GetStudent();
-        SaveStudentClicked?.Invoke(this, student);
+        AddStudentClicked?.Invoke(this, student);
     }
 
     private StudentInput GetStudent() => new()
@@ -100,7 +114,7 @@ public partial class StudentForm : Form, IStudentFormView
         PostalCode = mtbPostalCode.Text,
         Street = tbStreet.Text,
         BuildingNumber = (int)nudBuildingNumber.Value,
-        FlatNumber = chkFlatNumberEnabled.Enabled ? (int)nudFlatNumber.Value : null,
+        FlatNumber = chkFlatNumberEnabled.Checked ? (int)nudFlatNumber.Value : null,
     };
 
     private void btnEditStudent_Click(object sender, EventArgs e)
@@ -171,129 +185,31 @@ public partial class StudentForm : Form, IStudentFormView
         return selection == ListBox.NoMatches;
     }
 
-    //private void EditSelectedStudent()
-    //{
-    //    if (lstStudents.SelectedItem is not Student student)
-    //    {
-    //        MessageBox.Show("Nie wybrano żadnego studenta.");
-    //        return;
-    //    }
+    private void btnSaveStudentList_Click(object sender, EventArgs e)
+    {
+        OnSaveStudentListClicked();
+    }
 
-    //    ValidateChildren();
+    private void OnSaveStudentListClicked()
+    {
+        if (saveStudentFileDialog.ShowDialog() != DialogResult.OK)
+        {
+            return;
+        }
+        SaveStudentListClicked?.Invoke(this, saveStudentFileDialog.FileName);
+    }
 
-    //    if (errorProvider.HasErrors)
-    //    {
-    //        MessageBox.Show("Formularz zawiera błędy.");
-    //        return;
-    //    }
+    private void btnLoadStudentList_Click(object sender, EventArgs e)
+    {
+        OnLoadStudentListClicked();
+    }
 
-    //    UpdateStudent(student);
-    //    lstStudents.DataSource = null;
-    //    lstStudents.DataSource = _studentRegistry.Students;
-
-    //    ClearForm();
-    //}
-
-    //private void UpdateStudent(Student student)
-    //{
-    //    student.FirstName = tbFirstName.Text.Trim();
-    //    student.LastName = tbLastName.Text.Trim();
-    //    student.CollegeLevel = (CollegeLevel)cbCollegeLevel.SelectedValue!;
-    //    student.HomeAddress = new()
-    //    {
-    //        City = tbCity.Text.Trim(),
-    //        PostalCode = mtbPostalCode.Text.Trim(),
-    //        Street = tbStreet.Text.Trim(),
-    //        BuildingNumber = (int)nudBuildingNumber.Value,
-    //        FlatNumber = chkFlatNumberEnabled.Checked ? (int)nudFlatNumber.Value : null
-    //    };
-    //}
-
-    //private void DeleteSelectedStudent()
-    //{
-    //    if (lstStudents.SelectedItem is not Student student)
-    //    {
-    //        MessageBox.Show("Nie wybrano żadnego studenta.");
-    //        return;
-    //    }
-
-    //    _studentRegistry.RemoveStudent(student);
-    //    lstStudents.ClearSelected();
-    //}
-
-    //private void SaveStudentList()
-    //{
-    //    if (saveStudentFileDialog.ShowDialog(this) != DialogResult.OK)
-    //    {
-    //        return;
-    //    }
-
-    //    var outputFilePath = saveStudentFileDialog.FileName;
-    //    var students = _studentRegistry.Students;
-
-    //    try
-    //    {
-    //        _studentJsonHelper.SaveStudents(students, outputFilePath);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        MessageBox.Show(this, "Failed to save student list", ex.Message);
-    //        return;
-    //    }
-    //}
-
-    //private void LoadStudentList()
-    //{
-    //    if (openStudentFileDialog.ShowDialog(this) != DialogResult.OK)
-    //    {
-    //        return;
-    //    }
-
-    //    var inputFilePath = saveStudentFileDialog.FileName;
-    //    IEnumerable<Student> students;
-
-    //    try
-    //    {
-    //        students = _studentJsonHelper.ReadStudents(inputFilePath);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        MessageBox.Show(this, "Failed to read student list", ex.Message);
-    //        return;
-    //    }
-
-    //    _studentRegistry.Students.Clear();
-
-    //    foreach (var student in students)
-    //    {
-    //        _studentRegistry.Students.Add(student);
-    //    }
-    //}
-
-    //private void ValidateTextBoxLength(TextBox textBox, int min, int max)
-    //{
-    //    var text = textBox.Text.Trim();
-
-    //    if (text.Length >= min && text.Length <= max)
-    //    {
-    //        errorProvider.SetError(textBox, null);
-    //        return;
-    //    }
-
-    //    var message = $"Pole musi zawierać między {min} a {max} znaki (nie wliczając białych znaków z obydwu końców).";
-    //    errorProvider.SetError(textBox, message);
-    //}
-
-    //private void ToggleFlatNumberEnabledState()
-    //{
-    //    nudFlatNumber.Enabled = chkFlatNumberEnabled.Checked;
-    //}
-
-    //private void BlockInvalidTextCharacters(object sender, KeyPressEventArgs e)
-    //{
-    //    if (!IsLetterOrSpace(e.KeyChar))
-    //    {
-    //        e.Handled = true;
-    //    }
-    //}
+    private void OnLoadStudentListClicked()
+    {
+        if (openStudentFileDialog.ShowDialog() != DialogResult.OK)
+        {
+            return;
+        }
+        LoadStudentListClicked?.Invoke(this, openStudentFileDialog.FileName);
+    }
 }

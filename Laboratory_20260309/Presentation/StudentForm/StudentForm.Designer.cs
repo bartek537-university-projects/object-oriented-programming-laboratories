@@ -197,6 +197,7 @@
             chkFlatNumberEnabled.TabIndex = 9;
             chkFlatNumberEnabled.Text = "Posiada";
             chkFlatNumberEnabled.UseVisualStyleBackColor = true;
+            chkFlatNumberEnabled.CheckedChanged += chkFlatNumberEnabled_CheckedChanged;
             // 
             // nudFlatNumber
             // 
@@ -349,6 +350,7 @@
             btnSaveStudentList.TabIndex = 8;
             btnSaveStudentList.Text = "Zapisz listę studentów";
             btnSaveStudentList.UseVisualStyleBackColor = false;
+            btnSaveStudentList.Click += btnSaveStudentList_Click;
             // 
             // btnLoadStudentList
             // 
@@ -360,6 +362,7 @@
             btnLoadStudentList.TabIndex = 9;
             btnLoadStudentList.Text = "Wczytaj listę studentów";
             btnLoadStudentList.UseVisualStyleBackColor = false;
+            btnLoadStudentList.Click += btnLoadStudentList_Click;
             // 
             // lstStudents
             // 

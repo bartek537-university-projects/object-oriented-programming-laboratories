@@ -1,4 +1,5 @@
 ﻿using Laboratory_20260309.Domain.Models;
+using Laboratory_20260309.Domain.Repositories;
 using Laboratory_20260309.Presentation.StudentForm.Interfaces;
 
 namespace Laboratory_20260309.Presentation.StudentForm;
@@ -6,23 +7,29 @@ namespace Laboratory_20260309.Presentation.StudentForm;
 internal class StudentFormPresenter : IStudentFormPresenter
 {
     private readonly IStudentFormView _view;
+
+    private readonly IStudentRepository _studentRepository;
     private readonly StudentRegister _studentRegister = new();
 
     private Student? _selectedStudent = null;
 
-    public StudentFormPresenter(IStudentFormView view)
+    public StudentFormPresenter(IStudentFormView view, IStudentRepository studentRepository)
     {
         _view = view;
+        _studentRepository = studentRepository;
+
         _view.SetStudents(_studentRegister.Students);
 
-        _view.SaveStudentClicked += OnSaveStudentClicked;
+        _view.AddStudentClicked += OnAddStudentClicked;
         _view.EditStudentClicked += OnEditStudentClicked;
         _view.DeleteStudentClicked += OnDeleteStudentClicked;
+        _view.SaveStudentListClicked += OnSaveStudentListClicked;
+        _view.LoadStudentListClicked += OnLoadStudentListClicked;
 
         _view.StudentSelected += OnStudentSelected;
     }
 
-    private void OnSaveStudentClicked(object? sender, StudentInput input)
+    private void OnAddStudentClicked(object? sender, StudentInput input)
     {
         var errors = input.Validate();
         _view.SetFormErorrs(errors);
@@ -55,8 +62,6 @@ internal class StudentFormPresenter : IStudentFormPresenter
 
         var student = input.ToStudent(id: selection.Id);
         _studentRegister.Upsert(student);
-
-        _view.ClearForm();
     }
 
     private void OnDeleteStudentClicked(object? sender, EventArgs e)
@@ -83,6 +88,27 @@ internal class StudentFormPresenter : IStudentFormPresenter
         else
         {
             _view.PopulateForm(student);
+        }
+    }
+
+    private void OnSaveStudentListClicked(object? sender, string path)
+    {
+        _studentRepository.Save(_studentRegister.Students, path);
+    }
+
+    private void OnLoadStudentListClicked(object? sender, string path)
+    {
+        var students = _studentRepository.Read(path);
+        LoadStudentList(students);
+    }
+
+    private void LoadStudentList(IEnumerable<Student> students)
+    {
+        _studentRegister.Students.Clear();
+
+        foreach (var student in students)
+        {
+            _studentRegister.Students.Add(student);
         }
     }
 }
