@@ -18,7 +18,7 @@ public partial class Form1 : Form
 
         IAddEmployeeHandler addEmployeeHandler = new AddEmployee.Handler(employeeDataValidator, employeeRepository);
 
-        EmployeeEditForm view = new();
+        EmployeeManageForm view = new();
         EmployeeAddPresenter presenter = new(view, addEmployeeHandler);
 
         view.Presenter = presenter;

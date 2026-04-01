@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Laboratory_20260323.Presentation.EmployeeEdit;
 
-public partial class EmployeeEditForm : Form, IEmployeeEditView
+public partial class EmployeeManageForm : Form, IEmployeeEditView
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public IEmployeeEditPresenter? Presenter { get; set; } = null;
@@ -19,7 +19,7 @@ public partial class EmployeeEditForm : Form, IEmployeeEditView
     public event EventHandler? SubmitClicked;
     public event EventHandler? CancelClicked;
 
-    public EmployeeEditForm()
+    public EmployeeManageForm()
     {
         InitializeComponent();
     }

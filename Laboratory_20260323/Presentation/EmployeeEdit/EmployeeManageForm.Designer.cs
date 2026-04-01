@@ -1,6 +1,6 @@
 ﻿namespace Laboratory_20260323.Presentation.EmployeeEdit
 {
-    partial class EmployeeEditForm
+    partial class EmployeeManageForm
     {
         /// <summary>
         /// Required designer variable.
