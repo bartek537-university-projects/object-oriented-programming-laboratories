@@ -7,9 +7,9 @@ namespace Laboratory_20260323.Application.Employees.Validators;
 
 public partial class EmployeeDataValidator : IValidator<IEmployeeData>
 {
-    [GeneratedRegex(@"^[A-Za-z]{2, 16}$", RegexOptions.Singleline)]
+    [GeneratedRegex(@"^[A-Za-z]{2,16}$", RegexOptions.Singleline)]
     private static partial Regex FirstNameRegex();
-    [GeneratedRegex(@"^[A-Za-z-]{1, 32}$", RegexOptions.Singleline)]
+    [GeneratedRegex(@"^[A-Za-z-]{1,32}$", RegexOptions.Singleline)]
     private static partial Regex LastNameRegex();
 
     public Dictionary<string, string> Validate(IEmployeeData employee)
