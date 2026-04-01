@@ -9,5 +9,6 @@ public interface IEmployeeEditView
     event EventHandler SubmitClicked;
     event EventHandler CancelClicked;
 
+    void SetErrors(IReadOnlyDictionary<string, string>? errors);
     void Close();
 }

@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Employees;
+﻿using Laboratory_20260323.Application.Common.Exceptions;
+using Laboratory_20260323.Application.Employees;
 using Laboratory_20260323.Presentation.EmployeeEdit.Interfaces;
 
 namespace Laboratory_20260323.Presentation.EmployeeEdit;
@@ -19,11 +20,22 @@ public class EmployeeAddPresenter : IEmployeeEditPresenter
 
     private void OnSubmitClicked(object? sender, EventArgs e)
     {
-        AddEmployee.Request request = new(_view.FirstName, _view.LastName);
+        _view.SetErrors(null);
 
-        AddEmployee.Response _ = _addEmployeeHandler.Handle(request);
+        var firstName = _view.FirstName.Trim();
+        var lastName = _view.LastName.Trim();
 
-        _view.Close();
+        AddEmployee.Request request = new(firstName, lastName);
+
+        try
+        {
+            AddEmployee.Response _ = _addEmployeeHandler.Handle(request);
+            _view.Close();
+        }
+        catch(ValidationException ex)
+        {
+            _view.SetErrors(ex.Errors);
+        }
     }
 
     private void OnCancelClicked(object? sender, EventArgs e)

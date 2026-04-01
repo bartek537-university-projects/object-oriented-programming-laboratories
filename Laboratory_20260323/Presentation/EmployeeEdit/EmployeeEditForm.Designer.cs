@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             gbInternal = new GroupBox();
             lbIdentifier = new Label();
             tbIdentifier = new TextBox();
@@ -38,8 +39,10 @@
             tbFirstName = new TextBox();
             btnCancel = new Button();
             btnOk = new Button();
+            errorProvider = new ErrorProvider(components);
             gbInternal.SuspendLayout();
             gbBasicInformation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // gbInternal
@@ -60,7 +63,7 @@
             lbIdentifier.Location = new Point(6, 25);
             lbIdentifier.Name = "lbIdentifier";
             lbIdentifier.Size = new Size(54, 15);
-            lbIdentifier.TabIndex = 1;
+            lbIdentifier.TabIndex = 0;
             lbIdentifier.Text = "Identifier";
             // 
             // tbIdentifier
@@ -69,7 +72,7 @@
             tbIdentifier.Location = new Point(86, 22);
             tbIdentifier.Name = "tbIdentifier";
             tbIdentifier.Size = new Size(169, 23);
-            tbIdentifier.TabIndex = 0;
+            tbIdentifier.TabIndex = 1;
             // 
             // gbBasicInformation
             // 
@@ -81,7 +84,7 @@
             gbBasicInformation.Location = new Point(12, 70);
             gbBasicInformation.Name = "gbBasicInformation";
             gbBasicInformation.Size = new Size(280, 82);
-            gbBasicInformation.TabIndex = 2;
+            gbBasicInformation.TabIndex = 1;
             gbBasicInformation.TabStop = false;
             gbBasicInformation.Text = "Basic information";
             // 
@@ -91,7 +94,7 @@
             lbLastName.Location = new Point(6, 54);
             lbLastName.Name = "lbLastName";
             lbLastName.Size = new Size(61, 15);
-            lbLastName.TabIndex = 3;
+            lbLastName.TabIndex = 2;
             lbLastName.Text = "Last name";
             // 
             // tbLastName
@@ -99,7 +102,7 @@
             tbLastName.Location = new Point(86, 51);
             tbLastName.Name = "tbLastName";
             tbLastName.Size = new Size(121, 23);
-            tbLastName.TabIndex = 2;
+            tbLastName.TabIndex = 3;
             // 
             // lbFirstName
             // 
@@ -107,7 +110,7 @@
             lbFirstName.Location = new Point(6, 25);
             lbFirstName.Name = "lbFirstName";
             lbFirstName.Size = new Size(62, 15);
-            lbFirstName.TabIndex = 1;
+            lbFirstName.TabIndex = 0;
             lbFirstName.Text = "First name";
             // 
             // tbFirstName
@@ -115,7 +118,7 @@
             tbFirstName.Location = new Point(86, 22);
             tbFirstName.Name = "tbFirstName";
             tbFirstName.Size = new Size(121, 23);
-            tbFirstName.TabIndex = 0;
+            tbFirstName.TabIndex = 1;
             // 
             // btnCancel
             // 
@@ -134,15 +137,22 @@
             btnOk.Location = new Point(138, 166);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
-            btnOk.TabIndex = 4;
+            btnOk.TabIndex = 2;
             btnOk.Text = "OK";
             btnOk.UseVisualStyleBackColor = true;
             btnOk.Click += btnOk_Click;
             // 
+            // errorProvider
+            // 
+            errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            errorProvider.ContainerControl = this;
+            // 
             // EmployeeEditForm
             // 
+            AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = btnCancel;
             ClientSize = new Size(304, 201);
             Controls.Add(btnOk);
             Controls.Add(btnCancel);
@@ -155,6 +165,7 @@
             gbInternal.PerformLayout();
             gbBasicInformation.ResumeLayout(false);
             gbBasicInformation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
         }
 
@@ -170,5 +181,6 @@
         private TextBox tbLastName;
         private Button btnCancel;
         private Button btnOk;
+        private ErrorProvider errorProvider;
     }
 }

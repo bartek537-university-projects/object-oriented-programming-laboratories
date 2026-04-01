@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Presentation.EmployeeEdit.Interfaces;
+﻿using Laboratory_20260323.Domain.Entities;
+using Laboratory_20260323.Presentation.EmployeeEdit.Interfaces;
 using System.ComponentModel;
 
 namespace Laboratory_20260323.Presentation.EmployeeEdit;
@@ -41,5 +42,39 @@ public partial class EmployeeEditForm : Form, IEmployeeEditView
     private void OnCancelClicked()
     {
         CancelClicked?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void SetErrors(IReadOnlyDictionary<string, string>? errors)
+    {
+        errorProvider.Clear();
+
+        if (errors is null)
+        {
+            return;
+        }
+
+        foreach (var (key, message) in errors)
+        {
+            SetError(key, message);
+        }
+    }
+
+    private void SetError(string key, string message)
+    {
+        if (FindControl(key) is not { } control)
+        {
+            return;
+        }
+        errorProvider.SetError(control, message);
+    }
+
+    private TextBox? FindControl(string key)
+    {
+        return key switch
+        {
+            nameof(Employee.FirstName) => tbFirstName,
+            nameof(Employee.LastName) => tbLastName,
+            _ => null
+        };
     }
 }
