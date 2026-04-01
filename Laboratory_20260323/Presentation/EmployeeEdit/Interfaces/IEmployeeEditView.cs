@@ -2,4 +2,12 @@
 
 public interface IEmployeeEditView
 {
+    string Identifier { set; }
+    string FirstName { get; set; }
+    string LastName { get; set; }
+
+    event EventHandler SubmitClicked;
+    event EventHandler CancelClicked;
+
+    void Close();
 }

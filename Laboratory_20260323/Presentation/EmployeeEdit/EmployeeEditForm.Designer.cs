@@ -66,7 +66,7 @@
             // tbIdentifier
             // 
             tbIdentifier.Enabled = false;
-            tbIdentifier.Location = new Point(80, 22);
+            tbIdentifier.Location = new Point(86, 22);
             tbIdentifier.Name = "tbIdentifier";
             tbIdentifier.Size = new Size(169, 23);
             tbIdentifier.TabIndex = 0;
@@ -126,6 +126,7 @@
             btnCancel.TabIndex = 3;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnOk
             // 
@@ -134,8 +135,9 @@
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
             btnOk.TabIndex = 4;
-            btnOk.Text = "Ok";
+            btnOk.Text = "OK";
             btnOk.UseVisualStyleBackColor = true;
+            btnOk.Click += btnOk_Click;
             // 
             // EmployeeEditForm
             // 
