@@ -111,8 +111,10 @@
             dgvManagedList.Location = new Point(3, 3);
             dgvManagedList.Name = "dgvManagedList";
             dgvManagedList.ReadOnly = true;
+            dgvManagedList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvManagedList.Size = new Size(166, 186);
             dgvManagedList.TabIndex = 0;
+            dgvManagedList.CellDoubleClick += dgvManagedList_CellDoubleClick;
             dgvManagedList.SelectionChanged += dgvManagedList_SelectionChanged;
             // 
             // ManagedListControl

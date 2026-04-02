@@ -106,6 +106,28 @@ public partial class ManagedListControl : UserControl
             HeaderText = title,
         };
 
-        dgvManagedList.Columns.Add(column);
+        _ = dgvManagedList.Columns.Add(column);
+    }
+
+    private void dgvManagedList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+    {
+        OnRowDoubleClicked(e.RowIndex);
+    }
+
+    private void OnRowDoubleClicked(int row)
+    {
+        if (GetRowItem(row) is { } item)
+        {
+            EditClicked?.Invoke(this, item);
+        }
+    }
+
+    private object? GetRowItem(int row)
+    {
+        if (row < 0 || row > dgvManagedList.RowCount)
+        {
+            return null;
+        }
+        return dgvManagedList.Rows[row].DataBoundItem;
     }
 }
