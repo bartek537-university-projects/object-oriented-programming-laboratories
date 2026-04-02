@@ -6,24 +6,25 @@ using Laboratory_20260323.Domain.Entities;
 
 namespace Laboratory_20260323.Application.Employees;
 
-public class AddEmployee
+public class UpdateEmployee
 {
-    public record Command(string FirstName, string LastName) : IEmployeeData;
+    public record Command(Guid EmployeeId, string FirstName, string LastName) : IEmployeeData;
 
     public class Handler(IValidator<IEmployeeData> validator, IEmployeeRepository repository)
-        : IAddEmployeeHandler
+        : IUpdateEmployeeHandler
     {
         public Response Handle(Command command)
         {
-            ValidateEmployee(command);
+            ValidateEmployeeDetails(command);
+            ValidateEmployeeExists(command.EmployeeId);
 
             Employee employee = CreateEmployee(command);
-            repository.Insert(employee);
+            repository.Update(employee);
 
             return new Response();
         }
 
-        private void ValidateEmployee(Command command)
+        private void ValidateEmployeeDetails(Command command)
         {
             Dictionary<string, string> errors = validator
                 .Validate(command);
@@ -34,10 +35,19 @@ public class AddEmployee
             }
         }
 
+        private void ValidateEmployeeExists(Guid employeeId)
+        {
+            if (repository.GetById(employeeId) is null)
+            {
+                throw new ArgumentException("Employee does not exist.", nameof(employeeId));
+            }
+        }
+
         private static Employee CreateEmployee(Command command)
         {
             return new()
             {
+                Id = command.EmployeeId,
                 FirstName = command.FirstName,
                 LastName = command.LastName,
             };
@@ -47,7 +57,7 @@ public class AddEmployee
     public record Response();
 }
 
-public interface IAddEmployeeHandler
+public interface IUpdateEmployeeHandler
 {
-    AddEmployee.Response Handle(AddEmployee.Command request);
+    UpdateEmployee.Response Handle(UpdateEmployee.Command request);
 }
