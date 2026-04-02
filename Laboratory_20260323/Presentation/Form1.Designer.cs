@@ -28,18 +28,82 @@
         /// </summary>
         private void InitializeComponent()
         {
+            listBox1 = new ListBox();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            button4 = new Button();
             SuspendLayout();
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.Location = new Point(25, 28);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(203, 214);
+            listBox1.TabIndex = 0;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(271, 28);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 1;
+            button1.Text = "Add";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(271, 57);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 2;
+            button2.Text = "Edit";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(271, 159);
+            button3.Name = "button3";
+            button3.Size = new Size(75, 23);
+            button3.TabIndex = 3;
+            button3.Text = "Remove";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(72, 262);
+            button4.Name = "button4";
+            button4.Size = new Size(75, 23);
+            button4.TabIndex = 4;
+            button4.Text = "Refresh";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(171, 62);
+            ClientSize = new Size(446, 319);
+            Controls.Add(button4);
+            Controls.Add(button3);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            Controls.Add(listBox1);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
         }
 
         #endregion
+
+        private ListBox listBox1;
+        private Button button1;
+        private Button button2;
+        private Button button3;
+        private Button button4;
     }
 }

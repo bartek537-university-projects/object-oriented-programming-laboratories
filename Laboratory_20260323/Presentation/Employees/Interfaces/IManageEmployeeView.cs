@@ -1,6 +1,6 @@
-﻿namespace Laboratory_20260323.Presentation.EmployeeEdit.Interfaces;
+﻿namespace Laboratory_20260323.Presentation.Employees.Interfaces;
 
-public interface IEmployeeEditView
+public interface IManageEmployeeView
 {
     string Identifier { set; }
     string FirstName { get; set; }

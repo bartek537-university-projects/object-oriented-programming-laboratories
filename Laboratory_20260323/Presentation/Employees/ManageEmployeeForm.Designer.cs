@@ -1,6 +1,6 @@
-﻿namespace Laboratory_20260323.Presentation.EmployeeEdit
+﻿namespace Laboratory_20260323.Presentation.Employees
 {
-    partial class EmployeeManageForm
+    partial class ManageEmployeeForm
     {
         /// <summary>
         /// Required designer variable.
@@ -52,7 +52,7 @@
             gbInternal.Controls.Add(tbIdentifier);
             gbInternal.Location = new Point(12, 12);
             gbInternal.Name = "gbInternal";
-            gbInternal.Size = new Size(280, 52);
+            gbInternal.Size = new Size(324, 52);
             gbInternal.TabIndex = 0;
             gbInternal.TabStop = false;
             gbInternal.Text = "Internal";
@@ -71,7 +71,7 @@
             tbIdentifier.Enabled = false;
             tbIdentifier.Location = new Point(86, 22);
             tbIdentifier.Name = "tbIdentifier";
-            tbIdentifier.Size = new Size(169, 23);
+            tbIdentifier.Size = new Size(229, 23);
             tbIdentifier.TabIndex = 1;
             // 
             // gbBasicInformation
@@ -83,7 +83,7 @@
             gbBasicInformation.Controls.Add(tbFirstName);
             gbBasicInformation.Location = new Point(12, 70);
             gbBasicInformation.Name = "gbBasicInformation";
-            gbBasicInformation.Size = new Size(280, 82);
+            gbBasicInformation.Size = new Size(324, 82);
             gbBasicInformation.TabIndex = 1;
             gbBasicInformation.TabStop = false;
             gbBasicInformation.Text = "Basic information";
@@ -123,7 +123,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(217, 166);
+            btnCancel.Location = new Point(261, 242);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 3;
@@ -134,7 +134,7 @@
             // btnOk
             // 
             btnOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnOk.Location = new Point(138, 166);
+            btnOk.Location = new Point(182, 242);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
             btnOk.TabIndex = 2;
@@ -147,19 +147,19 @@
             errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
             errorProvider.ContainerControl = this;
             // 
-            // EmployeeEditForm
+            // ManageEmployeeForm
             // 
             AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(304, 201);
+            ClientSize = new Size(348, 277);
             Controls.Add(btnOk);
             Controls.Add(btnCancel);
             Controls.Add(gbBasicInformation);
             Controls.Add(gbInternal);
-            MinimumSize = new Size(320, 240);
-            Name = "EmployeeEditForm";
+            MinimumSize = new Size(364, 240);
+            Name = "ManageEmployeeForm";
             Text = "Edit employee";
             gbInternal.ResumeLayout(false);
             gbInternal.PerformLayout();

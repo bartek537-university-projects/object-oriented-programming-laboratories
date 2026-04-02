@@ -1,13 +1,13 @@
 ﻿using Laboratory_20260323.Domain.Entities;
-using Laboratory_20260323.Presentation.EmployeeEdit.Interfaces;
+using Laboratory_20260323.Presentation.Employees.Interfaces;
 using System.ComponentModel;
 
-namespace Laboratory_20260323.Presentation.EmployeeEdit;
+namespace Laboratory_20260323.Presentation.Employees;
 
-public partial class EmployeeManageForm : Form, IEmployeeEditView
+public partial class ManageEmployeeForm : Form, IManageEmployeeView
 {
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public IEmployeeEditPresenter? Presenter { get; set; } = null;
+    public IManageEmployeePresenter? Presenter { get; set; } = null;
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string Identifier { set => tbIdentifier.Text = value; }
@@ -19,7 +19,7 @@ public partial class EmployeeManageForm : Form, IEmployeeEditView
     public event EventHandler? SubmitClicked;
     public event EventHandler? CancelClicked;
 
-    public EmployeeManageForm()
+    public ManageEmployeeForm()
     {
         InitializeComponent();
     }
@@ -53,7 +53,7 @@ public partial class EmployeeManageForm : Form, IEmployeeEditView
             return;
         }
 
-        foreach (var (key, message) in errors)
+        foreach ((string? key, string? message) in errors)
         {
             SetError(key, message);
         }
