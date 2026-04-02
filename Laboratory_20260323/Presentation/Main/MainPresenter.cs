@@ -5,10 +5,14 @@ namespace Laboratory_20260323.Presentation.Main;
 public class MainPresenter : IMainPresenter
 {
     private readonly IMainView _view;
+    private readonly IWindowService _windowService;
 
-    public MainPresenter(IMainView view)
+    public MainPresenter(IMainView view, IWindowService windowService)
     {
         _view = view;
+        _windowService = windowService;
+
+        _view.CreateTabs(_windowService);
 
         _view.ExitClicked += OnExitClicked;
     }

@@ -53,7 +53,7 @@ public partial class ManageEmployeeForm : Form, IManageEmployeeView
             return;
         }
 
-        foreach ((string? key, string? message) in errors)
+        foreach ((string key, string message) in errors)
         {
             SetError(key, message);
         }

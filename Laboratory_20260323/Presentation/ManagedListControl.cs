@@ -100,7 +100,7 @@ public partial class ManagedListControl : UserControl
 
     public void AddColumn(string title, string member)
     {
-        var column = new DataGridViewColumn
+        using DataGridViewTextBoxColumn column = new()
         {
             DataPropertyName = member,
             HeaderText = title,

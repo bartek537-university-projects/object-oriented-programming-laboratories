@@ -46,4 +46,17 @@ public partial class MainForm : Form, IMainView
     {
         ExitClicked?.Invoke(this, EventArgs.Empty);
     }
+
+    public void CreateTabs(IWindowService windows)
+    {
+        AddEmployeeTab(windows);
+    }
+
+    private void AddEmployeeTab(IWindowService windows)
+    {
+        UserControl employeeFragment = windows.CreateEmployeeListFragment();
+        employeeFragment.Dock = DockStyle.Fill;
+
+        tpEmployees.Controls.Add(employeeFragment);
+    }
 }

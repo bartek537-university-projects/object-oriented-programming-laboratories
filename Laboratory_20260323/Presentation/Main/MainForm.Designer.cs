@@ -46,7 +46,7 @@
             msMainMenu.Items.AddRange(new ToolStripItem[] { tsmiFile });
             msMainMenu.Location = new Point(0, 0);
             msMainMenu.Name = "msMainMenu";
-            msMainMenu.Size = new Size(672, 24);
+            msMainMenu.Size = new Size(496, 24);
             msMainMenu.TabIndex = 0;
             msMainMenu.Text = "menuStrip1";
             // 
@@ -88,7 +88,7 @@
             tpEmployees.Location = new Point(4, 24);
             tpEmployees.Name = "tpEmployees";
             tpEmployees.Padding = new Padding(3);
-            tpEmployees.Size = new Size(664, 346);
+            tpEmployees.Size = new Size(488, 273);
             tpEmployees.TabIndex = 0;
             tpEmployees.Text = "Employees";
             tpEmployees.UseVisualStyleBackColor = true;
@@ -100,17 +100,18 @@
             tcMain.Location = new Point(0, 24);
             tcMain.Name = "tcMain";
             tcMain.SelectedIndex = 0;
-            tcMain.Size = new Size(672, 374);
+            tcMain.Size = new Size(496, 301);
             tcMain.TabIndex = 1;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(672, 398);
+            ClientSize = new Size(496, 325);
             Controls.Add(tcMain);
             Controls.Add(msMainMenu);
             MainMenuStrip = msMainMenu;
+            MinimumSize = new Size(300, 256);
             Name = "MainForm";
             Text = "Reservations";
             msMainMenu.ResumeLayout(false);
