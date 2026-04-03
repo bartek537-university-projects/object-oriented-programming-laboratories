@@ -6,6 +6,6 @@ public interface IMainView
     event EventHandler LoadFromFileClicked;
     event EventHandler ExitClicked;
 
-    void CreateTabs(IWindowService windows);
+    void InflateTabs(IWindowService windows);
     void Close();
 }

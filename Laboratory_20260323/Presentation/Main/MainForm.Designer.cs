@@ -36,6 +36,9 @@
             tsmiExit = new ToolStripMenuItem();
             tpEmployees = new TabPage();
             tcMain = new TabControl();
+            tpFaculties = new TabPage();
+            tpRooms = new TabPage();
+            tpReservations = new TabPage();
             msMainMenu.SuspendLayout();
             tcMain.SuspendLayout();
             SuspendLayout();
@@ -96,12 +99,45 @@
             // tcMain
             // 
             tcMain.Controls.Add(tpEmployees);
+            tcMain.Controls.Add(tpFaculties);
+            tcMain.Controls.Add(tpRooms);
+            tcMain.Controls.Add(tpReservations);
             tcMain.Dock = DockStyle.Fill;
             tcMain.Location = new Point(0, 24);
             tcMain.Name = "tcMain";
             tcMain.SelectedIndex = 0;
             tcMain.Size = new Size(496, 301);
             tcMain.TabIndex = 1;
+            // 
+            // tpFaculties
+            // 
+            tpFaculties.Location = new Point(4, 24);
+            tpFaculties.Name = "tpFaculties";
+            tpFaculties.Padding = new Padding(3);
+            tpFaculties.Size = new Size(488, 273);
+            tpFaculties.TabIndex = 1;
+            tpFaculties.Text = "Faculties";
+            tpFaculties.UseVisualStyleBackColor = true;
+            // 
+            // tpRooms
+            // 
+            tpRooms.Location = new Point(4, 24);
+            tpRooms.Name = "tpRooms";
+            tpRooms.Padding = new Padding(3);
+            tpRooms.Size = new Size(488, 273);
+            tpRooms.TabIndex = 2;
+            tpRooms.Text = "Rooms";
+            tpRooms.UseVisualStyleBackColor = true;
+            // 
+            // tpReservations
+            // 
+            tpReservations.Location = new Point(4, 24);
+            tpReservations.Name = "tpReservations";
+            tpReservations.Padding = new Padding(3);
+            tpReservations.Size = new Size(488, 273);
+            tpReservations.TabIndex = 3;
+            tpReservations.Text = "Reservations";
+            tpReservations.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -131,5 +167,8 @@
         private ToolStripMenuItem tsmiExit;
         private TabPage tpEmployees;
         private TabControl tcMain;
+        private TabPage tpFaculties;
+        private TabPage tpRooms;
+        private TabPage tpReservations;
     }
 }

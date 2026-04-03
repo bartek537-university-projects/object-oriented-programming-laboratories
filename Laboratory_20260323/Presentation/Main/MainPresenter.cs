@@ -12,7 +12,7 @@ public class MainPresenter : IMainPresenter
         _view = view;
         _windowService = windowService;
 
-        _view.CreateTabs(_windowService);
+        _view.InflateTabs(_windowService);
 
         _view.ExitClicked += OnExitClicked;
     }

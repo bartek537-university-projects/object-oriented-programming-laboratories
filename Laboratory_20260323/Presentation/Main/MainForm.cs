@@ -47,16 +47,27 @@ public partial class MainForm : Form, IMainView
         ExitClicked?.Invoke(this, EventArgs.Empty);
     }
 
-    public void CreateTabs(IWindowService windows)
+    public void InflateTabs(IWindowService windows)
     {
-        AddEmployeeTab(windows);
+        InflateEmployeeTab(windows);
+        InflateFacultyTab(windows);
     }
 
-    private void AddEmployeeTab(IWindowService windows)
+    private static void InflateTab(TabPage tab, Control control)
+    {
+        control.Dock = DockStyle.Fill;
+        tab.Controls.Add(control);
+    }
+
+    private void InflateEmployeeTab(IWindowService windows)
     {
         UserControl employeeFragment = windows.CreateEmployeeListFragment();
-        employeeFragment.Dock = DockStyle.Fill;
+        InflateTab(tpEmployees, employeeFragment);
+    }
 
-        tpEmployees.Controls.Add(employeeFragment);
+    private void InflateFacultyTab(IWindowService windows)
+    {
+        UserControl facultyFragment = windows.CreateFacultyListFragment();
+        InflateTab(tpFaculties, facultyFragment);
     }
 }

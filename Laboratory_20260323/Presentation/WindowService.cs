@@ -1,6 +1,7 @@
 ﻿using Laboratory_20260323.Application.Employees;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Employees;
+using Laboratory_20260323.Presentation.Faculties;
 using Laboratory_20260323.Presentation.Main;
 
 namespace Laboratory_20260323.Presentation;
@@ -62,5 +63,14 @@ public class WindowService(
     public void ShowEditEmployeeDialog(Employee employee)
     {
         _ = CreateEditEmployeeDialog(employee).ShowDialog();
+    }
+
+    public UserControl CreateFacultyListFragment()
+    {
+        FacultyListControl control = new();
+        FacultyListPresenter presenter = new(control);
+        control.Presenter = presenter;
+
+        return control;
     }
 }

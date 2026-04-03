@@ -124,10 +124,6 @@ public partial class ManagedListControl : UserControl
 
     private object? GetRowItem(int row)
     {
-        if (row < 0 || row > dgvManagedList.RowCount)
-        {
-            return null;
-        }
-        return dgvManagedList.Rows[row].DataBoundItem;
+        return row < 0 || row > dgvManagedList.RowCount ? null : dgvManagedList.Rows[row].DataBoundItem;
     }
 }
