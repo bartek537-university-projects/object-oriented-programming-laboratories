@@ -51,6 +51,7 @@ public partial class MainForm : Form, IMainView
     {
         InflateEmployeeTab(windows);
         InflateFacultyTab(windows);
+        InflateRoomTab(windows);
     }
 
     private static void InflateTab(TabPage tab, Control control)
@@ -69,5 +70,11 @@ public partial class MainForm : Form, IMainView
     {
         UserControl facultyFragment = windows.CreateFacultyListFragment();
         InflateTab(tpFaculties, facultyFragment);
+    }
+
+    private void InflateRoomTab(IWindowService windows)
+    {
+        UserControl roomFragment = windows.CreateRoomListFragment();
+        InflateTab(tpRooms, roomFragment);
     }
 }
