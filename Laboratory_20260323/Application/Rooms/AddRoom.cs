@@ -44,18 +44,15 @@ public class AddRoom
 
         private Room CreateRoom(Command command)
         {
-            if (facultyRepository.GetById(command.FacultyId) is not { } faculty)
-            {
-                throw new ArgumentException("Faculty does not exist.", nameof(command));
-            }
-
-            return new()
-            {
-                Number = command.Number,
-                Capacity = command.Capacity,
-                Type = command.Type,
-                Faculty = faculty
-            };
+            return facultyRepository.GetById(command.FacultyId) is not { } faculty
+                ? throw new ArgumentException("Faculty does not exist.", nameof(command))
+                : new()
+                {
+                    Number = command.Number,
+                    Capacity = command.Capacity,
+                    Type = command.Type,
+                    Faculty = faculty
+                };
         }
     }
 

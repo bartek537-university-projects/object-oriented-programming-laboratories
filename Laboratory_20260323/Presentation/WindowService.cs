@@ -1,5 +1,6 @@
 ﻿using Laboratory_20260323.Application.Employees;
 using Laboratory_20260323.Application.Faculties;
+using Laboratory_20260323.Application.Rooms;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Employees;
 using Laboratory_20260323.Presentation.Faculties;
@@ -17,7 +18,11 @@ public class WindowService(
     IAddFacultyHandler addFacultyHandler,
     IGetFacultiesHandler getFacultiesHandler,
     IUpdateFacultyHandler updateFacultyHandler,
-    IDeleteFacultyHandler deleteFacultyHandler
+    IDeleteFacultyHandler deleteFacultyHandler,
+    IAddRoomHandler addRoomHandler,
+    IGetRoomsHandler getRoomsHandler,
+    IUpdateRoomHandler updateRoomHandler,
+    IDeleteRoomHandler deleteRoomHandler
 ) : IWindowService
 {
     public Form CreateMainWindow()
@@ -113,10 +118,31 @@ public class WindowService(
     public UserControl CreateRoomListFragment()
     {
         RoomListControl control = new();
-        RoomListPresenter presenter = new(control);
+        RoomListPresenter presenter = new(control, this,
+            getRoomsHandler, deleteRoomHandler);
         control.Presenter = presenter;
 
         return control;
+    }
+
+    public Form CreateAddRoomDialog()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ShowAddRoomDialog()
+    {
+        CreateAddRoomDialog().ShowDialog();
+    }
+
+    public Form CreateEditRoomDialog(Room room)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ShowEditRoomDialog(Room room)
+    {
+        CreateEditRoomDialog(room).ShowDialog();
     }
 
     public UserControl CreateReservationListFragment()

@@ -17,5 +17,9 @@ public interface IWindowService
     Form CreateEditFacultyDialog(Faculty faculty);
     void ShowEditFacultyDialog(Faculty faculty);
     UserControl CreateRoomListFragment();
+    Form CreateAddRoomDialog();
+    void ShowAddRoomDialog();
+    Form CreateEditRoomDialog(Room room);
+    void ShowEditRoomDialog(Room room);
     UserControl CreateReservationListFragment();
 }
