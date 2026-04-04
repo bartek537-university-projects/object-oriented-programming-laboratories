@@ -1,4 +1,5 @@
 ﻿using Laboratory_20260323.Application.Employees;
+using Laboratory_20260323.Application.Faculties;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Employees;
 using Laboratory_20260323.Presentation.Faculties;
@@ -12,8 +13,12 @@ public class WindowService(
     IAddEmployeeHandler addEmployeeHandler,
     IGetEmployeesHandler getEmployeesHandler,
     IUpdateEmployeeHandler updateEmployeeHandler,
-    IDeleteEmployeeHandler deleteEmployeeHandler)
-    : IWindowService
+    IDeleteEmployeeHandler deleteEmployeeHandler,
+    IAddFacultyHandler addFacultyHandler,
+    IGetFacultiesHandler getFacultiesHandler,
+    IUpdateFacultyHandler updateFacultyHandler,
+    IDeleteFacultyHandler deleteFacultyHandler
+) : IWindowService
 {
     public Form CreateMainWindow()
     {
@@ -70,10 +75,39 @@ public class WindowService(
     public UserControl CreateFacultyListFragment()
     {
         FacultyListControl control = new();
-        FacultyListPresenter presenter = new(control);
+        FacultyListPresenter presenter = new(control, this,
+            getFacultiesHandler, deleteFacultyHandler);
         control.Presenter = presenter;
 
         return control;
+    }
+
+    public Form CreateAddFacultyDialog()
+    {
+        ManageFacultyForm form = new();
+        AddFacultyPresenter presenter = new(form, addFacultyHandler);
+        form.Presenter = presenter;
+
+        return form;
+    }
+
+    public void ShowAddFacultyDialog()
+    {
+        _ = CreateAddFacultyDialog().ShowDialog();
+    }
+
+    public Form CreateEditFacultyDialog(Faculty faculty)
+    {
+        ManageFacultyForm form = new();
+        EditFacultyPresenter presenter = new(faculty, form, updateFacultyHandler);
+        form.Presenter = presenter;
+
+        return form;
+    }
+
+    public void ShowEditFacultyDialog(Faculty faculty)
+    {
+        _ = CreateEditFacultyDialog(faculty).ShowDialog();
     }
 
     public UserControl CreateRoomListFragment()
