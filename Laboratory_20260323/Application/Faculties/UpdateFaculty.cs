@@ -36,7 +36,7 @@ public class UpdateFaculty
 
         private void ValidateFacultyExists(Guid facultyId)
         {
-            if (repository.GetById(facultyId) is null)
+            if (!repository.ExistsById(facultyId))
             {
                 throw new ArgumentException("Faculty does not exist.", nameof(facultyId));
             }

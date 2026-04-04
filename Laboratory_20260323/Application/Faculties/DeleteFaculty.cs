@@ -12,7 +12,8 @@ public class DeleteFaculty
         public Response Handle(Command command)
         {
             ValidateFacultyExists(command.FacultyId);
-            // TODO: Add check for related data (reservations).
+            //ValidateNoRoomsExist(command.FacultyId);
+            // TODO: Add check for related data (rooms).
 
             repository.DeleteById(command.FacultyId);
 
@@ -21,7 +22,7 @@ public class DeleteFaculty
 
         private void ValidateFacultyExists(Guid facultyId)
         {
-            if (repository.GetById(facultyId) is null)
+            if (!repository.ExistsById(facultyId))
             {
                 throw new ArgumentException("Faculty does not exist.", nameof(facultyId));
             }

@@ -9,6 +9,8 @@ public interface IEmployeeRepository
     IEnumerable<Employee> GetAll();
     Employee? GetById(Guid employeeId);
 
+    bool ExistsById(Guid employeeId);
+
     void Update(Employee employee);
 
     void DeleteById(Guid employeeId);

@@ -27,6 +27,11 @@ public class InMemoryFacultyRepository : IFacultyRepository
         return faculty;
     }
 
+    public bool ExistsById(Guid facultyId)
+    {
+        return _faculties.ContainsKey(facultyId);
+    }
+
     public void Update(Faculty faculty)
     {
         if (!_faculties.ContainsKey(faculty.Id))

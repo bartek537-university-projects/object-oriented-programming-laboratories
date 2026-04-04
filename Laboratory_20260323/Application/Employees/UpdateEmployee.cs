@@ -37,7 +37,7 @@ public class UpdateEmployee
 
         private void ValidateEmployeeExists(Guid employeeId)
         {
-            if (repository.GetById(employeeId) is null)
+            if (!repository.ExistsById(employeeId))
             {
                 throw new ArgumentException("Employee does not exist.", nameof(employeeId));
             }

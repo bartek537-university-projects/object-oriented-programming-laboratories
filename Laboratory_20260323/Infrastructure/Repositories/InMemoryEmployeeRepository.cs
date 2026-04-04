@@ -27,6 +27,11 @@ internal class InMemoryEmployeeRepository : IEmployeeRepository
         return employee;
     }
 
+    public bool ExistsById(Guid employeeId)
+    {
+        return _employees.ContainsKey(employeeId);
+    }
+
     public void Update(Employee employee)
     {
         if (!_employees.ContainsKey(employee.Id))
