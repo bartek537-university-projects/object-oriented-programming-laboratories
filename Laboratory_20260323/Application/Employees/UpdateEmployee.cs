@@ -15,8 +15,8 @@ public class UpdateEmployee
     {
         public Response Handle(Command command)
         {
-            ValidateEmployeeDetails(command);
             ValidateEmployeeExists(command.EmployeeId);
+            ValidateEmployeeDetails(command);
 
             Employee employee = CreateEmployee(command);
             repository.Update(employee);
