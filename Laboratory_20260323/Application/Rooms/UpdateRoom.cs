@@ -57,6 +57,7 @@ public class UpdateRoom
                 ? throw new ArgumentException("Faculty does not exist.", nameof(command))
                 : new()
                 {
+                    Id = command.RoomId,
                     Number = command.Number,
                     Capacity = command.Capacity,
                     Type = command.Type,

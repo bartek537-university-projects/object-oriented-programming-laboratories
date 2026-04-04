@@ -127,22 +127,30 @@ public class WindowService(
 
     public Form CreateAddRoomDialog()
     {
-        throw new NotImplementedException();
+        ManageRoomForm form = new();
+        AddRoomPresenter presenter = new(form, addRoomHandler, getFacultiesHandler);
+        form.Presenter = presenter;
+
+        return form;
     }
 
     public void ShowAddRoomDialog()
     {
-        CreateAddRoomDialog().ShowDialog();
+        _ = CreateAddRoomDialog().ShowDialog();
     }
 
     public Form CreateEditRoomDialog(Room room)
     {
-        throw new NotImplementedException();
+        ManageRoomForm form = new();
+        EditRoomPresenter presenter = new(room, form, updateRoomHandler, getFacultiesHandler);
+        form.Presenter = presenter;
+
+        return form;
     }
 
     public void ShowEditRoomDialog(Room room)
     {
-        CreateEditRoomDialog(room).ShowDialog();
+        _ = CreateEditRoomDialog(room).ShowDialog();
     }
 
     public UserControl CreateReservationListFragment()

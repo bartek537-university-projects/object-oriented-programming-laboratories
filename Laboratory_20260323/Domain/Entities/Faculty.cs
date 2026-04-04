@@ -7,4 +7,9 @@ public class Faculty
     public required string Name { get; set; }
 
     public required Address Address { get; set; }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }
