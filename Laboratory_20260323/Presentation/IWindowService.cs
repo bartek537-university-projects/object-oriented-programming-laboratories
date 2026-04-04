@@ -13,4 +13,5 @@ public interface IWindowService
     void ShowEditEmployeeDialog(Employee employee);
     UserControl CreateFacultyListFragment();
     UserControl CreateRoomListFragment();
+    UserControl CreateReservationListFragment();
 }

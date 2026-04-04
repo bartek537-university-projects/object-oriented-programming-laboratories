@@ -3,6 +3,7 @@ using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Employees;
 using Laboratory_20260323.Presentation.Faculties;
 using Laboratory_20260323.Presentation.Main;
+using Laboratory_20260323.Presentation.Reservations;
 using Laboratory_20260323.Presentation.Rooms;
 
 namespace Laboratory_20260323.Presentation;
@@ -79,6 +80,15 @@ public class WindowService(
     {
         RoomListControl control = new();
         RoomListPresenter presenter = new(control);
+        control.Presenter = presenter;
+
+        return control;
+    }
+
+    public UserControl CreateReservationListFragment()
+    {
+        ReservationListControl control = new();
+        ReservationListPresenter presenter = new(control);
         control.Presenter = presenter;
 
         return control;

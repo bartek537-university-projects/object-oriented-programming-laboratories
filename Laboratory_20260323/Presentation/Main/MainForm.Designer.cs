@@ -98,10 +98,10 @@
             // 
             // tcMain
             // 
-            tcMain.Controls.Add(tpEmployees);
-            tcMain.Controls.Add(tpFaculties);
-            tcMain.Controls.Add(tpRooms);
             tcMain.Controls.Add(tpReservations);
+            tcMain.Controls.Add(tpRooms);
+            tcMain.Controls.Add(tpFaculties);
+            tcMain.Controls.Add(tpEmployees);
             tcMain.Dock = DockStyle.Fill;
             tcMain.Location = new Point(0, 24);
             tcMain.Name = "tcMain";

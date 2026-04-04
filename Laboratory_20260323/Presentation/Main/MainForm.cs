@@ -52,12 +52,7 @@ public partial class MainForm : Form, IMainView
         InflateEmployeeTab(windows);
         InflateFacultyTab(windows);
         InflateRoomTab(windows);
-    }
-
-    private static void InflateTab(TabPage tab, Control control)
-    {
-        control.Dock = DockStyle.Fill;
-        tab.Controls.Add(control);
+        InflateReservationsTab(windows);
     }
 
     private void InflateEmployeeTab(IWindowService windows)
@@ -76,5 +71,17 @@ public partial class MainForm : Form, IMainView
     {
         UserControl roomFragment = windows.CreateRoomListFragment();
         InflateTab(tpRooms, roomFragment);
+    }
+
+    private void InflateReservationsTab(IWindowService windows)
+    {
+        UserControl reservationsFragment = windows.CreateReservationListFragment();
+        InflateTab(tpReservations, reservationsFragment);
+    }
+
+    private static void InflateTab(TabPage tab, Control control)
+    {
+        control.Dock = DockStyle.Fill;
+        tab.Controls.Add(control);
     }
 }
