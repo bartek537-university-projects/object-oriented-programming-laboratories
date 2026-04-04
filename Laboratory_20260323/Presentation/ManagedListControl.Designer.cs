@@ -114,6 +114,7 @@
             dgvManagedList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvManagedList.Size = new Size(166, 186);
             dgvManagedList.TabIndex = 0;
+            dgvManagedList.DataSourceChanged += dgvManagedList_DataSourceChanged;
             dgvManagedList.CellDoubleClick += dgvManagedList_CellDoubleClick;
             dgvManagedList.SelectionChanged += dgvManagedList_SelectionChanged;
             // 

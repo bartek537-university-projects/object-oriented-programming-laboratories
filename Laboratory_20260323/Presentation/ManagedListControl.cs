@@ -23,9 +23,19 @@ public partial class ManagedListControl : UserControl
         dgvManagedList.Columns.Clear();
     }
 
+    private void dgvManagedList_DataSourceChanged(object sender, EventArgs e)
+    {
+        OnDataSourceChanged();
+    }
+
     private void dgvManagedList_SelectionChanged(object sender, EventArgs e)
     {
         OnSelectionChanged();
+    }
+
+    private void OnDataSourceChanged()
+    {
+        UpdateActionButtons();
     }
 
     private void OnSelectionChanged()
