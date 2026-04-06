@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Common.Exceptions;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Employees;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Employees.Interfaces;
@@ -7,12 +8,13 @@ namespace Laboratory_20260323.Presentation.Employees;
 
 public class EditEmployeePresenter : IManageEmployeePresenter
 {
-    private readonly IManageEmployeeView _view;
-    private readonly IUpdateEmployeeHandler _updateEmployeeHandler;
-
     private readonly Employee _employee;
 
-    public EditEmployeePresenter(Employee employee, IManageEmployeeView view, IUpdateEmployeeHandler updateEmployeeHandler)
+    private readonly IManageEmployeeView _view;
+    private readonly IRequestHandler<UpdateEmployee.Command, UpdateEmployee.Response> _updateEmployeeHandler;
+
+    public EditEmployeePresenter(Employee employee, IManageEmployeeView view,
+        IRequestHandler<UpdateEmployee.Command, UpdateEmployee.Response> updateEmployeeHandler)
     {
         _view = view;
         _updateEmployeeHandler = updateEmployeeHandler;
@@ -38,11 +40,11 @@ public class EditEmployeePresenter : IManageEmployeePresenter
         string firstName = _view.FirstName.Trim();
         string lastName = _view.LastName.Trim();
 
-        UpdateEmployee.Command request = new(_employee.Id, firstName, lastName);
+        UpdateEmployee.Command command = new(_employee.Id, firstName, lastName);
 
         try
         {
-            UpdateEmployee.Response _ = _updateEmployeeHandler.Handle(request);
+            UpdateEmployee.Response _ = _updateEmployeeHandler.Handle(command);
             _view.Close();
         }
         catch (ValidationException ex)

@@ -5,14 +5,14 @@ namespace Laboratory_20260323.Application.Reservations.Validators;
 
 public class ReservationValidator : IValidator<AddReservation.Command>, IValidator<UpdateReservation.Command>
 {
-    public Dictionary<string, string> Validate(AddReservation.Command reservation)
+    public Dictionary<string, string> Validate(AddReservation.Command ac)
     {
-        return Validate(new ReservationDetails(reservation.RoomId, reservation.EmployeeId, reservation.Start, reservation.End));
+        return Validate(new ReservationDetails(ac.RoomId, ac.EmployeeId, ac.Start, ac.End));
     }
 
-    public Dictionary<string, string> Validate(UpdateReservation.Command reservation)
+    public Dictionary<string, string> Validate(UpdateReservation.Command uc)
     {
-        return Validate(new ReservationDetails(reservation.RoomId, reservation.EmployeeId, reservation.Start, reservation.End));
+        return Validate(new ReservationDetails(uc.RoomId, uc.EmployeeId, uc.Start, uc.End));
     }
 
     private static Dictionary<string, string> Validate(ReservationDetails reservation)
@@ -23,19 +23,18 @@ public class ReservationValidator : IValidator<AddReservation.Command>, IValidat
             (nameof(Reservation.End), ValidateTimeWindow(reservation.Start, reservation.End))
         ];
 
-        return errors
-            .Where(error => error.Message is not null)
+        return errors.Where(error => error.Message is not null)
             .ToDictionary(error => error.Field, error => error.Message!);
     }
 
-    private static string? ValidateRoom(object? obj)
+    private static string? ValidateRoom(Guid? id)
     {
-        return obj is null ? "Room must be specified." : null;
+        return id is null ? "Room must be specified." : null;
     }
 
-    private static string? ValidateEmployee(object? obj)
+    private static string? ValidateEmployee(Guid? id)
     {
-        return obj is null ? "Employee must be specified." : null;
+        return id is null ? "Employee must be specified." : null;
     }
 
     private static string? ValidateTimeWindow(DateTime start, DateTime end)

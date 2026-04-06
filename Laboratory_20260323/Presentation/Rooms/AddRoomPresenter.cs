@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Common.Exceptions;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Faculties;
 using Laboratory_20260323.Application.Rooms;
 using Laboratory_20260323.Domain.Entities;
@@ -9,10 +10,13 @@ namespace Laboratory_20260323.Presentation.Rooms;
 public class AddRoomPresenter : IManageRoomPresenter
 {
     private readonly IManageRoomView _view;
-    private readonly IAddRoomHandler _addRoomHandler;
-    private readonly IGetFacultiesHandler _getFacultiesHandler;
 
-    public AddRoomPresenter(IManageRoomView view, IAddRoomHandler addRoomHandler, IGetFacultiesHandler getFacultiesHandler)
+    private readonly IRequestHandler<AddRoom.Command, AddRoom.Response> _addRoomHandler;
+    private readonly IRequestHandler<GetFaculties.Query, GetFaculties.Response> _getFacultiesHandler;
+
+    public AddRoomPresenter(IManageRoomView view,
+        IRequestHandler<AddRoom.Command, AddRoom.Response> addRoomHandler,
+        IRequestHandler<GetFaculties.Query, GetFaculties.Response> getFacultiesHandler)
     {
         _view = view;
         _addRoomHandler = addRoomHandler;
@@ -25,8 +29,12 @@ public class AddRoomPresenter : IManageRoomPresenter
 
     private void OnViewLoaded(object? sender, EventArgs e)
     {
-        var faculties = _getFacultiesHandler.Handle(new()).Faculties;
-        _view.SetFaculties(faculties);
+        _view.SetFaculties(GetAllFaculties());
+    }
+
+    private IReadOnlyList<Faculty> GetAllFaculties()
+    {
+        return _getFacultiesHandler.Handle(new()).Faculties;
     }
 
     private void OnSubmitClicked(object? sender, EventArgs e)
@@ -38,16 +46,7 @@ public class AddRoomPresenter : IManageRoomPresenter
         RoomType roomType = _view.RoomType;
         Faculty? faculty = _view.Faculty;
 
-        if (faculty is null)
-        {
-            _view.SetErrors(new Dictionary<string, string>
-            {
-                [nameof(Room.Faculty)] = "Create a faculty first."
-            });
-            return;
-        }
-
-        AddRoom.Command command = new(roomNumber, capacity, roomType, faculty.Id);
+        AddRoom.Command command = new(roomNumber, capacity, roomType, faculty?.Id);
 
         try
         {

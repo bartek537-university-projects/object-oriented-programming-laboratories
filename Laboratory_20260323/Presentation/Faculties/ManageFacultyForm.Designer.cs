@@ -196,7 +196,7 @@
             // btnOk
             // 
             btnOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnOk.Location = new Point(182, 284);
+            btnOk.Location = new Point(182, 290);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
             btnOk.TabIndex = 3;
@@ -207,7 +207,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(261, 284);
+            btnCancel.Location = new Point(261, 290);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 4;
@@ -226,13 +226,13 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
-            ClientSize = new Size(348, 319);
+            ClientSize = new Size(348, 325);
             Controls.Add(btnOk);
             Controls.Add(btnCancel);
             Controls.Add(gbAddress);
             Controls.Add(gbBasicInformation);
             Controls.Add(gbInternal);
-            MinimumSize = new Size(364, 240);
+            MinimumSize = new Size(364, 364);
             Name = "ManageFacultyForm";
             Text = "Edit faculty";
             gbInternal.ResumeLayout(false);

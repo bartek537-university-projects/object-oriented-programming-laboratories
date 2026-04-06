@@ -15,23 +15,23 @@ public class UpdateReservation
         public Response Handle(Command command)
         {
             ValidateRequest(command);
-            EnsureReservationExists(command.ReservationId);
 
+            Reservation oldReservation = GetReservationOrThrow(command.ReservationId);
             Room room = GetRoomOrThrow(command.RoomId!.Value);
             Employee employee = GetEmployeeOrThrow(command.EmployeeId!.Value);
 
-            EnsureAvailability(command.ReservationId, room, employee, command.Start, command.End);
+            EnsureAvailability(oldReservation.Id, room, employee, command.Start, command.End);
 
-            Reservation reservation = new()
+            Reservation newReservation = new()
             {
-                Id = command.ReservationId,
+                Id = oldReservation.Id,
                 Room = room,
                 Employee = employee,
                 Start = command.Start,
                 End = command.End
             };
 
-            reservationRepository.Update(reservation);
+            reservationRepository.Update(newReservation);
             return new Response();
         }
 
@@ -43,12 +43,9 @@ public class UpdateReservation
             }
         }
 
-        private void EnsureReservationExists(Guid reservationId)
+        private Reservation GetReservationOrThrow(Guid reservationId)
         {
-            if (!reservationRepository.ExistsById(reservationId))
-            {
-                throw new NotFoundException("Reservation does not exist.");
-            }
+            return reservationRepository.GetById(reservationId) ?? throw new NotFoundException("Reservation does not exist.");
         }
 
         private Room GetRoomOrThrow(Guid roomId)

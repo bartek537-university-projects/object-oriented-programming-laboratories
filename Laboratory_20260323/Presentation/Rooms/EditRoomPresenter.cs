@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Common.Exceptions;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Faculties;
 using Laboratory_20260323.Application.Rooms;
 using Laboratory_20260323.Domain.Entities;
@@ -9,12 +10,14 @@ namespace Laboratory_20260323.Presentation.Rooms;
 public class EditRoomPresenter : IManageRoomPresenter
 {
     private readonly IManageRoomView _view;
-    private readonly IUpdateRoomHandler _updateRoomHandler;
-    private readonly IGetFacultiesHandler _getFacultiesHandler;
+    private readonly IRequestHandler<UpdateRoom.Command, UpdateRoom.Response> _updateRoomHandler;
+    private readonly IRequestHandler<GetFaculties.Query, GetFaculties.Response> _getFacultiesHandler;
 
     private readonly Room _room;
 
-    public EditRoomPresenter(Room room, IManageRoomView view, IUpdateRoomHandler updateRoomHandler, IGetFacultiesHandler getFacultiesHandler)
+    public EditRoomPresenter(Room room, IManageRoomView view,
+        IRequestHandler<UpdateRoom.Command, UpdateRoom.Response> updateRoomHandler,
+        IRequestHandler<GetFaculties.Query, GetFaculties.Response> getFacultiesHandler)
     {
         _room = room;
 
@@ -39,7 +42,7 @@ public class EditRoomPresenter : IManageRoomPresenter
 
     private void OnViewLoaded(object? sender, EventArgs e)
     {
-        var faculties = _getFacultiesHandler.Handle(new()).Faculties;
+        IReadOnlyList<Faculty> faculties = _getFacultiesHandler.Handle(new()).Faculties;
         _view.SetFaculties(faculties);
     }
 
@@ -50,9 +53,9 @@ public class EditRoomPresenter : IManageRoomPresenter
         string roomNumber = _view.RoomNumber;
         int capacity = _view.Capacity;
         RoomType roomType = _view.RoomType;
-        Faculty faculty = _view.Faculty!;
+        Faculty? faculty = _view.Faculty;
 
-        UpdateRoom.Command command = new(_room.Id, roomNumber, capacity, roomType, faculty.Id);
+        UpdateRoom.Command command = new(_room.Id, roomNumber, capacity, roomType, faculty?.Id);
 
         try
         {

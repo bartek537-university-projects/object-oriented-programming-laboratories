@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Rooms;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Rooms;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Rooms.Interfaces;
 
@@ -9,11 +10,12 @@ public class RoomListPresenter : IRoomListPresenter
     private readonly IRoomListView _view;
     private readonly IWindowService _windows;
 
-    private readonly IGetRoomsHandler _getRoomsHandler;
-    private readonly IDeleteRoomHandler _deleteRoomHandler;
+    private readonly IRequestHandler<GetRooms.Query, GetRooms.Response> _getRoomsHandler;
+    private readonly IRequestHandler<DeleteRoom.Command, DeleteRoom.Response> _deleteRoomHandler;
 
     public RoomListPresenter(IRoomListView view, IWindowService windows,
-        IGetRoomsHandler getRoomsHandler, IDeleteRoomHandler deleteRoomHandler)
+        IRequestHandler<GetRooms.Query, GetRooms.Response> getRoomsHandler,
+        IRequestHandler<DeleteRoom.Command, DeleteRoom.Response> deleteRoomHandler)
     {
         _view = view;
         _windows = windows;

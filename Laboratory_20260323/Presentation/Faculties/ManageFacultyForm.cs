@@ -10,7 +10,7 @@ public partial class ManageFacultyForm : Form, IManageFacultyView
     public IManageFacultyPresenter Presenter { get; set; }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public string Identifier { get => tbIdentifier.Text; set => tbIdentifier.Text = value; }
+    public string Identifier { set => tbIdentifier.Text = value; }
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FacultyName { get => tbFacultyName.Text; set => tbFacultyName.Text = value; }
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

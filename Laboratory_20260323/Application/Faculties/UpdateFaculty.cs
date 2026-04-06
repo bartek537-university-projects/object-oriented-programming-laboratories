@@ -1,52 +1,26 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
 using Laboratory_20260323.Application.Abstractions.Repositories;
 using Laboratory_20260323.Application.Common.Exceptions;
-using Laboratory_20260323.Application.Faculties.Interfaces;
 using Laboratory_20260323.Domain.Entities;
 
 namespace Laboratory_20260323.Application.Faculties;
 
 public class UpdateFaculty
 {
-    public record Command(Guid FacultyId, string Name, string City, string PostalCode, string Street, string Building) : IFacultyData;
+    public record Command(Guid FacultyId, string Name, string City, string PostalCode, string Street, string Building) : IRequest<Response>;
 
-    public class Handler(IValidator<IFacultyData> validator, IFacultyRepository repository)
-        : IUpdateFacultyHandler
+    public class Handler(IValidator<Command> validator, IFacultyRepository repository)
+        : IRequestHandler<Command, Response>
     {
         public Response Handle(Command command)
         {
-            ValidateFacultyExists(command.FacultyId);
-            ValidateFacultyDetails(command);
+            ValidateRequest(command);
 
-            Faculty faculty = CreateFaculty(command);
-            repository.Update(faculty);
+            Faculty oldFaculty = GetFacultyOrThrow(command.FacultyId);
 
-            return new Response();
-        }
-
-        private void ValidateFacultyDetails(Command command)
-        {
-            Dictionary<string, string> errors = validator.Validate(command);
-
-            if (errors.Count > 0)
+            Faculty newFaculty = new()
             {
-                throw new ValidationException(errors);
-            }
-        }
-
-        private void ValidateFacultyExists(Guid facultyId)
-        {
-            if (!repository.ExistsById(facultyId))
-            {
-                throw new ArgumentException("Faculty does not exist.", nameof(facultyId));
-            }
-        }
-
-        private static Faculty CreateFaculty(Command command)
-        {
-            return new()
-            {
-                Id = command.FacultyId,
+                Id = oldFaculty.Id,
                 Name = command.Name,
                 Address = new()
                 {
@@ -56,13 +30,25 @@ public class UpdateFaculty
                     Building = command.Building
                 }
             };
+
+            repository.Update(newFaculty);
+
+            return new Response();
+        }
+
+        private void ValidateRequest(Command command)
+        {
+            if (validator.Validate(command) is { Count: > 0 } errors)
+            {
+                throw new ValidationException(errors);
+            }
+        }
+
+        private Faculty GetFacultyOrThrow(Guid facultyId)
+        {
+            return repository.GetById(facultyId) ?? throw new NotFoundException("Faculty does not exist.");
         }
     }
 
     public record Response();
-}
-
-public interface IUpdateFacultyHandler
-{
-    UpdateFaculty.Response Handle(UpdateFaculty.Command command);
 }

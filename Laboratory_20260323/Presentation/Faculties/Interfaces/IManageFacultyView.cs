@@ -2,7 +2,7 @@
 
 public interface IManageFacultyView
 {
-    string Identifier { get; set; }
+    string Identifier { set; }
     string FacultyName { get; set; }
     string City { get; set; }
     string PostalCode { get; set; }

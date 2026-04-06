@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Common.Exceptions;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Faculties;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Faculties.Interfaces;
@@ -6,11 +7,12 @@ using Laboratory_20260323.Presentation.Faculties.Interfaces;
 public class EditFacultyPresenter : IManageFacultyPresenter
 {
     private readonly IManageFacultyView _view;
-    private readonly IUpdateFacultyHandler _updateFacultyHandler;
+    private readonly IRequestHandler<UpdateFaculty.Command, UpdateFaculty.Response> _updateFacultyHandler;
 
     private readonly Faculty _faculty;
 
-    public EditFacultyPresenter(Faculty faculty, IManageFacultyView view, IUpdateFacultyHandler updateFacultyHandler)
+    public EditFacultyPresenter(Faculty faculty, IManageFacultyView view,
+        IRequestHandler<UpdateFaculty.Command, UpdateFaculty.Response> updateFacultyHandler)
     {
         _faculty = faculty;
 

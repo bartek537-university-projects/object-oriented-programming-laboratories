@@ -1,38 +1,32 @@
-﻿using Laboratory_20260323.Application.Abstractions.Repositories;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Abstractions.Repositories;
+using Laboratory_20260323.Application.Common.Exceptions;
+using Laboratory_20260323.Domain.Entities;
 
 namespace Laboratory_20260323.Application.Employees;
 
 public class DeleteEmployee
 {
-    public record Command(Guid EmployeeId);
+    public record Command(Guid EmployeeId) : IRequest<Response>;
 
     public class Handler(IEmployeeRepository repository)
-        : IDeleteEmployeeHandler
+        : IRequestHandler<Command, Response>
     {
         public Response Handle(Command command)
         {
-            ValidateEmployeeExists(command.EmployeeId);
+            Employee employee = GetEmployeeOrThrow(command.EmployeeId);
             // TODO: Add check for related data (reservations).
 
-            repository.DeleteById(command.EmployeeId);
+            repository.DeleteById(employee.Id);
 
             return new Response();
         }
 
-        private void ValidateEmployeeExists(Guid employeeId)
+        private Employee GetEmployeeOrThrow(Guid employeeId)
         {
-            if (!repository.ExistsById(employeeId))
-            {
-                throw new ArgumentException("Employee does not exist.", nameof(employeeId));
-            }
+            return repository.GetById(employeeId) ?? throw new NotFoundException("Employee does not exist.");
         }
     }
 
     public record Response();
 }
-
-public interface IDeleteEmployeeHandler
-{
-    DeleteEmployee.Response Handle(DeleteEmployee.Command request);
-}
-

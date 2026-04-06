@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Faculties;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Faculties;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Faculties.Interfaces;
 
@@ -9,11 +10,12 @@ public class FacultyListPresenter : IFacultyListPresenter
     private readonly IFacultyListView _view;
     private readonly IWindowService _windows;
 
-    private readonly IGetFacultiesHandler _getFacultiesHandler;
-    private readonly IDeleteFacultyHandler _deleteFacultyHandler;
+    private readonly IRequestHandler<GetFaculties.Query, GetFaculties.Response> _getFacultiesHandler;
+    private readonly IRequestHandler<DeleteFaculty.Command, DeleteFaculty.Response> _deleteFacultyHandler;
 
     public FacultyListPresenter(IFacultyListView view, IWindowService windows,
-        IGetFacultiesHandler getFacultiesHandler, IDeleteFacultyHandler deleteFacultyHandler)
+        IRequestHandler<GetFaculties.Query, GetFaculties.Response> getFacultiesHandler,
+        IRequestHandler<DeleteFaculty.Command, DeleteFaculty.Response> deleteFacultyHandler)
     {
         _view = view;
         _windows = windows;

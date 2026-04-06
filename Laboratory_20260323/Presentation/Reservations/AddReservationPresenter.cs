@@ -13,12 +13,13 @@ public class AddReservationPresenter : IManageReservationPresenter
     private readonly IManageReservationView _view;
 
     private readonly IRequestHandler<AddReservation.Command, AddReservation.Response> _addReservationHandler;
-    private readonly IGetRoomsHandler _getRoomsHandler;
-    private readonly IGetEmployeesHandler _getEmployeesHandler;
+    private readonly IRequestHandler<GetRooms.Query, GetRooms.Response> _getRoomsHandler;
+    private readonly IRequestHandler<GetEmployees.Query, GetEmployees.Response> _getEmployeesHandler;
 
     public AddReservationPresenter(IManageReservationView view,
         IRequestHandler<AddReservation.Command, AddReservation.Response> addReservationHandler,
-        IGetRoomsHandler getRoomsHandler, IGetEmployeesHandler getEmployeesHandler)
+        IRequestHandler<GetRooms.Query, GetRooms.Response> getRoomsHandler,
+        IRequestHandler<GetEmployees.Query, GetEmployees.Response> getEmployeesHandler)
     {
         _view = view;
 

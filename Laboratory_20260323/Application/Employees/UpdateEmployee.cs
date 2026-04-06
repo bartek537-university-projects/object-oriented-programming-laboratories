@@ -1,63 +1,48 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
 using Laboratory_20260323.Application.Abstractions.Repositories;
 using Laboratory_20260323.Application.Common.Exceptions;
-using Laboratory_20260323.Application.Employees.Interfaces;
 using Laboratory_20260323.Domain.Entities;
 
 namespace Laboratory_20260323.Application.Employees;
 
 public class UpdateEmployee
 {
-    public record Command(Guid EmployeeId, string FirstName, string LastName) : IEmployeeData;
+    public record Command(Guid EmployeeId, string FirstName, string LastName) : IRequest<Response>;
 
-    public class Handler(IValidator<IEmployeeData> validator, IEmployeeRepository repository)
-        : IUpdateEmployeeHandler
+    public class Handler(IValidator<Command> validator, IEmployeeRepository repository)
+        : IRequestHandler<Command, Response>
     {
         public Response Handle(Command command)
         {
-            ValidateEmployeeExists(command.EmployeeId);
-            ValidateEmployeeDetails(command);
+            ValidateRequest(command);
 
-            Employee employee = CreateEmployee(command);
-            repository.Update(employee);
+            Employee oldEmployee = GetEmployeeOrThrow(command.EmployeeId);
+
+            Employee newEmployee = new()
+            {
+                Id = oldEmployee.Id,
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+            };
+
+            repository.Update(newEmployee);
 
             return new Response();
         }
 
-        private void ValidateEmployeeDetails(Command command)
+        private void ValidateRequest(Command command)
         {
-            Dictionary<string, string> errors = validator
-                .Validate(command);
-
-            if (errors.Count > 0)
+            if (validator.Validate(command) is { Count: > 0 } errors)
             {
                 throw new ValidationException(errors);
             }
         }
 
-        private void ValidateEmployeeExists(Guid employeeId)
+        private Employee GetEmployeeOrThrow(Guid employeeId)
         {
-            if (!repository.ExistsById(employeeId))
-            {
-                throw new ArgumentException("Employee does not exist.", nameof(employeeId));
-            }
-        }
-
-        private static Employee CreateEmployee(Command command)
-        {
-            return new()
-            {
-                Id = command.EmployeeId,
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-            };
+            return repository.GetById(employeeId) ?? throw new NotFoundException("Employee does not exist.");
         }
     }
 
     public record Response();
-}
-
-public interface IUpdateEmployeeHandler
-{
-    UpdateEmployee.Response Handle(UpdateEmployee.Command request);
 }

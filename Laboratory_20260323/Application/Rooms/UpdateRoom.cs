@@ -1,75 +1,56 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
 using Laboratory_20260323.Application.Abstractions.Repositories;
 using Laboratory_20260323.Application.Common.Exceptions;
-using Laboratory_20260323.Application.Rooms.Interfaces;
 using Laboratory_20260323.Domain.Entities;
 
 namespace Laboratory_20260323.Application.Rooms;
 
 public class UpdateRoom
 {
-    public record Command(Guid RoomId, string Number, int Capacity, RoomType Type, Guid FacultyId) : IRoomData;
+    public record Command(Guid RoomId, string Number, int Capacity, RoomType Type, Guid? FacultyId) : IRequest<Response>;
 
-    public class Handler(IValidator<IRoomData> validator, IRoomRepository roomRepository, IFacultyRepository facultyRepository)
-        : IUpdateRoomHandler
+    public class Handler(IValidator<Command> validator, IRoomRepository roomRepository, IFacultyRepository facultyRepository)
+        : IRequestHandler<Command, Response>
     {
         public Response Handle(Command command)
         {
-            ValidateRoomDetails(command);
-            ValidateRoomExists(command.RoomId);
-            ValidateFacultyExists(command.FacultyId);
+            ValidateRequest(command);
 
-            Room room = CreateRoom(command);
-            roomRepository.Update(room);
+            Room oldRoom = GetRoomOrThrow(command.RoomId);
+            Faculty faculty = GetFacultyOrThrow(command.FacultyId!.Value);
+
+            Room newRoom = new()
+            {
+                Id = oldRoom.Id,
+                Number = command.Number,
+                Capacity = command.Capacity,
+                Type = command.Type,
+                Faculty = faculty
+            };
+
+            roomRepository.Update(newRoom);
 
             return new Response();
         }
 
-        private void ValidateRoomDetails(Command command)
+        private void ValidateRequest(Command command)
         {
-            Dictionary<string, string> errors = validator.Validate(command);
-
-            if (errors.Count > 0)
+            if (validator.Validate(command) is { Count: > 0 } errors)
             {
                 throw new ValidationException(errors);
             }
         }
 
-        private void ValidateRoomExists(Guid roomId)
+        private Room GetRoomOrThrow(Guid roomId)
         {
-            if (!roomRepository.ExistsById(roomId))
-            {
-                throw new ArgumentException("Room does not exist.", nameof(roomId));
-            }
+            return roomRepository.GetById(roomId) ?? throw new NotFoundException("Room does not exist.");
         }
 
-        private void ValidateFacultyExists(Guid facultyId)
+        private Faculty GetFacultyOrThrow(Guid facultyId)
         {
-            if (!facultyRepository.ExistsById(facultyId))
-            {
-                throw new ArgumentException("Faculty does not exist.", nameof(facultyId));
-            }
-        }
-
-        private Room CreateRoom(Command command)
-        {
-            return facultyRepository.GetById(command.FacultyId) is not { } faculty
-                ? throw new ArgumentException("Faculty does not exist.", nameof(command))
-                : new()
-                {
-                    Id = command.RoomId,
-                    Number = command.Number,
-                    Capacity = command.Capacity,
-                    Type = command.Type,
-                    Faculty = faculty
-                };
+            return facultyRepository.GetById(facultyId) ?? throw new NotFoundException("Faculty does not exist.");
         }
     }
 
     public record Response();
-}
-
-public interface IUpdateRoomHandler
-{
-    UpdateRoom.Response Handle(UpdateRoom.Command command);
 }

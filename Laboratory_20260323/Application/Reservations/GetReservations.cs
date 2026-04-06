@@ -13,7 +13,7 @@ public class GetReservations
     {
         public Response Handle(Query query)
         {
-            List<Reservation> reservations = repository.GetAll().ToList();
+            List<Reservation> reservations = [.. repository.GetAll()];
             return new Response(reservations);
         }
     }

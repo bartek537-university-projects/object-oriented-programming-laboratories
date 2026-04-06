@@ -1,5 +1,7 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
 using Laboratory_20260323.Application.Abstractions.Repositories;
+using Laboratory_20260323.Application.Common.Exceptions;
+using Laboratory_20260323.Domain.Entities;
 
 namespace Laboratory_20260323.Application.Reservations;
 
@@ -12,19 +14,16 @@ public class DeleteReservation
     {
         public Response Handle(Command request)
         {
-            ValidateReservationExists(request.ReservationId);
+            Reservation reservation = GetReservationOrThrow(request.ReservationId);
 
-            repository.DeleteById(request.ReservationId);
+            repository.DeleteById(reservation.Id);
 
             return new Response();
         }
 
-        private void ValidateReservationExists(Guid reservationId)
+        private Reservation GetReservationOrThrow(Guid reservationId)
         {
-            if (!repository.ExistsById(reservationId))
-            {
-                throw new ArgumentException("Reservation does not exist.", nameof(reservationId));
-            }
+            return repository.GetById(reservationId) ?? throw new NotFoundException("Reservation does not exist.");
         }
     }
 

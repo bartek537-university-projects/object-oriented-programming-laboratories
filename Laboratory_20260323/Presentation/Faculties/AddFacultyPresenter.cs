@@ -1,4 +1,5 @@
-﻿using Laboratory_20260323.Application.Common.Exceptions;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Faculties;
 using Laboratory_20260323.Presentation.Faculties.Interfaces;
 
@@ -7,9 +8,10 @@ namespace Laboratory_20260323.Presentation.Faculties;
 public class AddFacultyPresenter : IManageFacultyPresenter
 {
     private readonly IManageFacultyView _view;
-    private readonly IAddFacultyHandler _addFacultyHandler;
+    private readonly IRequestHandler<AddFaculty.Command, AddFaculty.Response> _addFacultyHandler;
 
-    public AddFacultyPresenter(IManageFacultyView view, IAddFacultyHandler addFacultyHandler)
+    public AddFacultyPresenter(IManageFacultyView view,
+        IRequestHandler<AddFaculty.Command, AddFaculty.Response> addFacultyHandler)
     {
         _view = view;
         _addFacultyHandler = addFacultyHandler;
