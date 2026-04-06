@@ -6,7 +6,7 @@ namespace Laboratory_20260323.Application.Employees.Validators;
 
 public partial class EmployeeValidator : IValidator<AddEmployee.Command>, IValidator<UpdateEmployee.Command>
 {
-    [GeneratedRegex(@"^[A-Za-z]{2,16}$", RegexOptions.Singleline)]
+    [GeneratedRegex(@"^[A-Za-z]{1,16}$", RegexOptions.Singleline)]
     private static partial Regex FirstNameRegex();
     [GeneratedRegex(@"^[A-Za-z-]{1,32}$", RegexOptions.Singleline)]
     private static partial Regex LastNameRegex();
@@ -34,7 +34,7 @@ public partial class EmployeeValidator : IValidator<AddEmployee.Command>, IValid
 
     private static string? ValidateFirstName(string name)
     {
-        return !FirstNameRegex().IsMatch(name) ? "First name must contain between 2 and 16 letters." : null;
+        return !FirstNameRegex().IsMatch(name) ? "First name must contain between 1 and 16 letters." : null;
     }
 
     private static string? ValidateLastName(string name)

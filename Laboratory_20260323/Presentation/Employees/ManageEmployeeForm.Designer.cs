@@ -100,6 +100,7 @@
             // tbLastName
             // 
             tbLastName.Location = new Point(86, 51);
+            tbLastName.MaxLength = 32;
             tbLastName.Name = "tbLastName";
             tbLastName.Size = new Size(121, 23);
             tbLastName.TabIndex = 3;
@@ -116,6 +117,7 @@
             // tbFirstName
             // 
             tbFirstName.Location = new Point(86, 22);
+            tbFirstName.MaxLength = 16;
             tbFirstName.Name = "tbFirstName";
             tbFirstName.Size = new Size(121, 23);
             tbFirstName.TabIndex = 1;

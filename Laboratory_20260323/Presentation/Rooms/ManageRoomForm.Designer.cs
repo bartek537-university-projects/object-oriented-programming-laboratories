@@ -127,13 +127,14 @@
             lbNumber.AutoSize = true;
             lbNumber.Location = new Point(6, 25);
             lbNumber.Name = "lbNumber";
-            lbNumber.Size = new Size(39, 15);
+            lbNumber.Size = new Size(51, 15);
             lbNumber.TabIndex = 0;
-            lbNumber.Text = "Name";
+            lbNumber.Text = "Number";
             // 
             // tbRoomNumber
             // 
             tbRoomNumber.Location = new Point(86, 22);
+            tbRoomNumber.MaxLength = 24;
             tbRoomNumber.Name = "tbRoomNumber";
             tbRoomNumber.Size = new Size(121, 23);
             tbRoomNumber.TabIndex = 1;

@@ -106,6 +106,7 @@
             // tbFacultyName
             // 
             tbFacultyName.Location = new Point(86, 22);
+            tbFacultyName.MaxLength = 128;
             tbFacultyName.Name = "tbFacultyName";
             tbFacultyName.Size = new Size(121, 23);
             tbFacultyName.TabIndex = 1;
@@ -148,6 +149,7 @@
             // tbBuilding
             // 
             tbBuilding.Location = new Point(86, 109);
+            tbBuilding.MaxLength = 32;
             tbBuilding.Name = "tbBuilding";
             tbBuilding.Size = new Size(121, 23);
             tbBuilding.TabIndex = 7;
@@ -164,6 +166,7 @@
             // tbStreet
             // 
             tbStreet.Location = new Point(86, 80);
+            tbStreet.MaxLength = 48;
             tbStreet.Name = "tbStreet";
             tbStreet.Size = new Size(121, 23);
             tbStreet.TabIndex = 5;
@@ -189,6 +192,7 @@
             // tbCity
             // 
             tbCity.Location = new Point(86, 22);
+            tbCity.MaxLength = 48;
             tbCity.Name = "tbCity";
             tbCity.Size = new Size(121, 23);
             tbCity.TabIndex = 1;

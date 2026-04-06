@@ -6,15 +6,15 @@ namespace Laboratory_20260323.Application.Faculties.Validators;
 
 public partial class FacultyValidator : IValidator<AddFaculty.Command>, IValidator<UpdateFaculty.Command>
 {
-    [GeneratedRegex(@"^[A-Za-z- ]{2,128}$", RegexOptions.Singleline)]
+    [GeneratedRegex(@"^[A-Za-z- ]{1,128}$", RegexOptions.Singleline)]
     private static partial Regex FacultyNameRegex();
-    [GeneratedRegex(@"^[A-Za-z- ]{2,48}$", RegexOptions.Singleline)]
+    [GeneratedRegex(@"^[A-Za-z- ]{1,48}$", RegexOptions.Singleline)]
     private static partial Regex CityRegex();
     [GeneratedRegex(@"^[0-9]{2}-[0-9]{3}$", RegexOptions.Singleline)]
     private static partial Regex PostalCodeRegex();
-    [GeneratedRegex(@"^[A-Za-z0-9 -]{2,48}$", RegexOptions.Singleline)]
+    [GeneratedRegex(@"^[A-Za-z0-9 -]{1,48}$", RegexOptions.Singleline)]
     private static partial Regex StreetRegex();
-    [GeneratedRegex(@"^[A-Za-z0-9 ]{2,32}$", RegexOptions.Singleline)]
+    [GeneratedRegex(@"^[A-Za-z0-9 ]{1,32}$", RegexOptions.Singleline)]
     private static partial Regex BuildingRegex();
 
     public Dictionary<string, string> Validate(AddFaculty.Command ac)
@@ -27,7 +27,7 @@ public partial class FacultyValidator : IValidator<AddFaculty.Command>, IValidat
         return Validate(new FacultyDetails(uc.Name, uc.City, uc.PostalCode, uc.Street, uc.Building));
     }
 
-    private Dictionary<string, string> Validate(FacultyDetails faculty)
+    private static Dictionary<string, string> Validate(FacultyDetails faculty)
     {
         IReadOnlyList<(string Field, string? Message)> errors = [
             (nameof(Faculty.Name), ValidateFacultyName(faculty.Name)),
@@ -43,12 +43,12 @@ public partial class FacultyValidator : IValidator<AddFaculty.Command>, IValidat
 
     private static string? ValidateFacultyName(string name)
     {
-        return !FacultyNameRegex().IsMatch(name) ? "Faculty name must contain between 2 to 128 letters, spaces and dashes." : null;
+        return !FacultyNameRegex().IsMatch(name) ? "Faculty name must contain between 1 to 128 letters, spaces and dashes." : null;
     }
 
     private static string? ValidateCity(string city)
     {
-        return !CityRegex().IsMatch(city) ? "City name must contain between 2 to 48 letters, spaces and dashes." : null;
+        return !CityRegex().IsMatch(city) ? "City name must contain between 1 to 48 letters, spaces and dashes." : null;
     }
 
     private static string? ValidatePostalCode(string postalCode)
@@ -58,12 +58,12 @@ public partial class FacultyValidator : IValidator<AddFaculty.Command>, IValidat
 
     private static string? ValidateStreet(string street)
     {
-        return !StreetRegex().IsMatch(street) ? "Street name must contain between 2 to 48 letters, numbers, spaces and dashes." : null;
+        return !StreetRegex().IsMatch(street) ? "Street name must contain between 1 to 48 letters, numbers, spaces and dashes." : null;
     }
 
     private static string? ValidateBuilding(string name)
     {
-        return !BuildingRegex().IsMatch(name) ? "Building number must contain between 2 to 32 letters, numbers and spaces." : null;
+        return !BuildingRegex().IsMatch(name) ? "Building number must contain between 1 to 32 letters, numbers and spaces." : null;
     }
 
     private record FacultyDetails(string Name, string City, string PostalCode, string Street, string Building);
