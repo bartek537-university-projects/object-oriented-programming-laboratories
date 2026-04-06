@@ -171,12 +171,20 @@ public class WindowService(
 
     public Form CreateAddReservationDialog()
     {
-        throw new NotImplementedException();
+        ManageReservationForm form = new();
+        AddReservationPresenter presenter = new(form);
+        form.Presenter = presenter;
+
+        return form;
     }
 
     public Form CreateEditReservationDialog(Reservation reservation)
     {
-        throw new NotImplementedException();
+        ManageReservationForm form = new();
+        EditReservationPresenter presenter = new(form);
+        form.Presenter = presenter;
+
+        return form;
     }
 
     public void ShowAddReservationDialog()
