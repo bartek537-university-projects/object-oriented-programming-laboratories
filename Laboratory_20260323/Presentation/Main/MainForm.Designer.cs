@@ -36,9 +36,9 @@
             tsmiExit = new ToolStripMenuItem();
             tpEmployees = new TabPage();
             tcMain = new TabControl();
-            tpFaculties = new TabPage();
             tpRooms = new TabPage();
             tpReservations = new TabPage();
+            tpFaculties = new TabPage();
             msMainMenu.SuspendLayout();
             tcMain.SuspendLayout();
             SuspendLayout();
@@ -109,16 +109,6 @@
             tcMain.Size = new Size(496, 301);
             tcMain.TabIndex = 1;
             // 
-            // tpFaculties
-            // 
-            tpFaculties.Location = new Point(4, 24);
-            tpFaculties.Name = "tpFaculties";
-            tpFaculties.Padding = new Padding(3);
-            tpFaculties.Size = new Size(488, 273);
-            tpFaculties.TabIndex = 1;
-            tpFaculties.Text = "Faculties";
-            tpFaculties.UseVisualStyleBackColor = true;
-            // 
             // tpRooms
             // 
             tpRooms.Location = new Point(4, 24);
@@ -138,6 +128,16 @@
             tpReservations.TabIndex = 3;
             tpReservations.Text = "Reservations";
             tpReservations.UseVisualStyleBackColor = true;
+            // 
+            // tpFaculties
+            // 
+            tpFaculties.Location = new Point(4, 24);
+            tpFaculties.Name = "tpFaculties";
+            tpFaculties.Padding = new Padding(3);
+            tpFaculties.Size = new Size(488, 273);
+            tpFaculties.TabIndex = 1;
+            tpFaculties.Text = "Faculties";
+            tpFaculties.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 

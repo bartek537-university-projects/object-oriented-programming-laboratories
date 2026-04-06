@@ -1,5 +1,7 @@
-﻿using Laboratory_20260323.Application.Employees;
+﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Employees;
 using Laboratory_20260323.Application.Faculties;
+using Laboratory_20260323.Application.Reservations;
 using Laboratory_20260323.Application.Rooms;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Employees;
@@ -22,7 +24,11 @@ public class WindowService(
     IAddRoomHandler addRoomHandler,
     IGetRoomsHandler getRoomsHandler,
     IUpdateRoomHandler updateRoomHandler,
-    IDeleteRoomHandler deleteRoomHandler
+    IDeleteRoomHandler deleteRoomHandler,
+    IRequestHandler<AddReservation.Command, AddReservation.Response> addReservationHandler,
+    IRequestHandler<GetReservations.Query, GetReservations.Response> getReservationsHandler,
+    IRequestHandler<UpdateReservation.Command, UpdateReservation.Response> updateReservationHandler,
+    IRequestHandler<DeleteReservation.Command, DeleteReservation.Response> deleteReservationHandler
 ) : IWindowService
 {
     public Form CreateMainWindow()
@@ -58,11 +64,6 @@ public class WindowService(
         return form;
     }
 
-    public void ShowAddEmployeeDialog()
-    {
-        _ = CreateAddEmployeeDialog().ShowDialog();
-    }
-
     public Form CreateEditEmployeeDialog(Employee employee)
     {
         ManageEmployeeForm form = new();
@@ -70,6 +71,11 @@ public class WindowService(
         form.Presenter = presenter;
 
         return form;
+    }
+
+    public void ShowAddEmployeeDialog()
+    {
+        _ = CreateAddEmployeeDialog().ShowDialog();
     }
 
     public void ShowEditEmployeeDialog(Employee employee)
@@ -96,11 +102,6 @@ public class WindowService(
         return form;
     }
 
-    public void ShowAddFacultyDialog()
-    {
-        _ = CreateAddFacultyDialog().ShowDialog();
-    }
-
     public Form CreateEditFacultyDialog(Faculty faculty)
     {
         ManageFacultyForm form = new();
@@ -108,6 +109,11 @@ public class WindowService(
         form.Presenter = presenter;
 
         return form;
+    }
+
+    public void ShowAddFacultyDialog()
+    {
+        _ = CreateAddFacultyDialog().ShowDialog();
     }
 
     public void ShowEditFacultyDialog(Faculty faculty)
@@ -134,11 +140,6 @@ public class WindowService(
         return form;
     }
 
-    public void ShowAddRoomDialog()
-    {
-        _ = CreateAddRoomDialog().ShowDialog();
-    }
-
     public Form CreateEditRoomDialog(Room room)
     {
         ManageRoomForm form = new();
@@ -146,6 +147,11 @@ public class WindowService(
         form.Presenter = presenter;
 
         return form;
+    }
+
+    public void ShowAddRoomDialog()
+    {
+        _ = CreateAddRoomDialog().ShowDialog();
     }
 
     public void ShowEditRoomDialog(Room room)
@@ -156,9 +162,30 @@ public class WindowService(
     public UserControl CreateReservationListFragment()
     {
         ReservationListControl control = new();
-        ReservationListPresenter presenter = new(control);
+        ReservationListPresenter presenter = new(control, this,
+            getReservationsHandler, deleteReservationHandler);
         control.Presenter = presenter;
 
         return control;
+    }
+
+    public Form CreateAddReservationDialog()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Form CreateEditReservationDialog(Reservation reservation)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ShowAddReservationDialog()
+    {
+        _ = CreateAddReservationDialog().ShowDialog();
+    }
+
+    public void ShowEditReservationDialog(Reservation reservation)
+    {
+        _ = CreateEditReservationDialog(reservation).ShowDialog();
     }
 }
