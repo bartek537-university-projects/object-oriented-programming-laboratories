@@ -27,6 +27,23 @@ public class InMemoryReservationRepository : IReservationRepository
         return reservation;
     }
 
+    public IEnumerable<Reservation> GetByRoomIdAndTime(Guid roomId, DateTime start, DateTime end)
+    {
+        return _reservations.Values
+            .Where(reservation => reservation.Room.Id == roomId && ReservationTimeOverlaps(reservation, start, end));
+    }
+
+    public IEnumerable<Reservation> GetByEmployeeIdAndTime(Guid employeeId, DateTime start, DateTime end)
+    {
+        return _reservations.Values
+            .Where(reservation => reservation.Employee.Id == employeeId && ReservationTimeOverlaps(reservation, start, end));
+    }
+
+    private bool ReservationTimeOverlaps(Reservation reservation, DateTime start, DateTime end)
+    {
+        return reservation.Start < end && start < reservation.End;
+    }
+
     public bool ExistsById(Guid reservationId)
     {
         return _reservations.ContainsKey(reservationId);
@@ -44,15 +61,5 @@ public class InMemoryReservationRepository : IReservationRepository
     public void DeleteById(Guid reservationId)
     {
         _ = _reservations.Remove(reservationId);
-    }
-
-    public bool ExistsByRoomIdAndTime(Guid roomId, DateTime start, DateTime end)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool ExistsByEmployeeIdAndTime(Guid employeeId, DateTime start, DateTime end)
-    {
-        throw new NotImplementedException();
     }
 }

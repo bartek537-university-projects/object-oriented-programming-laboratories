@@ -7,7 +7,7 @@ namespace Laboratory_20260323.Application.Reservations;
 
 public class UpdateReservation
 {
-    public record Command(Guid ReservationId, Guid RoomId, Guid EmployeeId, DateTime Start, DateTime End) : IRequest<Response>;
+    public record Command(Guid ReservationId, Guid? RoomId, Guid? EmployeeId, DateTime Start, DateTime End) : IRequest<Response>;
 
     public class Handler(IValidator<Command> validator, IReservationRepository reservationRepository, IRoomRepository roomRepository, IEmployeeRepository employeeRepository)
         : IRequestHandler<Command, Response>
@@ -17,10 +17,10 @@ public class UpdateReservation
             ValidateRequest(command);
             EnsureReservationExists(command.ReservationId);
 
-            Room room = GetRoomOrThrow(command.RoomId);
-            Employee employee = GetEmployeeOrThrow(command.EmployeeId);
+            Room room = GetRoomOrThrow(command.RoomId!.Value);
+            Employee employee = GetEmployeeOrThrow(command.EmployeeId!.Value);
 
-            EnsureAvailability(room, employee, command.Start, command.End);
+            EnsureAvailability(command.ReservationId, room, employee, command.Start, command.End);
 
             Reservation reservation = new()
             {
@@ -61,16 +61,26 @@ public class UpdateReservation
             return employeeRepository.GetById(employeeId) ?? throw new NotFoundException("Employee does not exist.");
         }
 
-        private void EnsureAvailability(Room room, Employee employee, DateTime start, DateTime end)
+        private void EnsureAvailability(Guid reservationId, Room room, Employee employee, DateTime start, DateTime end)
         {
-            if (reservationRepository.ExistsByRoomIdAndTime(employee.Id, start, end))
+            if (IsRoomOccupied(room, start, end, reservationId))
             {
-                throw new ConflictException("Room is occupied at that time.");
+                throw new ConflictException("Room is occupied at that time.", nameof(Reservation.Room));
             }
-            if (reservationRepository.ExistsByEmployeeIdAndTime(employee.Id, start, end))
+            if (IsEmployeeOccupied(employee, start, end, reservationId))
             {
-                throw new ConflictException("Employee is occupied at that time.");
+                throw new ConflictException("Employee is occupied at that time.", nameof(Reservation.Employee));
             }
+        }
+
+        private bool IsRoomOccupied(Room room, DateTime start, DateTime end, Guid reservationId)
+        {
+            return reservationRepository.GetByRoomIdAndTime(room.Id, start, end).Any(reservation => reservation.Id != reservationId);
+        }
+
+        private bool IsEmployeeOccupied(Employee employee, DateTime start, DateTime end, Guid reservationId)
+        {
+            return reservationRepository.GetByEmployeeIdAndTime(employee.Id, start, end).Any(reservation => reservation.Id != reservationId);
         }
     }
 

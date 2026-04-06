@@ -8,10 +8,10 @@ public interface IReservationRepository
 
     IEnumerable<Reservation> GetAll();
     Reservation? GetById(Guid reservationId);
+    IEnumerable<Reservation> GetByRoomIdAndTime(Guid roomId, DateTime start, DateTime end);
+    IEnumerable<Reservation> GetByEmployeeIdAndTime(Guid employeeId, DateTime start, DateTime end);
 
     bool ExistsById(Guid reservationId);
-    bool ExistsByRoomIdAndTime(Guid roomId, DateTime start, DateTime end);
-    bool ExistsByEmployeeIdAndTime(Guid employeeId, DateTime start, DateTime end);
 
     void Update(Reservation reservation);
 

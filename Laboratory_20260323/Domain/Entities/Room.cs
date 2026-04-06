@@ -9,4 +9,9 @@ public class Room
     public required RoomType Type { get; set; }
 
     public required Faculty Faculty { get; set; }
+
+    public override string ToString()
+    {
+        return Number;
+    }
 }

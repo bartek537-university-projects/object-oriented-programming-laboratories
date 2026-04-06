@@ -172,7 +172,8 @@ public class WindowService(
     public Form CreateAddReservationDialog()
     {
         ManageReservationForm form = new();
-        AddReservationPresenter presenter = new(form);
+        AddReservationPresenter presenter = new(form,
+            addReservationHandler, getRoomsHandler, getEmployeesHandler);
         form.Presenter = presenter;
 
         return form;
@@ -181,7 +182,8 @@ public class WindowService(
     public Form CreateEditReservationDialog(Reservation reservation)
     {
         ManageReservationForm form = new();
-        EditReservationPresenter presenter = new(form);
+        EditReservationPresenter presenter = new(reservation, form,
+            updateReservationHandler, getRoomsHandler, getEmployeesHandler);
         form.Presenter = presenter;
 
         return form;

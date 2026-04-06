@@ -17,11 +17,10 @@ public partial class ReservationListControl : UserControl, IReservationListView
     {
         InitializeComponent();
 
-        mlcReservations.AddColumn("Faculty", nameof(Reservation.Room.Faculty));
         mlcReservations.AddColumn("Room", nameof(Reservation.Room));
+        mlcReservations.AddColumn("Employee", nameof(Reservation.Employee));
         mlcReservations.AddColumn("Start", nameof(Reservation.Start));
         mlcReservations.AddColumn("End", nameof(Reservation.End));
-        mlcReservations.AddColumn("Employee", nameof(Reservation.Employee));
 
         mlcReservations.AddClicked += OnAddReservationClicked;
         mlcReservations.EditClicked += OnEditReservationClicked;
@@ -37,7 +36,7 @@ public partial class ReservationListControl : UserControl, IReservationListView
     {
         if (item is Reservation reservation)
         {
-            RemoveReservationClicked?.Invoke(this, reservation);
+            EditReservationClicked?.Invoke(this, reservation);
         }
     }
 

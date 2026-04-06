@@ -7,17 +7,19 @@ public class ReservationValidator : IValidator<AddReservation.Command>, IValidat
 {
     public Dictionary<string, string> Validate(AddReservation.Command reservation)
     {
-        return Validate(new ReservationDetails(reservation.Start, reservation.End));
+        return Validate(new ReservationDetails(reservation.RoomId, reservation.EmployeeId, reservation.Start, reservation.End));
     }
 
     public Dictionary<string, string> Validate(UpdateReservation.Command reservation)
     {
-        return Validate(new ReservationDetails(reservation.Start, reservation.End));
+        return Validate(new ReservationDetails(reservation.RoomId, reservation.EmployeeId, reservation.Start, reservation.End));
     }
 
     private static Dictionary<string, string> Validate(ReservationDetails reservation)
     {
         IReadOnlyList<(string Field, string? Message)> errors = [
+            (nameof(Reservation.Room), ValidateRoom(reservation.RoomId)),
+            (nameof(Reservation.Employee), ValidateEmployee(reservation.EmployeeId)),
             (nameof(Reservation.End), ValidateTimeWindow(reservation.Start, reservation.End))
         ];
 
@@ -26,10 +28,20 @@ public class ReservationValidator : IValidator<AddReservation.Command>, IValidat
             .ToDictionary(error => error.Field, error => error.Message!);
     }
 
-    private static string? ValidateTimeWindow(DateTime start, DateTime end)
+    private static string? ValidateRoom(object? obj)
     {
-        return start < end ? null : "End time must follow the start time.";
+        return obj is null ? "Room must be specified." : null;
     }
 
-    private record ReservationDetails(DateTime Start, DateTime End);
+    private static string? ValidateEmployee(object? obj)
+    {
+        return obj is null ? "Employee must be specified." : null;
+    }
+
+    private static string? ValidateTimeWindow(DateTime start, DateTime end)
+    {
+        return start >= end ? "End time must follow the start time." : null;
+    }
+
+    private record ReservationDetails(Guid? RoomId, Guid? EmployeeId, DateTime Start, DateTime End);
 }

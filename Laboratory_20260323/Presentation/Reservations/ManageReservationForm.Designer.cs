@@ -28,32 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             gbBasicInformation = new GroupBox();
+            lbDuration = new Label();
+            dtpEndTime = new DateTimePicker();
+            lbTimeEnd = new Label();
+            dtpStartTime = new DateTimePicker();
+            lbTimeStart = new Label();
+            cbEmployee = new ComboBox();
+            cbRoom = new ComboBox();
+            lbEmployee = new Label();
             lbRoom = new Label();
             gbInternal = new GroupBox();
             lbIdentifier = new Label();
             tbIdentifier = new TextBox();
             btnOk = new Button();
             btnCancel = new Button();
-            lbEmployee = new Label();
-            cbRoom = new ComboBox();
-            cbEmployee = new ComboBox();
-            lbTimeStart = new Label();
-            dateTimePicker1 = new DateTimePicker();
-            dateTimePicker2 = new DateTimePicker();
-            lbTimeEnd = new Label();
-            lbDuration = new Label();
+            errorProvider = new ErrorProvider(components);
             gbBasicInformation.SuspendLayout();
             gbInternal.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // gbBasicInformation
             // 
             gbBasicInformation.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             gbBasicInformation.Controls.Add(lbDuration);
-            gbBasicInformation.Controls.Add(dateTimePicker2);
+            gbBasicInformation.Controls.Add(dtpEndTime);
             gbBasicInformation.Controls.Add(lbTimeEnd);
-            gbBasicInformation.Controls.Add(dateTimePicker1);
+            gbBasicInformation.Controls.Add(dtpStartTime);
             gbBasicInformation.Controls.Add(lbTimeStart);
             gbBasicInformation.Controls.Add(cbEmployee);
             gbBasicInformation.Controls.Add(cbRoom);
@@ -61,10 +64,83 @@
             gbBasicInformation.Controls.Add(lbRoom);
             gbBasicInformation.Location = new Point(12, 70);
             gbBasicInformation.Name = "gbBasicInformation";
-            gbBasicInformation.Size = new Size(324, 212);
+            gbBasicInformation.Size = new Size(324, 155);
             gbBasicInformation.TabIndex = 3;
             gbBasicInformation.TabStop = false;
             gbBasicInformation.Text = "Basic information";
+            // 
+            // lbDuration
+            // 
+            lbDuration.AutoSize = true;
+            lbDuration.Location = new Point(86, 135);
+            lbDuration.Name = "lbDuration";
+            lbDuration.Size = new Size(48, 15);
+            lbDuration.TabIndex = 9;
+            lbDuration.Text = "- 0h 0m";
+            // 
+            // dtpEndTime
+            // 
+            dtpEndTime.Format = DateTimePickerFormat.Time;
+            dtpEndTime.Location = new Point(86, 109);
+            dtpEndTime.Name = "dtpEndTime";
+            dtpEndTime.Size = new Size(159, 23);
+            dtpEndTime.TabIndex = 8;
+            dtpEndTime.ValueChanged += dtpEndTime_ValueChanged;
+            // 
+            // lbTimeEnd
+            // 
+            lbTimeEnd.AutoSize = true;
+            lbTimeEnd.Location = new Point(6, 115);
+            lbTimeEnd.Name = "lbTimeEnd";
+            lbTimeEnd.Size = new Size(54, 15);
+            lbTimeEnd.TabIndex = 7;
+            lbTimeEnd.Text = "End time";
+            // 
+            // dtpStartTime
+            // 
+            dtpStartTime.Checked = false;
+            dtpStartTime.Format = DateTimePickerFormat.Time;
+            dtpStartTime.Location = new Point(86, 80);
+            dtpStartTime.Name = "dtpStartTime";
+            dtpStartTime.Size = new Size(159, 23);
+            dtpStartTime.TabIndex = 6;
+            dtpStartTime.ValueChanged += dtpStartTime_ValueChanged;
+            // 
+            // lbTimeStart
+            // 
+            lbTimeStart.AutoSize = true;
+            lbTimeStart.Location = new Point(6, 86);
+            lbTimeStart.Name = "lbTimeStart";
+            lbTimeStart.Size = new Size(58, 15);
+            lbTimeStart.TabIndex = 5;
+            lbTimeStart.Text = "Start time";
+            // 
+            // cbEmployee
+            // 
+            cbEmployee.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbEmployee.FormattingEnabled = true;
+            cbEmployee.Location = new Point(86, 51);
+            cbEmployee.Name = "cbEmployee";
+            cbEmployee.Size = new Size(121, 23);
+            cbEmployee.TabIndex = 4;
+            // 
+            // cbRoom
+            // 
+            cbRoom.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbRoom.FormattingEnabled = true;
+            cbRoom.Location = new Point(86, 22);
+            cbRoom.Name = "cbRoom";
+            cbRoom.Size = new Size(121, 23);
+            cbRoom.TabIndex = 3;
+            // 
+            // lbEmployee
+            // 
+            lbEmployee.AutoSize = true;
+            lbEmployee.Location = new Point(6, 54);
+            lbEmployee.Name = "lbEmployee";
+            lbEmployee.Size = new Size(59, 15);
+            lbEmployee.TabIndex = 2;
+            lbEmployee.Text = "Employee";
             // 
             // lbRoom
             // 
@@ -107,110 +183,49 @@
             // btnOk
             // 
             btnOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnOk.Location = new Point(182, 226);
+            btnOk.Location = new Point(182, 242);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(75, 23);
             btnOk.TabIndex = 5;
             btnOk.Text = "OK";
             btnOk.UseVisualStyleBackColor = true;
+            btnOk.Click += btnOk_Click;
             // 
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(261, 226);
+            btnCancel.Location = new Point(261, 242);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 6;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
-            // lbEmployee
+            // errorProvider
             // 
-            lbEmployee.AutoSize = true;
-            lbEmployee.Location = new Point(6, 54);
-            lbEmployee.Name = "lbEmployee";
-            lbEmployee.Size = new Size(59, 15);
-            lbEmployee.TabIndex = 2;
-            lbEmployee.Text = "Employee";
-            // 
-            // cbRoom
-            // 
-            cbRoom.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbRoom.FormattingEnabled = true;
-            cbRoom.Location = new Point(86, 22);
-            cbRoom.Name = "cbRoom";
-            cbRoom.Size = new Size(121, 23);
-            cbRoom.TabIndex = 3;
-            // 
-            // cbEmployee
-            // 
-            cbEmployee.DropDownStyle = ComboBoxStyle.DropDownList;
-            cbEmployee.FormattingEnabled = true;
-            cbEmployee.Location = new Point(86, 51);
-            cbEmployee.Name = "cbEmployee";
-            cbEmployee.Size = new Size(121, 23);
-            cbEmployee.TabIndex = 4;
-            // 
-            // lbTimeStart
-            // 
-            lbTimeStart.AutoSize = true;
-            lbTimeStart.Location = new Point(6, 86);
-            lbTimeStart.Name = "lbTimeStart";
-            lbTimeStart.Size = new Size(58, 15);
-            lbTimeStart.TabIndex = 5;
-            lbTimeStart.Text = "Start time";
-            // 
-            // dateTimePicker1
-            // 
-            dateTimePicker1.Checked = false;
-            dateTimePicker1.Format = DateTimePickerFormat.Time;
-            dateTimePicker1.Location = new Point(86, 80);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(159, 23);
-            dateTimePicker1.TabIndex = 6;
-            // 
-            // dateTimePicker2
-            // 
-            dateTimePicker2.Format = DateTimePickerFormat.Time;
-            dateTimePicker2.Location = new Point(86, 109);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(159, 23);
-            dateTimePicker2.TabIndex = 8;
-            // 
-            // lbTimeEnd
-            // 
-            lbTimeEnd.AutoSize = true;
-            lbTimeEnd.Location = new Point(6, 115);
-            lbTimeEnd.Name = "lbTimeEnd";
-            lbTimeEnd.Size = new Size(54, 15);
-            lbTimeEnd.TabIndex = 7;
-            lbTimeEnd.Text = "End time";
-            // 
-            // lbDuration
-            // 
-            lbDuration.AutoSize = true;
-            lbDuration.Location = new Point(251, 115);
-            lbDuration.Name = "lbDuration";
-            lbDuration.Size = new Size(56, 15);
-            lbDuration.TabIndex = 7;
-            lbDuration.Text = "2 h 0 min";
+            errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+            errorProvider.ContainerControl = this;
             // 
             // ManageReservationForm
             // 
+            AcceptButton = btnOk;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(348, 261);
+            CancelButton = btnCancel;
+            ClientSize = new Size(348, 277);
             Controls.Add(btnOk);
             Controls.Add(btnCancel);
             Controls.Add(gbBasicInformation);
             Controls.Add(gbInternal);
-            MinimumSize = new Size(364, 300);
+            MinimumSize = new Size(364, 316);
             Name = "ManageReservationForm";
-            Text = "ManageReservationForm";
+            Text = "Edit reservation";
             gbBasicInformation.ResumeLayout(false);
             gbBasicInformation.PerformLayout();
             gbInternal.ResumeLayout(false);
             gbInternal.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
         }
 
@@ -226,10 +241,11 @@
         private ComboBox cbRoom;
         private Label lbEmployee;
         private ComboBox cbEmployee;
-        private DateTimePicker dateTimePicker2;
+        private DateTimePicker dtpEndTime;
         private Label lbTimeEnd;
-        private DateTimePicker dateTimePicker1;
+        private DateTimePicker dtpStartTime;
         private Label lbTimeStart;
+        private ErrorProvider errorProvider;
         private Label lbDuration;
     }
 }
