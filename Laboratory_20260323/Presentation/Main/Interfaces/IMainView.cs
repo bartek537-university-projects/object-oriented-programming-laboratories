@@ -2,8 +2,8 @@
 
 public interface IMainView
 {
-    event EventHandler SaveToFileClicked;
-    event EventHandler LoadFromFileClicked;
+    event EventHandler<string> SaveToFileClicked;
+    event EventHandler<string> LoadFromFileClicked;
     event EventHandler ExitClicked;
 
     void InflateTabs(IWindowService windows);

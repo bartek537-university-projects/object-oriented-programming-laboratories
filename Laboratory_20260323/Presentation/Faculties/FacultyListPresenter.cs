@@ -26,6 +26,8 @@ public class FacultyListPresenter : IFacultyListPresenter
         _view.AddFacultyClicked += OnAddFacultyClicked;
         _view.EditFacultyClicked += OnEditFacultyClicked;
         _view.RemoveFacultyClicked += OnRemoveFacultyClicked;
+
+        UpdateFacultyList();
     }
 
     private void OnAddFacultyClicked(object? sender, EventArgs e)

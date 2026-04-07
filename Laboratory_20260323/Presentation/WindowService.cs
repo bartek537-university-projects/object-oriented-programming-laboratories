@@ -1,6 +1,7 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
 using Laboratory_20260323.Application.Employees;
 using Laboratory_20260323.Application.Faculties;
+using Laboratory_20260323.Application.Persistence;
 using Laboratory_20260323.Application.Reservations;
 using Laboratory_20260323.Application.Rooms;
 using Laboratory_20260323.Domain.Entities;
@@ -13,6 +14,8 @@ using Laboratory_20260323.Presentation.Rooms;
 namespace Laboratory_20260323.Presentation;
 
 public class WindowService(
+    IRequestHandler<SaveToFile.Command, SaveToFile.Response> saveToFileHandler,
+    IRequestHandler<LoadFromFile.Command, LoadFromFile.Response> loadFromFileHandler,
     IRequestHandler<AddEmployee.Command, AddEmployee.Response> addEmployeeHandler,
     IRequestHandler<GetEmployees.Query, GetEmployees.Response> getEmployeesHandler,
     IRequestHandler<UpdateEmployee.Command, UpdateEmployee.Response> updateEmployeeHandler,
@@ -34,7 +37,7 @@ public class WindowService(
     public Form CreateMainWindow()
     {
         MainForm form = new();
-        MainPresenter presenter = new(form, this);
+        MainPresenter presenter = new(form, this, saveToFileHandler, loadFromFileHandler);
         form.Presenter = presenter;
 
         return form;

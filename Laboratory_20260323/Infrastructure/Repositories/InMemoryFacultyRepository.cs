@@ -5,7 +5,12 @@ namespace Laboratory_20260323.Infrastructure.Repositories;
 
 public class InMemoryFacultyRepository : IFacultyRepository
 {
-    private readonly Dictionary<Guid, Faculty> _faculties = [];
+    private Dictionary<Guid, Faculty> _faculties = [];
+
+    public void ReplaceAll(IReadOnlyList<Faculty> faculties)
+    {
+        _faculties = faculties.ToDictionary(faculty => faculty.Id);
+    }
 
     public void Insert(Faculty faculty)
     {

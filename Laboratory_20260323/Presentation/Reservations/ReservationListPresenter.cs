@@ -26,6 +26,8 @@ public class ReservationListPresenter : IReservationListPresenter
         _view.AddReservationClicked += OnAddReservationClicked;
         _view.EditReservationClicked += OnEditReservationClicked;
         _view.RemoveReservationClicked += OnRemoveReservationClicked;
+
+        UpdateReservationList();
     }
 
     private void OnAddReservationClicked(object? sender, EventArgs e)

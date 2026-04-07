@@ -5,7 +5,12 @@ namespace Laboratory_20260323.Infrastructure.Repositories;
 
 internal class InMemoryRoomRepository : IRoomRepository
 {
-    private readonly Dictionary<Guid, Room> _rooms = [];
+    private Dictionary<Guid, Room> _rooms = [];
+
+    public void ReplaceAll(IReadOnlyList<Room> rooms)
+    {
+        _rooms = rooms.ToDictionary(room => room.Id);
+    }
 
     public void Insert(Room room)
     {

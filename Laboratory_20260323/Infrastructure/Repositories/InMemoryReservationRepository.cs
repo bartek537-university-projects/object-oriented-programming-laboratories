@@ -5,7 +5,12 @@ namespace Laboratory_20260323.Infrastructure.Repositories;
 
 public class InMemoryReservationRepository : IReservationRepository
 {
-    private readonly Dictionary<Guid, Reservation> _reservations = [];
+    private Dictionary<Guid, Reservation> _reservations = [];
+
+    public void ReplaceAll(IReadOnlyList<Reservation> reservations)
+    {
+        _reservations = reservations.ToDictionary(reservation => reservation.Id);
+    }
 
     public void Insert(Reservation reservation)
     {

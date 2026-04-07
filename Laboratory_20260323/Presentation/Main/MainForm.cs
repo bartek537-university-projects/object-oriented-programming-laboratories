@@ -8,8 +8,8 @@ public partial class MainForm : Form, IMainView
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public IMainPresenter? Presenter { get; set; } = null;
 
-    public event EventHandler? SaveToFileClicked;
-    public event EventHandler? LoadFromFileClicked;
+    public event EventHandler<string>? SaveToFileClicked;
+    public event EventHandler<string>? LoadFromFileClicked;
     public event EventHandler? ExitClicked;
 
     public MainForm()
@@ -34,12 +34,20 @@ public partial class MainForm : Form, IMainView
 
     private void OnSaveToFileClicked()
     {
-        SaveToFileClicked?.Invoke(this, EventArgs.Empty);
+        if (sfdSaveState.ShowDialog() != DialogResult.OK)
+        {
+            return;
+        }
+        SaveToFileClicked?.Invoke(this, sfdSaveState.FileName);
     }
 
     private void OnLoadFromFileClicked()
     {
-        LoadFromFileClicked?.Invoke(this, EventArgs.Empty);
+        if (ofdLoadState.ShowDialog() != DialogResult.OK)
+        {
+            return;
+        }
+        LoadFromFileClicked?.Invoke(this, ofdLoadState.FileName);
     }
 
     private void OnExitClicked()
@@ -81,7 +89,9 @@ public partial class MainForm : Form, IMainView
 
     private static void InflateTab(TabPage tab, Control control)
     {
-        control.Dock = DockStyle.Fill;
+        tab.Controls.Clear();
         tab.Controls.Add(control);
+
+        control.Dock = DockStyle.Fill;
     }
 }

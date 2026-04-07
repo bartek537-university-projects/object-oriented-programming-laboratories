@@ -4,6 +4,8 @@ namespace Laboratory_20260323.Application.Abstractions.Repositories;
 
 public interface IReservationRepository
 {
+    void ReplaceAll(IReadOnlyList<Reservation> reservations);
+
     void Insert(Reservation reservation);
 
     IEnumerable<Reservation> GetAll();

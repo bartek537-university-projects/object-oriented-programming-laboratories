@@ -26,6 +26,8 @@ public class EmployeeListPresenter : IEmployeeListPresenter
         _view.AddEmployeeClicked += OnAddEmployeeClicked;
         _view.EditEmployeeClicked += OnEditEmployeeClicked;
         _view.RemoveEmployeeClicked += OnRemoveEmployeeClicked;
+
+        UpdateEmployeeList();
     }
 
     private void OnAddEmployeeClicked(object? sender, EventArgs e)

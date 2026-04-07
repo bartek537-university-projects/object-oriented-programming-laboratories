@@ -3,6 +3,7 @@
 public class Employee
 {
     public Guid Id { get; init; } = Guid.NewGuid();
+
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
 

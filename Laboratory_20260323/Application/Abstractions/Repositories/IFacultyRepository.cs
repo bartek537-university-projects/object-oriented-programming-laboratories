@@ -4,6 +4,8 @@ namespace Laboratory_20260323.Application.Abstractions.Repositories;
 
 public interface IFacultyRepository
 {
+    void ReplaceAll(IReadOnlyList<Faculty> faculties);
+
     void Insert(Faculty faculty);
 
     IEnumerable<Faculty> GetAll();

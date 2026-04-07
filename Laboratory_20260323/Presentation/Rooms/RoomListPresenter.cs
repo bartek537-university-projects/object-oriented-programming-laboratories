@@ -26,6 +26,8 @@ public class RoomListPresenter : IRoomListPresenter
         _view.AddRoomClicked += OnAddRoomClicked;
         _view.EditRoomClicked += OnEditRoomClicked;
         _view.RemoveRoomClicked += OnRemoveRoomClicked;
+
+        UpdateRoomList();
     }
 
     private void OnAddRoomClicked(object? sender, EventArgs e)

@@ -5,7 +5,12 @@ namespace Laboratory_20260323.Infrastructure.Repositories;
 
 internal class InMemoryEmployeeRepository : IEmployeeRepository
 {
-    private readonly Dictionary<Guid, Employee> _employees = [];
+    private Dictionary<Guid, Employee> _employees = [];
+
+    public void ReplaceAll(IReadOnlyList<Employee> employees)
+    {
+        _employees = employees.ToDictionary(employee => employee.Id);
+    }
 
     public void Insert(Employee employee)
     {

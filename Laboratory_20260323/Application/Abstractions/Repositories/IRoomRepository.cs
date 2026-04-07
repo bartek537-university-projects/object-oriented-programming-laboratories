@@ -4,6 +4,8 @@ namespace Laboratory_20260323.Application.Abstractions.Repositories;
 
 public interface IRoomRepository
 {
+    void ReplaceAll(IReadOnlyList<Room> rooms);
+
     void Insert(Room room);
 
     IEnumerable<Room> GetAll();

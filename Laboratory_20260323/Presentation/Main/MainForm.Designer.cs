@@ -36,9 +36,11 @@
             tsmiExit = new ToolStripMenuItem();
             tpEmployees = new TabPage();
             tcMain = new TabControl();
-            tpRooms = new TabPage();
             tpReservations = new TabPage();
+            tpRooms = new TabPage();
             tpFaculties = new TabPage();
+            ofdLoadState = new OpenFileDialog();
+            sfdSaveState = new SaveFileDialog();
             msMainMenu.SuspendLayout();
             tcMain.SuspendLayout();
             SuspendLayout();
@@ -109,16 +111,6 @@
             tcMain.Size = new Size(496, 301);
             tcMain.TabIndex = 1;
             // 
-            // tpRooms
-            // 
-            tpRooms.Location = new Point(4, 24);
-            tpRooms.Name = "tpRooms";
-            tpRooms.Padding = new Padding(3);
-            tpRooms.Size = new Size(488, 273);
-            tpRooms.TabIndex = 2;
-            tpRooms.Text = "Rooms";
-            tpRooms.UseVisualStyleBackColor = true;
-            // 
             // tpReservations
             // 
             tpReservations.Location = new Point(4, 24);
@@ -129,6 +121,16 @@
             tpReservations.Text = "Reservations";
             tpReservations.UseVisualStyleBackColor = true;
             // 
+            // tpRooms
+            // 
+            tpRooms.Location = new Point(4, 24);
+            tpRooms.Name = "tpRooms";
+            tpRooms.Padding = new Padding(3);
+            tpRooms.Size = new Size(488, 273);
+            tpRooms.TabIndex = 2;
+            tpRooms.Text = "Rooms";
+            tpRooms.UseVisualStyleBackColor = true;
+            // 
             // tpFaculties
             // 
             tpFaculties.Location = new Point(4, 24);
@@ -138,6 +140,15 @@
             tpFaculties.TabIndex = 1;
             tpFaculties.Text = "Faculties";
             tpFaculties.UseVisualStyleBackColor = true;
+            // 
+            // ofdLoadState
+            // 
+            ofdLoadState.Filter = "Reservations (*.rsv)|*.rsv|JSON files (*.json)|*.json|All files (*.*)|*.*";
+            // 
+            // sfdSaveState
+            // 
+            sfdSaveState.FileName = "reservations";
+            sfdSaveState.Filter = "Reservations (*.rsv)|*.rsv|JSON files (*.json)|*.json|All files (*.*)|*.*";
             // 
             // MainForm
             // 
@@ -170,5 +181,7 @@
         private TabPage tpFaculties;
         private TabPage tpRooms;
         private TabPage tpReservations;
+        private OpenFileDialog ofdLoadState;
+        private SaveFileDialog sfdSaveState;
     }
 }
