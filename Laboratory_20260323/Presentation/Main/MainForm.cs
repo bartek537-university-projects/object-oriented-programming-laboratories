@@ -94,4 +94,9 @@ public partial class MainForm : Form, IMainView
 
         control.Dock = DockStyle.Fill;
     }
+
+    public void ShowError(string message)
+    {
+        MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
 }

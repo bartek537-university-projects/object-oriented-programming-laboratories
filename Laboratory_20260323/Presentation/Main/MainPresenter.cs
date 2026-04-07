@@ -1,6 +1,7 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
 using Laboratory_20260323.Application.Persistence;
 using Laboratory_20260323.Presentation.Main.Interfaces;
+using System.Text.Json;
 
 namespace Laboratory_20260323.Presentation.Main;
 
@@ -40,7 +41,18 @@ public class MainPresenter : IMainPresenter
 
     private void OnLoadFromFileClicked(object? sender, string path)
     {
-        _ = _loadFromFileHandler.Handle(new(path));
-        _view.InflateTabs(_windows);
+        try
+        {
+            _ = _loadFromFileHandler.Handle(new(path));
+            _view.InflateTabs(_windows);
+        }
+        catch (JsonException)
+        {
+            _view.ShowError("Failed to parse the file.");
+        }
+        catch (KeyNotFoundException)
+        {
+            _view.ShowError("Failed to restore relations.");
+        }
     }
 }

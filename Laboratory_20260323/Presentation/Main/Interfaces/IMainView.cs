@@ -7,5 +7,6 @@ public interface IMainView
     event EventHandler ExitClicked;
 
     void InflateTabs(IWindowService windows);
+    void ShowError(string message);
     void Close();
 }
