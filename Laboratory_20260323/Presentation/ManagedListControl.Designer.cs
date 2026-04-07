@@ -106,6 +106,7 @@
             dgvManagedList.AllowUserToDeleteRows = false;
             dgvManagedList.AllowUserToOrderColumns = true;
             dgvManagedList.AllowUserToResizeRows = false;
+            dgvManagedList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvManagedList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvManagedList.Dock = DockStyle.Fill;
             dgvManagedList.Location = new Point(3, 3);
