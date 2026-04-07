@@ -9,12 +9,12 @@ internal class DziennikStudentow
 
     public void Upsert(Student student)
     {
-        Students.Remove(student);
+        _ = Students.Remove(student);
         Students.Add(student);
     }
 
     public void Delete(Student student)
     {
-        Students.Remove(student);
+        _ = Students.Remove(student);
     }
 }

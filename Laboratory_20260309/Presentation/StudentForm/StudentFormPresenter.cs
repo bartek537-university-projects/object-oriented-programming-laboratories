@@ -33,7 +33,7 @@ internal class StudentFormPresenter : IStudentFormPresenter
 
     private void OnAddStudentClicked(object? sender, StudentInput input)
     {
-        var errors = _studentValidator.Validate(input);
+        Dictionary<string, string> errors = _studentValidator.Validate(input);
         _view.SetFormErorrs(errors);
 
         if (errors.Count > 0)
@@ -41,7 +41,7 @@ internal class StudentFormPresenter : IStudentFormPresenter
             return;
         }
 
-        var student = input.ToStudent();
+        Student student = input.ToStudent();
         _studentRegister.Upsert(student);
 
         _view.ClearForm();
@@ -54,15 +54,15 @@ internal class StudentFormPresenter : IStudentFormPresenter
             return;
         }
 
-        var errors = _studentValidator.Validate(input);
+        Dictionary<string, string> errors = _studentValidator.Validate(input);
         _view.SetFormErorrs(errors);
 
-        if(errors.Count > 0)
+        if (errors.Count > 0)
         {
             return;
         }
 
-        var student = input.ToStudent(id: selection.Id);
+        Student student = input.ToStudent(id: selection.Id);
         _studentRegister.Upsert(student);
     }
 
@@ -100,7 +100,7 @@ internal class StudentFormPresenter : IStudentFormPresenter
 
     private void OnLoadStudentListClicked(object? sender, string path)
     {
-        var students = _studentRepository.Read(path);
+        IEnumerable<Student> students = _studentRepository.Read(path);
         LoadStudentList(students);
     }
 
@@ -108,7 +108,7 @@ internal class StudentFormPresenter : IStudentFormPresenter
     {
         _studentRegister.Students.Clear();
 
-        foreach (var student in students)
+        foreach (Student student in students)
         {
             _studentRegister.Students.Add(student);
         }

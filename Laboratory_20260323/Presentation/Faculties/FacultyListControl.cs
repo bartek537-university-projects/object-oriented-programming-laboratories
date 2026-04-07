@@ -53,6 +53,6 @@ public partial class FacultyListControl : UserControl, IFacultyListView
 
     public void ShowError(string message)
     {
-        MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        _ = MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 }

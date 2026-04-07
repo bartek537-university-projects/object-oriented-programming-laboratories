@@ -22,24 +22,24 @@ public partial class StudentForm : Form, IStudentFormView
         InitializeComponent();
         cbCollegeLevel.DataSource = Enum.GetValues<RokStudiow>();
 
-        var studentRepository = new InMemoryStudentRepository();
+        InMemoryStudentRepository studentRepository = new();
         _presenter = new StudentFormPresenter(this, studentRepository);
     }
 
     public void SetFormErorrs(Dictionary<string, string> errors)
     {
-        var controls = new[] { gbBasicDetails, gbAddressDetails }
+        List<Control> controls = new[] { gbBasicDetails, gbAddressDetails }
             .SelectMany(group => group.Controls.Cast<Control>())
             .ToList();
 
-        foreach (var control in controls)
+        foreach (Control control in controls)
         {
             if (control.Tag is not string tag)
             {
                 continue;
             }
 
-            errors.TryGetValue(tag, out string? message);
+            _ = errors.TryGetValue(tag, out string? message);
             errorProvider.SetError(control, message);
         }
     }
@@ -58,7 +58,7 @@ public partial class StudentForm : Form, IStudentFormView
         nudFlatNumber.Value = student.AdresZamieszkania.NumerMieszkania ?? 1;
         errorProvider.Clear();
 
-        tbFirstName.Focus();
+        _ = tbFirstName.Focus();
     }
 
     public void ClearForm()
@@ -100,22 +100,25 @@ public partial class StudentForm : Form, IStudentFormView
 
     private void OnAddStudentClicked()
     {
-        var student = GetStudent();
+        StudentInput student = GetStudent();
         AddStudentClicked?.Invoke(this, student);
     }
 
-    private StudentInput GetStudent() => new()
+    private StudentInput GetStudent()
     {
-        FirstName = tbFirstName.Text,
-        LastName = tbLastName.Text,
-        BirthDate = dtpBirthDate.Value,
-        CollegeLevel = (RokStudiow)cbCollegeLevel.SelectedValue!,
-        City = tbCity.Text,
-        PostalCode = mtbPostalCode.Text,
-        Street = tbStreet.Text,
-        BuildingNumber = (int)nudBuildingNumber.Value,
-        FlatNumber = chkFlatNumberEnabled.Checked ? (int)nudFlatNumber.Value : null,
-    };
+        return new()
+        {
+            FirstName = tbFirstName.Text,
+            LastName = tbLastName.Text,
+            BirthDate = dtpBirthDate.Value,
+            CollegeLevel = (RokStudiow)cbCollegeLevel.SelectedValue!,
+            City = tbCity.Text,
+            PostalCode = mtbPostalCode.Text,
+            Street = tbStreet.Text,
+            BuildingNumber = (int)nudBuildingNumber.Value,
+            FlatNumber = chkFlatNumberEnabled.Checked ? (int)nudFlatNumber.Value : null,
+        };
+    }
 
     private void btnEditStudent_Click(object sender, EventArgs e)
     {
@@ -124,7 +127,7 @@ public partial class StudentForm : Form, IStudentFormView
 
     private void OnEditStudentClicked()
     {
-        var student = GetStudent();
+        StudentInput student = GetStudent();
         EditStudentClicked?.Invoke(this, student);
     }
 
@@ -181,7 +184,7 @@ public partial class StudentForm : Form, IStudentFormView
 
     private static bool IsWhiteSpaceClick(ListBox list, MouseEventArgs mouse)
     {
-        var selection = list.IndexFromPoint(mouse.Location);
+        int selection = list.IndexFromPoint(mouse.Location);
         return selection == ListBox.NoMatches;
     }
 

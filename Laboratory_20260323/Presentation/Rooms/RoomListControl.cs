@@ -55,6 +55,6 @@ public partial class RoomListControl : UserControl, IRoomListView
 
     public void ShowError(string message)
     {
-        MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        _ = MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 }

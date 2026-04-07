@@ -8,7 +8,7 @@ internal partial class StudentValidator
 
     public Dictionary<string, string> Validate(StudentInput student)
     {
-        var errors = new Dictionary<string, string?>
+        Dictionary<string, string?> errors = new()
         {
             [nameof(StudentInput.FirstName)] = ValidateFirstName(student.FirstName),
             [nameof(StudentInput.LastName)] = ValidateLastName(student.LastName),
@@ -23,45 +23,63 @@ internal partial class StudentValidator
             .ToDictionary(error => error.Key, error => error.Value);
     }
 
-    private static string? ValidateFirstName(string name) => name switch
+    private static string? ValidateFirstName(string name)
     {
-        _ when !ValidateLength(name, 1, 32) => "Imię musi zawierać od 1 do 32 znaków.",
-        _ when !ValidateOnlyLetters(name) => "Imię może zawierać wyłącznie litery.",
-        _ => null,
-    };
+        return name switch
+        {
+            _ when !ValidateLength(name, 1, 32) => "Imię musi zawierać od 1 do 32 znaków.",
+            _ when !ValidateOnlyLetters(name) => "Imię może zawierać wyłącznie litery.",
+            _ => null,
+        };
+    }
 
-    private static string? ValidateLastName(string name) => name switch
+    private static string? ValidateLastName(string name)
     {
-        _ when !ValidateLength(name, 1, 64) => "Nazwisko musi zawierać od 1 do 64 znaków.",
-        _ when !ValidateLettersAndSpaces(name) => "Nazwisko może zawierać wyłącznie litery oddzielone spacjami.",
-        _ => null,
-    };
+        return name switch
+        {
+            _ when !ValidateLength(name, 1, 64) => "Nazwisko musi zawierać od 1 do 64 znaków.",
+            _ when !ValidateLettersAndSpaces(name) => "Nazwisko może zawierać wyłącznie litery oddzielone spacjami.",
+            _ => null,
+        };
+    }
 
-    private static string? ValidateBirthDate(DateTime date) => date switch
+    private static string? ValidateBirthDate(DateTime date)
     {
-        _ when date > DateTime.Now => "Data urodzenia nie może leżeć w przyszłości.",
-        _ => null
-    };
+        return date switch
+        {
+            _ when date > DateTime.Now => "Data urodzenia nie może leżeć w przyszłości.",
+            _ => null
+        };
+    }
 
-    private static string? ValidateCity(string name) => name switch
+    private static string? ValidateCity(string name)
     {
-        _ when !ValidateLength(name, 1, 64) => "Nazwa miasta musi zawierać od 1 do 64 znaków.",
-        _ when !ValidateLettersAndSpaces(name) => "Nazwa miasta może zawierać wyłącznie litery oddzielone spacjami.",
-        _ => null,
-    };
+        return name switch
+        {
+            _ when !ValidateLength(name, 1, 64) => "Nazwa miasta musi zawierać od 1 do 64 znaków.",
+            _ when !ValidateLettersAndSpaces(name) => "Nazwa miasta może zawierać wyłącznie litery oddzielone spacjami.",
+            _ => null,
+        };
+    }
 
-    private static string? ValidatePostalCode(string code) => code switch
+    private static string? ValidatePostalCode(string code)
     {
-        _ when !PostalCodeRegex().IsMatch(code) => "Kod pocztowy musi składać się z pięciu cyfr.",
-        _ => null,
-    };
+        return code switch
+        {
+            _ when !PostalCodeRegex().IsMatch(code) => "Kod pocztowy musi składać się z pięciu cyfr.",
+            _ => null,
+        };
+    }
 
-    private static string? ValidateStreet(string name) => name switch
+    private static string? ValidateStreet(string name)
     {
-        _ when !ValidateLength(name, 1, 80) => "Nazwa ulicy musi zawierać od 1 do 80 znaków.",
-        _ when !ValidateLettersAndSpaces(name) => "Nazwa ulicy może zawierać wyłącznie litery oddzielone spacjami.",
-        _ => null,
-    };
+        return name switch
+        {
+            _ when !ValidateLength(name, 1, 80) => "Nazwa ulicy musi zawierać od 1 do 80 znaków.",
+            _ when !ValidateLettersAndSpaces(name) => "Nazwa ulicy może zawierać wyłącznie litery oddzielone spacjami.",
+            _ => null,
+        };
+    }
 
     private static bool ValidateLength(string value, int min, int max)
     {
