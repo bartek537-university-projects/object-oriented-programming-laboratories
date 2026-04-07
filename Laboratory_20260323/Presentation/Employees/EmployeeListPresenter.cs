@@ -1,4 +1,5 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Employees;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Employees.Interfaces;
@@ -44,8 +45,15 @@ public class EmployeeListPresenter : IEmployeeListPresenter
 
     private void OnRemoveEmployeeClicked(object? sender, Employee employee)
     {
-        _ = _deleteEmployeeHandler.Handle(new(employee.Id));
-        UpdateEmployeeList();
+        try
+        {
+            _ = _deleteEmployeeHandler.Handle(new(employee.Id));
+            UpdateEmployeeList();
+        }
+        catch (ConflictException ex)
+        {
+            _view.ShowError(ex.Message);
+        }
     }
 
     private void UpdateEmployeeList()

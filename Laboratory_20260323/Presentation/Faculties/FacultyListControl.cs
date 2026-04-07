@@ -50,4 +50,9 @@ public partial class FacultyListControl : UserControl, IFacultyListView
     {
         mlcFaculties.DataSource = faculties;
     }
+
+    public void ShowError(string message)
+    {
+        MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
 }

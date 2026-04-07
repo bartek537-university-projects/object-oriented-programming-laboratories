@@ -12,6 +12,7 @@ public interface IRoomRepository
     Room? GetById(Guid roomId);
 
     bool ExistsById(Guid roomId);
+    bool ExistsByFacultyId(Guid facultyId);
 
     void Update(Room room);
 

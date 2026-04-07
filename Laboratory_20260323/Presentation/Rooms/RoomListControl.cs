@@ -52,4 +52,9 @@ public partial class RoomListControl : UserControl, IRoomListView
     {
         mlcRooms.DataSource = rooms;
     }
+
+    public void ShowError(string message)
+    {
+        MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
 }

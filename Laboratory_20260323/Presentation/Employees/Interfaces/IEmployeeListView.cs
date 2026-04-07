@@ -9,4 +9,5 @@ public interface IEmployeeListView
     event EventHandler<Employee> RemoveEmployeeClicked;
 
     void SetEmployees(IReadOnlyList<Employee> employees);
+    void ShowError(string message);
 }

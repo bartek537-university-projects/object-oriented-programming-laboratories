@@ -9,4 +9,5 @@ public interface IRoomListView
     event EventHandler<Room> RemoveRoomClicked;
 
     void SetRooms(IReadOnlyList<Room> rooms);
+    void ShowError(string message);
 }

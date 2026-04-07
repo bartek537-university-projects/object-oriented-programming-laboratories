@@ -36,21 +36,21 @@ namespace Laboratory_20260323
             AddEmployee.Handler addEmployeeHandler = new(employeeValidator, employeeRepository);
             GetEmployees.Handler getEmployeesHandler = new(employeeRepository);
             UpdateEmployee.Handler updateEmployeeHandler = new(employeeValidator, employeeRepository);
-            DeleteEmployee.Handler deleteEmployeeHandler = new(employeeRepository);
+            DeleteEmployee.Handler deleteEmployeeHandler = new(employeeRepository, reservationRepository);
 
             // Faculties
             FacultyValidator facultyValidator = new();
             AddFaculty.Handler addFacultyHandler = new(facultyValidator, facultyRepository);
             GetFaculties.Handler getFacultiesHandler = new(facultyRepository);
             UpdateFaculty.Handler updateFacultyHandler = new(facultyValidator, facultyRepository);
-            DeleteFaculty.Handler deleteFacultyHandler = new(facultyRepository);
+            DeleteFaculty.Handler deleteFacultyHandler = new(facultyRepository, roomRepository);
 
             // Rooms
             RoomValidator roomValidator = new();
             AddRoom.Handler addRoomHandler = new(roomValidator, roomRepository, facultyRepository);
             GetRooms.Handler getRoomsHandler = new(roomRepository);
             UpdateRoom.Handler updateRoomHandler = new(roomValidator, roomRepository, facultyRepository);
-            DeleteRoom.Handler deleteRoomHandler = new(roomRepository);
+            DeleteRoom.Handler deleteRoomHandler = new(roomRepository, reservationRepository);
 
             // Reservations
             ReservationValidator reservationValidator = new();

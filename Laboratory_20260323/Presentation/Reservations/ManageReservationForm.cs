@@ -44,7 +44,7 @@ public partial class ManageReservationForm : Form, IManageReservationView
     private void OnTimeChanged()
     {
         TimeSpan duration = TimeEnd - TimeStart;
-        DisplayDuration(duration);
+        DisplayDuration(new TimeSpan(duration.Days, duration.Hours, duration.Minutes, duration.Seconds));
     }
 
     private void DisplayDuration(TimeSpan duration)

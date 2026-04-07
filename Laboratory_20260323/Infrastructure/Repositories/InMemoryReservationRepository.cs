@@ -54,6 +54,16 @@ public class InMemoryReservationRepository : IReservationRepository
         return _reservations.ContainsKey(reservationId);
     }
 
+    public bool ExistsByRoomId(Guid roomId)
+    {
+        return _reservations.Values.Any(reservation => reservation.Room.Id == roomId);
+    }
+
+    public bool ExistsByEmployeeId(Guid employeeId)
+    {
+        return _reservations.Values.Any(reservation => reservation.Employee.Id == employeeId);
+    }
+
     public void Update(Reservation reservation)
     {
         if (!_reservations.ContainsKey(reservation.Id))

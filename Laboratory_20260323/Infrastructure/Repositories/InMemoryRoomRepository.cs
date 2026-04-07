@@ -37,6 +37,11 @@ internal class InMemoryRoomRepository : IRoomRepository
         return _rooms.ContainsKey(roomId);
     }
 
+    public bool ExistsByFacultyId(Guid facultyId)
+    {
+        return _rooms.Values.Any(room => room.Faculty.Id == facultyId);
+    }
+
     public void Update(Room room)
     {
         if (!_rooms.ContainsKey(room.Id))

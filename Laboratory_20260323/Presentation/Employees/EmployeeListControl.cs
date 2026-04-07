@@ -50,4 +50,9 @@ public partial class EmployeeListControl : UserControl, IEmployeeListView
     {
         mlcEmployees.DataSource = employees;
     }
+
+    public void ShowError(string message)
+    {
+        MessageBox.Show(this, message, null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Faculties;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Faculties.Interfaces;
@@ -44,8 +45,15 @@ public class FacultyListPresenter : IFacultyListPresenter
 
     private void OnRemoveFacultyClicked(object? sender, Faculty faculty)
     {
-        _ = _deleteFacultyHandler.Handle(new(faculty.Id));
-        UpdateFacultyList();
+        try
+        {
+            _ = _deleteFacultyHandler.Handle(new(faculty.Id));
+            UpdateFacultyList();
+        }
+        catch (ConflictException ex)
+        {
+            _view.ShowError(ex.Message);
+        }
     }
 
     private void UpdateFacultyList()

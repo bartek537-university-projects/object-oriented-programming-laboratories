@@ -9,4 +9,5 @@ public interface IFacultyListView
     event EventHandler<Faculty> RemoveFacultyClicked;
 
     void SetFaculties(IReadOnlyList<Faculty> faculties);
+    void ShowError(string message);
 }

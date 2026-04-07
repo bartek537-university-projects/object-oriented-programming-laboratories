@@ -14,6 +14,8 @@ public interface IReservationRepository
     IEnumerable<Reservation> GetByEmployeeIdAndTime(Guid employeeId, DateTime start, DateTime end);
 
     bool ExistsById(Guid reservationId);
+    bool ExistsByRoomId(Guid employeeId);
+    bool ExistsByEmployeeId(Guid employeeId);
 
     void Update(Reservation reservation);
 

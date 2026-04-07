@@ -9,22 +9,36 @@ public class DeleteEmployee
 {
     public record Command(Guid EmployeeId) : IRequest<Response>;
 
-    public class Handler(IEmployeeRepository repository)
+    public class Handler(IEmployeeRepository employeeRepository, IReservationRepository reservationRepository)
         : IRequestHandler<Command, Response>
     {
         public Response Handle(Command command)
         {
             Employee employee = GetEmployeeOrThrow(command.EmployeeId);
-            // TODO: Add check for related data (reservations).
 
-            repository.DeleteById(employee.Id);
+            EnsureHasNoActiveDependencies(employee);
+
+            employeeRepository.DeleteById(employee.Id);
 
             return new Response();
         }
 
         private Employee GetEmployeeOrThrow(Guid employeeId)
         {
-            return repository.GetById(employeeId) ?? throw new NotFoundException("Employee does not exist.");
+            return employeeRepository.GetById(employeeId) ?? throw new NotFoundException("Employee does not exist.");
+        }
+
+        private void EnsureHasNoActiveDependencies(Employee employee)
+        {
+            if (CheckHasLinkedReservations(employee))
+            {
+                throw new ConflictException("Employee has linked reservations.");
+            }
+        }
+
+        private bool CheckHasLinkedReservations(Employee employee)
+        {
+            return reservationRepository.ExistsByEmployeeId(employee.Id);
         }
     }
 

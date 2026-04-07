@@ -1,4 +1,5 @@
 ﻿using Laboratory_20260323.Application.Abstractions.Interfaces;
+using Laboratory_20260323.Application.Common.Exceptions;
 using Laboratory_20260323.Application.Rooms;
 using Laboratory_20260323.Domain.Entities;
 using Laboratory_20260323.Presentation.Rooms.Interfaces;
@@ -44,8 +45,15 @@ public class RoomListPresenter : IRoomListPresenter
 
     private void OnRemoveRoomClicked(object? sender, Room room)
     {
-        _ = _deleteRoomHandler.Handle(new(room.Id));
-        UpdateRoomList();
+        try
+        {
+            _ = _deleteRoomHandler.Handle(new(room.Id));
+            UpdateRoomList();
+        }
+        catch (ConflictException ex)
+        {
+            _view.ShowError(ex.Message);
+        }
     }
 
     private void UpdateRoomList()

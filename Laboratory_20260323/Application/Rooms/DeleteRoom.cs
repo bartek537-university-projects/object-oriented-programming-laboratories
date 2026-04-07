@@ -9,22 +9,36 @@ public class DeleteRoom
 {
     public record Command(Guid RoomId) : IRequest<Response>;
 
-    public class Handler(IRoomRepository repository)
+    public class Handler(IRoomRepository roomRepository, IReservationRepository reservationRepository)
         : IRequestHandler<Command, Response>
     {
         public Response Handle(Command command)
         {
             Room room = GetRoomOrThrow(command.RoomId);
-            // TODO: Add check for related data (reservations).
 
-            repository.DeleteById(room.Id);
+            EnsureHasNoActiveDependencies(room);
+
+            roomRepository.DeleteById(room.Id);
 
             return new Response();
         }
 
         private Room GetRoomOrThrow(Guid roomId)
         {
-            return repository.GetById(roomId) ?? throw new NotFoundException("Room does not exist.");
+            return roomRepository.GetById(roomId) ?? throw new NotFoundException("Room does not exist.");
+        }
+
+        private void EnsureHasNoActiveDependencies(Room room)
+        {
+            if (CheckHasLinkedReservations(room))
+            {
+                throw new ConflictException("Room has linked reservations.");
+            }
+        }
+
+        private bool CheckHasLinkedReservations(Room room)
+        {
+            return reservationRepository.ExistsByRoomId(room.Id);
         }
     }
 
