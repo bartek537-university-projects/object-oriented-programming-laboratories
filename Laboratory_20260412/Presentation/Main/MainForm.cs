@@ -1,10 +1,15 @@
-namespace Laboratory_20260412.Presentation.Main
+using Laboratory_20260412.Presentation.Main.Contracts;
+using System.ComponentModel;
+
+namespace Laboratory_20260412.Presentation.Main;
+
+internal partial class MainForm : Form, IMainView
 {
-    public partial class MainForm : Form
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    internal IMainPresenter? Presenter { get; set; }
+
+    public MainForm()
     {
-        public MainForm()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
