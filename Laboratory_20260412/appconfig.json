@@ -1,2 +1,6 @@
 {
+  "OpenWeatherMap": {
+    "BaseUrl": "https://api.openweathermap.org",
+    "Token": ""
+  }
 }
