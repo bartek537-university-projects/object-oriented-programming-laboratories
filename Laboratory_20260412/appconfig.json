@@ -1,4 +1,7 @@
 {
+  "OpenDataSoft": {
+    "BaseUrl": "https://public.opendatasoft.com/api"
+  },
   "OpenWeatherMap": {
     "BaseUrl": "https://api.openweathermap.org",
     "Token": ""
