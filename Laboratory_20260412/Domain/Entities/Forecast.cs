@@ -1,7 +1,6 @@
 ﻿namespace Laboratory_20260412.Domain.Entities;
 
 public record Forecast(
-    Guid Id,
     WeatherConditions Weather,
     TemperatureConditions Temperature,
     AtmosphericConditions Atmospheric
