@@ -24,7 +24,7 @@ public class HttpOpenDataSoftGeonamesRepository : ICityRepository
         return GetCitiesByUriAsync(CreateGetCitiesByNameUri(name, limit), cancellationToken);
     }
 
-    public Task<IEnumerable<City>> GetCapitalsByContinentAsync(string continent, int limit, CancellationToken cancellationToken)
+    public Task<IEnumerable<City>> GetLargestCapitalsByContinentAsync(string continent, int limit, CancellationToken cancellationToken)
     {
         return GetCitiesByUriAsync(CreateGetCapitalsByContinentUri(continent, limit), cancellationToken);
     }
