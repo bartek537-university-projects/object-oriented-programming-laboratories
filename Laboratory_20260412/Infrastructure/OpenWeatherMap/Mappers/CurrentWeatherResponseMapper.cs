@@ -11,7 +11,9 @@ internal class CurrentWeatherResponseMapper : ICurrentWeatherResponseMapper
         Forecast forecast = new(
             Weather: ToWeatherConditions(response.Weather),
             Temperature: ToTemperatureConditions(response.Main),
-            Atmospheric: ToAtmosphericConditions(response.Main)
+            Atmospheric: ToAtmosphericConditions(response.Main),
+            Wind: ToWindConditions(response.Wind),
+            Rain: ToRainConditions(response.Rain)
         );
 
         return forecast;
@@ -51,6 +53,26 @@ internal class CurrentWeatherResponseMapper : ICurrentWeatherResponseMapper
         return new(
             Pressure: conditions.Pressure,
             Humidity: conditions.Humidity
+        );
+    }
+
+    private static WindConditions ToWindConditions(CurrentWeatherResponse.WindConditions conditions)
+    {
+        return new(
+            Speed: conditions.Speed,
+            Angle: conditions.Direction
+        );
+    }
+
+    private static RainConditions? ToRainConditions(CurrentWeatherResponse.RainConditions? conditions)
+    {
+        if (conditions is null)
+        {
+            return null;
+        }
+
+        return new(
+            NextHour: conditions.NextHour
         );
     }
 }

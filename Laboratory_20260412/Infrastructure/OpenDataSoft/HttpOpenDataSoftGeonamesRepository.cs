@@ -8,7 +8,7 @@ namespace Laboratory_20260412.Infrastructure.OpenDataSoft;
 
 public class HttpOpenDataSoftGeonamesRepository : ICityRepository
 {
-    private const string DatasetUri = $"/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000";
+    private const string DatasetUri = $"api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000";
 
     private readonly HttpClient _client;
     private readonly IGeonameResponseMapper _mapper;
@@ -42,7 +42,7 @@ public class HttpOpenDataSoftGeonamesRepository : ICityRepository
     private static string CreateGetCitiesByNameUri(string name, int limit = 20)
     {
         return $"{DatasetUri}/records" +
-            $"?select=name, cou_name_en, coordinates" +
+            $"?select=name, country_code, coordinates" +
             $"&where=name like \"*{name}*\"" +
             $"&order_by=population desc" +
             $"&limit={limit}";
@@ -51,7 +51,7 @@ public class HttpOpenDataSoftGeonamesRepository : ICityRepository
     private static string CreateGetCapitalsByContinentUri(string continent, int limit = 20)
     {
         return $"{DatasetUri}/records" +
-            $"?select=name, cou_name_en, coordinates" +
+            $"?select=name, country_code, coordinates" +
             $"&where=timezone like \"{continent}*\" and feature_code = \"PPLC\"" +
             $"&order_by=population desc" +
             $"&limit={limit}";

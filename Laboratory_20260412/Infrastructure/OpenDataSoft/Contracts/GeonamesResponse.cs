@@ -12,8 +12,8 @@ public class GeonamesResponse
         [JsonPropertyName("name")]
         public required string Name { get; set; }
 
-        [JsonPropertyName("cou_name_en")]
-        public required string Country { get; set; }
+        [JsonPropertyName("country_code")]
+        public required string CountryCode { get; set; }
 
         [JsonPropertyName("coordinates")]
         public required Coordinates Coordinates { get; set; }

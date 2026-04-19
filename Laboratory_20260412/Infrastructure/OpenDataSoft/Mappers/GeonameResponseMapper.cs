@@ -14,6 +14,7 @@ internal class GeonameResponseMapper : IGeonameResponseMapper
     {
         return new(
             Name: city.Name,
+            CountryCode: city.CountryCode,
             Location: ToGeolocation(city.Coordinates)
         );
     }

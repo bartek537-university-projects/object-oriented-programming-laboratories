@@ -32,6 +32,6 @@ public class HttpOpenWeatherMapForecastRepository : IForecastRepository
 
     private string GetCurrentWeatherUriFor(Geolocation location)
     {
-        return $"/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={_options.Token}";
+        return $"data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={_options.Token}&units=metric";
     }
 }

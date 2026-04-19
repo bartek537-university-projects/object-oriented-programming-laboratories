@@ -4,7 +4,7 @@ using Laboratory_20260412.Domain.Entities;
 
 namespace Laboratory_20260412.Application.Queries;
 
-public static class GetForecast
+public static class GetCurrentWeather
 {
     public sealed record Query(Geolocation Location) : IRequest<Response>;
 

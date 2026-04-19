@@ -3,7 +3,9 @@
 public record Forecast(
     WeatherConditions Weather,
     TemperatureConditions Temperature,
-    AtmosphericConditions Atmospheric
+    AtmosphericConditions Atmospheric,
+    WindConditions Wind,
+    RainConditions? Rain
 );
 
 public enum WeatherConditions
@@ -23,4 +25,12 @@ public record TemperatureConditions(
 
 public record AtmosphericConditions(
     double Pressure, double Humidity
+);
+
+public record WindConditions(
+    double Speed, double Angle
+);
+
+public record RainConditions(
+    double NextHour
 );

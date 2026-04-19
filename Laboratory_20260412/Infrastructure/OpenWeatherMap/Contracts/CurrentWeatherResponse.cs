@@ -10,6 +10,12 @@ internal class CurrentWeatherResponse
     [JsonPropertyName("main")]
     public required AtmosphericConditions Main { get; set; }
 
+    [JsonPropertyName("wind")]
+    public required WindConditions Wind { get; set; }
+
+    [JsonPropertyName("rain")]
+    public RainConditions? Rain { get; set; }
+
     [JsonPropertyName("dt")]
     public required long Timestamp { get; set; }
 
@@ -35,5 +41,20 @@ internal class CurrentWeatherResponse
 
         [JsonPropertyName("humidity")]
         public required double Humidity { get; set; }
+    }
+
+    internal class WindConditions
+    {
+        [JsonPropertyName("speed")]
+        public required double Speed { get; set; }
+
+        [JsonPropertyName("deg")]
+        public required double Direction { get; set; }
+    }
+
+    internal class RainConditions
+    {
+        [JsonPropertyName("1h")]
+        public required double NextHour { get; set; }
     }
 }
