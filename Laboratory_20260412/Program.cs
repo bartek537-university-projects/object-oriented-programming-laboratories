@@ -1,5 +1,8 @@
+using Laboratory_20260412.Application.Queries;
 using Laboratory_20260412.Infrastructure.OpenDataSoft;
+using Laboratory_20260412.Infrastructure.OpenDataSoft.Mappers;
 using Laboratory_20260412.Infrastructure.OpenWeatherMap;
+using Laboratory_20260412.Infrastructure.OpenWeatherMap.Mappers;
 using Laboratory_20260412.Presentation.Main;
 using Microsoft.Extensions.Configuration;
 
@@ -13,11 +16,24 @@ internal static class Program
         ApplicationConfiguration.Initialize();
 
         IConfiguration configuration = GetConfiguration("appconfig.json");
-        _ = configuration.GetOptions<OpenWeatherMapOptions>(OpenWeatherMapOptions.Section);
-        _ = configuration.GetOptions<OpenDataSoftOptions>(OpenDataSoftOptions.Section);
+        OpenDataSoftOptions openDataSoftOptions = configuration.GetOptions<OpenDataSoftOptions>(OpenDataSoftOptions.Section);
+        OpenWeatherMapOptions openWeatherMapOptions = configuration.GetOptions<OpenWeatherMapOptions>(OpenWeatherMapOptions.Section);
+
+        HttpClient openDataSoftHttpClient = new() { BaseAddress = openDataSoftOptions.BaseUrl };
+        HttpClient openWeatherMapHttpClient = new() { BaseAddress = openWeatherMapOptions.BaseUrl };
+
+        GeonameResponseMapper geonameResponseMapper = new();
+        CurrentWeatherResponseMapper currentWeatherResponseMapper = new();
+
+        HttpOpenDataSoftGeonamesRepository geonamesRepository = new(openDataSoftHttpClient, geonameResponseMapper);
+        HttpOpenWeatherMapForecastRepository forecastRepository = new(openWeatherMapHttpClient, openWeatherMapOptions, currentWeatherResponseMapper);
+
+        GetLargestEuropeanCapitals.Handler getLargestEuropeanCapitalsHandler = new(geonamesRepository);
+        var getCurrentWeatherHandler = new GetCurrentWeather.Handler(forecastRepository);
+        _ = new SearchCities.Handler(geonamesRepository);
 
         MainForm view = new();
-        MainPresenter presenter = new(view);
+        MainPresenter presenter = new(view, getLargestEuropeanCapitalsHandler, getCurrentWeatherHandler);
 
         view.Presenter = presenter;
 

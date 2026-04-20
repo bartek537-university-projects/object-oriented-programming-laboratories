@@ -1,6 +1,6 @@
 {
   "OpenDataSoft": {
-    "BaseUrl": "https://public.opendatasoft.com/api"
+    "BaseUrl": "https://public.opendatasoft.com"
   },
   "OpenWeatherMap": {
     "BaseUrl": "https://api.openweathermap.org",
