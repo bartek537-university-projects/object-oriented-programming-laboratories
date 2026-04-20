@@ -29,11 +29,11 @@ internal static class Program
         HttpOpenWeatherMapForecastRepository forecastRepository = new(openWeatherMapHttpClient, openWeatherMapOptions, currentWeatherResponseMapper);
 
         GetLargestEuropeanCapitals.Handler getLargestEuropeanCapitalsHandler = new(geonamesRepository);
-        var getCurrentWeatherHandler = new GetCurrentWeather.Handler(forecastRepository);
-        _ = new SearchCities.Handler(geonamesRepository);
+        GetCurrentWeather.Handler getCurrentWeatherHandler = new(forecastRepository);
+        SearchCities.Handler searchCitiesHandler = new(geonamesRepository);
 
         MainForm view = new();
-        MainPresenter presenter = new(view, getLargestEuropeanCapitalsHandler, getCurrentWeatherHandler);
+        MainPresenter presenter = new(view, getLargestEuropeanCapitalsHandler, searchCitiesHandler, getCurrentWeatherHandler);
 
         view.Presenter = presenter;
 

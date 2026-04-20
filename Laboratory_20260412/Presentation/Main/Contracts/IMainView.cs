@@ -4,12 +4,14 @@ namespace Laboratory_20260412.Presentation.Main.Contracts;
 
 internal interface IMainView
 {
-    string Search { get; set; }
-    City? City { get; set; }
-    IReadOnlyList<City> Suggestions { set; }
+    string SearchPhrase { get; set; }
+    City? SelectedCity { get; set; }
+    IReadOnlyList<City> SearchResults { set; }
 
     Forecast? Forecast { set; }
 
-    event Action Loaded;
-    event Action CitySelected;
+    event Action FormLoaded;
+
+    event Action<string> SearchPhraseChanged;
+    event Action<City> CitySelected;
 }

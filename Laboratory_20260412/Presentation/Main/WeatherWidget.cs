@@ -8,7 +8,7 @@ public partial class WeatherWidget : UserControl
     public string Label { get => lbTitle.Text; set => lbTitle.Text = value; }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-    public new string Text { get => lbValue.Text; set => lbValue.Text = value; }
+    public string Value { get => lbValue.Text; set => lbValue.Text = value; }
 
     public WeatherWidget()
     {

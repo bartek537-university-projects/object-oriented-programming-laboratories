@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             cbSearch = new ComboBox();
             lbCurrentTemperature = new Label();
             picWeatherIcon = new PictureBox();
@@ -38,6 +39,7 @@
             wPressure = new WeatherWidget();
             wHumidity = new WeatherWidget();
             llOpenWeatherMapAttribution = new LinkLabel();
+            timSearchDebounce = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)picWeatherIcon).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -51,6 +53,8 @@
             cbSearch.Size = new Size(260, 23);
             cbSearch.TabIndex = 1;
             cbSearch.SelectionChangeCommitted += cbSearch_SelectionChangeCommitted;
+            cbSearch.TextUpdate += cbSearch_TextUpdate;
+            cbSearch.Format += cbSearch_Format;
             // 
             // lbCurrentTemperature
             // 
@@ -58,9 +62,9 @@
             lbCurrentTemperature.Font = new Font("Segoe UI", 16F);
             lbCurrentTemperature.Location = new Point(80, 55);
             lbCurrentTemperature.Name = "lbCurrentTemperature";
-            lbCurrentTemperature.Size = new Size(59, 30);
+            lbCurrentTemperature.Size = new Size(47, 30);
             lbCurrentTemperature.TabIndex = 3;
-            lbCurrentTemperature.Text = "23°C";
+            lbCurrentTemperature.Text = "0°C";
             // 
             // picWeatherIcon
             // 
@@ -77,9 +81,9 @@
             lbTemperatureRange.AutoSize = true;
             lbTemperatureRange.Location = new Point(82, 85);
             lbTemperatureRange.Name = "lbTemperatureRange";
-            lbTemperatureRange.Size = new Size(78, 15);
+            lbTemperatureRange.Size = new Size(66, 15);
             lbTemperatureRange.TabIndex = 6;
-            lbTemperatureRange.Text = "↑ 24*C ↓ 21*C";
+            lbTemperatureRange.Text = "↑ 0*C ↓ 0*C";
             // 
             // tableLayoutPanel1
             // 
@@ -108,8 +112,9 @@
             wRain.Location = new Point(133, 52);
             wRain.Margin = new Padding(3, 3, 3, 8);
             wRain.Name = "wRain";
-            wRain.Size = new Size(44, 38);
+            wRain.Size = new Size(69, 38);
             wRain.TabIndex = 3;
+            wRain.Value = "0 mm/h";
             // 
             // wWind
             // 
@@ -119,8 +124,9 @@
             wWind.Location = new Point(3, 52);
             wWind.Margin = new Padding(3, 3, 3, 8);
             wWind.Name = "wWind";
-            wWind.Size = new Size(44, 38);
+            wWind.Size = new Size(79, 38);
             wWind.TabIndex = 2;
+            wWind.Value = "0 km/h N";
             // 
             // wPressure
             // 
@@ -132,6 +138,7 @@
             wPressure.Name = "wPressure";
             wPressure.Size = new Size(56, 38);
             wPressure.TabIndex = 1;
+            wPressure.Value = "0 hPa";
             // 
             // wHumidity
             // 
@@ -143,6 +150,7 @@
             wHumidity.Name = "wHumidity";
             wHumidity.Size = new Size(62, 38);
             wHumidity.TabIndex = 0;
+            wHumidity.Value = "0%";
             // 
             // llOpenWeatherMapAttribution
             // 
@@ -154,7 +162,11 @@
             llOpenWeatherMapAttribution.TabIndex = 8;
             llOpenWeatherMapAttribution.TabStop = true;
             llOpenWeatherMapAttribution.Text = "Weather data provided by OpenWeather";
-            llOpenWeatherMapAttribution.LinkClicked += llOpenWeatherMapAttribution_LinkClicked;
+            // 
+            // timSearchDebounce
+            // 
+            timSearchDebounce.Interval = 1000;
+            timSearchDebounce.Tick += timSearchDebounce_Tick;
             // 
             // MainForm
             // 
@@ -171,7 +183,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "MainForm";
-            Text = "Form1";
+            Text = "Weather";
             Load += MainForm_Load;
             ((System.ComponentModel.ISupportInitialize)picWeatherIcon).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
@@ -191,5 +203,6 @@
         private WeatherWidget wHumidity;
         private WeatherWidget wRain;
         private LinkLabel llOpenWeatherMapAttribution;
+        private System.Windows.Forms.Timer timSearchDebounce;
     }
 }

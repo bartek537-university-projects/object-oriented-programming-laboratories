@@ -9,50 +9,76 @@ internal class MainPresenter : IMainPresenter
 {
     private readonly IMainView _view;
     private readonly IRequestHandler<GetLargestEuropeanCapitals.Query, GetLargestEuropeanCapitals.Response> _getLargestEuropeanCapitalsHandler;
+    private readonly IRequestHandler<SearchCities.Query, SearchCities.Response> _searchCitiesHandler;
     private readonly IRequestHandler<GetCurrentWeather.Query, GetCurrentWeather.Response> _getCurrentWeatherHandler;
 
     public MainPresenter(IMainView view,
         IRequestHandler<GetLargestEuropeanCapitals.Query, GetLargestEuropeanCapitals.Response> getLargestEuropeanCapitalsHandler,
+        IRequestHandler<SearchCities.Query, SearchCities.Response> searchCitiesHandler,
         IRequestHandler<GetCurrentWeather.Query, GetCurrentWeather.Response> getCurrentWeatherHandler
     )
     {
         _view = view;
+
         _getLargestEuropeanCapitalsHandler = getLargestEuropeanCapitalsHandler;
+        _searchCitiesHandler = searchCitiesHandler;
         _getCurrentWeatherHandler = getCurrentWeatherHandler;
 
-        _view.Loaded += OnFormLoaded;
+        _view.FormLoaded += OnFormLoaded;
+        _view.SearchPhraseChanged += OnSearchPhraseChanged;
         _view.CitySelected += OnCitySelected;
+
+        _view.Forecast = null;
     }
 
     private async void OnFormLoaded()
     {
-        _view.Suggestions = await GetCapitals();
-        OnCitySelected();
+        if (await GetCapitalsAsync() is not { Count: > 0 } results)
+        {
+            return;
+        }
+
+        _view.SearchResults = results;
+        OnCitySelected(results[0]);
     }
 
-    private async Task<IReadOnlyList<City>> GetCapitals()
+    private async Task<IReadOnlyList<City>> GetCapitalsAsync()
     {
-        GetLargestEuropeanCapitals.Response capitals = await _getLargestEuropeanCapitalsHandler.HandleAsync(new());
-        return capitals.Cities;
+        return (await _getLargestEuropeanCapitalsHandler.HandleAsync(new())).Cities;
     }
 
-    private async void OnCitySelected()
+    private async void OnSearchPhraseChanged(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            _view.SearchResults = await GetCapitalsAsync();
+            return;
+        }
+
+        query = query.TrimStart();
+        _view.SearchResults = await SearchCitiesAsync(query);
+    }
+
+    private async Task<IReadOnlyList<City>> SearchCitiesAsync(string query)
+    {
+        return (await _searchCitiesHandler.HandleAsync(new(query))).Cities;
+    }
+
+    private async void OnCitySelected(City city)
     {
         _view.Forecast = null;
+        _view.SelectedCity = city;
 
-        if (_view.City is not { } city)
+        if (await GetCurrentWeatherAsync(city) is not { } forecast)
         {
             return;
         }
 
-        GetCurrentWeather.Response weather = await _getCurrentWeatherHandler.HandleAsync(new(city.Location));
-
-        if (weather?.Forecast is not { } forecast)
-        {
-            return;
-        }
-
-        _view.City = city;
         _view.Forecast = forecast;
+    }
+
+    private async Task<Forecast?> GetCurrentWeatherAsync(City city)
+    {
+        return (await _getCurrentWeatherHandler.HandleAsync(new(city.Location))).Forecast;
     }
 }

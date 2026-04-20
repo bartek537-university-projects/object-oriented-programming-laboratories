@@ -12,63 +12,106 @@ internal partial class MainForm : Form, IMainView
     internal IMainPresenter? Presenter { get; set; }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public string Search { get => cbSearch.Text; set => cbSearch.Text = value; }
+    public string SearchPhrase { get => cbSearch.Text; set => cbSearch.Text = value; }
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public IReadOnlyList<City> Suggestions { set => SetSuggestions(value); }
+    public City? SelectedCity { get => cbSearch.SelectedItem as City; set => UpdateSelectedCity(value); }
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public IReadOnlyList<City> SearchResults { set => UpdateSearchResults(value); }
 
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public City? City { get => cbSearch.SelectedItem as City; set => SetCity(value); }
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Forecast? Forecast { set => SetForecast(value); }
 
-    public event Action? Loaded;
-    public event Action? CitySelected;
+    public event Action? FormLoaded;
+
+    public event Action<string>? SearchPhraseChanged;
+    public event Action<City>? CitySelected;
 
     public MainForm()
     {
         InitializeComponent();
+    }
 
-        cbSearch.DisplayMember = nameof(City.Name);
-        llOpenWeatherMapAttribution.Links.Add(25, 11, "https://openweathermap.org/");
+    private void OnFormLoaded()
+    {
+        FormLoaded?.Invoke();
+    }
 
-        SetCity(null);
-        SetForecast(null);
+    private void UpdateSelectedCity(City? city)
+    {
+        timSearchDebounce.Stop();
+        cbSearch.SelectedItem = city;
+        Text = city is null ? "Weather" : $"{city.Name} Weather";
+    }
+
+    private void UpdateSearchResults(IReadOnlyList<City> cities)
+    {
+        string query = cbSearch.Text;
+        int selectionStart = cbSearch.SelectionStart;
+        int selectionLength = cbSearch.SelectionLength;
+
+        cbSearch.DataSource = null;
+        cbSearch.DataSource = cities;
+
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            cbSearch.Text = query;
+            cbSearch.DroppedDown |= true;
+        }
+
+        cbSearch.SelectionStart = selectionStart;
+        cbSearch.SelectionLength = selectionLength;
+    }
+
+    private void OnSearchPhraseChanged()
+    {
+        timSearchDebounce.Stop();
+        timSearchDebounce.Start();
+    }
+
+    private void OnSearchDebounceFired()
+    {
+        timSearchDebounce.Stop();
+
+        string query = cbSearch.Text;
+        SearchPhraseChanged?.Invoke(query);
+    }
+
+    private void OnSearchResultSelected()
+    {
+        if (cbSearch.SelectedItem is City city)
+        {
+            CitySelected?.Invoke(city);
+        }
     }
 
     private void MainForm_Load(object sender, EventArgs e)
     {
-        Loaded?.Invoke();
+        OnFormLoaded();
+    }
+    private void cbSearch_TextUpdate(object sender, EventArgs e)
+    {
+        OnSearchPhraseChanged();
+    }
+
+    private void timSearchDebounce_Tick(object sender, EventArgs e)
+    {
+        OnSearchDebounceFired();
     }
 
     private void cbSearch_SelectionChangeCommitted(object sender, EventArgs e)
     {
-        CitySelected?.Invoke();
+        OnSearchResultSelected();
     }
 
-    private void SetSuggestions(IReadOnlyList<City> cities)
+    private void cbSearch_Format(object sender, ListControlConvertEventArgs e)
     {
-        cbSearch.DataSource = null;
-        cbSearch.DataSource = Sorted(cities, (a, b) => a.Name.CompareTo(b.Name));
-    }
-
-    private static List<T> Sorted<T>(IReadOnlyList<T> values, Comparison<T> comparison)
-    {
-        var list = values.ToList();
-        list.Sort(comparison);
-        return list;
-    }
-
-    private void SetCity(City? city)
-    {
-        Text = "Weather";
-
-        if (city is not null)
+        if (e.ListItem is not City city)
         {
-            var location = $"{city?.Name}, {city?.CountryCode}";
-            Text = $"{location} Weather";
+            return;
         }
 
-        cbSearch.SelectedItem = city;
+        var location = city.Location;
+        e.Value = $"{city.Name}, {city.CountryCode} ({location.Latitude}, {location.Longitude})";
     }
 
     private void SetForecast(Forecast? forecast)
@@ -111,7 +154,7 @@ internal partial class MainForm : Form, IMainView
         }
 
         lbCurrentTemperature.Text = FormatTemperature(temperature.Current);
-        lbTemperatureRange.Text = $"↑ {FormatTemperature(temperature.Minimum)} ↓ {FormatTemperature(temperature.Minimum)}";
+        lbTemperatureRange.Text = $"↑ {FormatTemperature(temperature.Minimum)} ↓ {FormatTemperature(temperature.Maximum)}";
     }
 
     private static string FormatTemperature(double temperature)
@@ -167,16 +210,7 @@ internal partial class MainForm : Form, IMainView
         wRain.Text = $"{rain.NextHour} mm/h";
     }
 
-    private void llOpenWeatherMapAttribution_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-    {
-        if (e.Link?.LinkData is string link)
-        {
-            OpenLink(link);
-        }
-
-    }
-
-    private void OpenLink(string link)
+    private static void OpenLink(string link)
     {
         var process = new ProcessStartInfo
         {
@@ -185,5 +219,13 @@ internal partial class MainForm : Form, IMainView
         };
 
         Process.Start(process);
+    }
+
+    private void llOpenWeatherMapAttribution_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        if (e.Link?.LinkData is string link)
+        {
+            OpenLink(link);
+        }
     }
 }
