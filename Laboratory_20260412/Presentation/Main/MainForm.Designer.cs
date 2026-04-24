@@ -114,7 +114,7 @@
             wRain.Name = "wRain";
             wRain.Size = new Size(69, 38);
             wRain.TabIndex = 3;
-            wRain.Value = "0 mm/h";
+            wRain.Text = "0 mm/h";
             // 
             // wWind
             // 
@@ -126,7 +126,7 @@
             wWind.Name = "wWind";
             wWind.Size = new Size(79, 38);
             wWind.TabIndex = 2;
-            wWind.Value = "0 km/h N";
+            wWind.Text = "0 km/h N";
             // 
             // wPressure
             // 
@@ -138,7 +138,7 @@
             wPressure.Name = "wPressure";
             wPressure.Size = new Size(56, 38);
             wPressure.TabIndex = 1;
-            wPressure.Value = "0 hPa";
+            wPressure.Text = "0 hPa";
             // 
             // wHumidity
             // 
@@ -150,7 +150,7 @@
             wHumidity.Name = "wHumidity";
             wHumidity.Size = new Size(62, 38);
             wHumidity.TabIndex = 0;
-            wHumidity.Value = "0%";
+            wHumidity.Text = "0%";
             // 
             // llOpenWeatherMapAttribution
             // 

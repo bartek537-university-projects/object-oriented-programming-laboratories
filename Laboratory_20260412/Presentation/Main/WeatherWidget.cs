@@ -7,8 +7,10 @@ public partial class WeatherWidget : UserControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public string Label { get => lbTitle.Text; set => lbTitle.Text = value; }
 
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-    public string Value { get => lbValue.Text; set => lbValue.Text = value; }
+    public override string Text { get => lbValue.Text; set => lbValue.Text = value; }
 
     public WeatherWidget()
     {
