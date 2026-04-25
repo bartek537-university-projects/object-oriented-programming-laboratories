@@ -52,10 +52,12 @@ internal partial class MainForm : Form, IMainView
         cbSearch.DataSource = null;
         cbSearch.DataSource = cities;
 
+        // Prevent overwriting user input and collapsing suggestion list
+        // when updating cbSearch.DataSource.
         if (!string.IsNullOrWhiteSpace(query))
         {
             cbSearch.Text = query;
-            cbSearch.DroppedDown |= true;
+            cbSearch.DroppedDown = true;
         }
 
         cbSearch.SelectionStart = selectionStart;
@@ -110,7 +112,7 @@ internal partial class MainForm : Form, IMainView
             return;
         }
 
-        var location = city.Location;
+        Geolocation location = city.Location;
         e.Value = $"{city.Name}, {city.CountryCode} ({location.Latitude}, {location.Longitude})";
     }
 
@@ -183,21 +185,24 @@ internal partial class MainForm : Form, IMainView
             return;
         }
 
-        var direction = GetWindDirectionForAngle(wind.Angle);
+        string direction = GetWindDirectionForAngle(wind.Angle);
         wWind.Text = $"{wind.Speed} km/h {direction}";
     }
 
-    private static string GetWindDirectionForAngle(double angle) => ((angle + 45.0 / 2) % 360) switch
+    private static string GetWindDirectionForAngle(double angle)
     {
-        < 45 => "N",
-        < 90 => "NE",
-        < 135 => "E",
-        < 180 => "SE",
-        < 225 => "S",
-        < 270 => "SW",
-        < 315 => "W",
-        _ => "NW",
-    };
+        return ((angle + (45.0 / 2)) % 360) switch
+        {
+            < 45 => "N",
+            < 90 => "NE",
+            < 135 => "E",
+            < 180 => "SE",
+            < 225 => "S",
+            < 270 => "SW",
+            < 315 => "W",
+            _ => "NW",
+        };
+    }
 
     private void SetRain(RainConditions? rain)
     {
@@ -212,13 +217,13 @@ internal partial class MainForm : Form, IMainView
 
     private static void OpenLink(string link)
     {
-        var process = new ProcessStartInfo
+        ProcessStartInfo process = new()
         {
             FileName = link,
             UseShellExecute = true
         };
 
-        Process.Start(process);
+        _ = Process.Start(process);
     }
 
     private void llOpenWeatherMapAttribution_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
