@@ -9,19 +9,19 @@ internal class MainPresenter : IMainPresenter
 {
     private readonly IMainView _view;
     private readonly IRequestHandler<GetLargestEuropeanCapitals.Query, GetLargestEuropeanCapitals.Response> _getLargestEuropeanCapitalsHandler;
-    private readonly IRequestHandler<SearchCities.Query, SearchCities.Response> _searchCitiesHandler;
+    private readonly IRequestHandler<GetCitiesByName.Query, GetCitiesByName.Response> _getCitiesByNameHandler;
     private readonly IRequestHandler<GetCurrentWeather.Query, GetCurrentWeather.Response> _getCurrentWeatherHandler;
 
     public MainPresenter(IMainView view,
         IRequestHandler<GetLargestEuropeanCapitals.Query, GetLargestEuropeanCapitals.Response> getLargestEuropeanCapitalsHandler,
-        IRequestHandler<SearchCities.Query, SearchCities.Response> searchCitiesHandler,
+        IRequestHandler<GetCitiesByName.Query, GetCitiesByName.Response> getCitiesByNameHandler,
         IRequestHandler<GetCurrentWeather.Query, GetCurrentWeather.Response> getCurrentWeatherHandler
     )
     {
         _view = view;
 
         _getLargestEuropeanCapitalsHandler = getLargestEuropeanCapitalsHandler;
-        _searchCitiesHandler = searchCitiesHandler;
+        _getCitiesByNameHandler = getCitiesByNameHandler;
         _getCurrentWeatherHandler = getCurrentWeatherHandler;
 
         _view.FormLoaded += OnFormLoaded;
@@ -61,7 +61,7 @@ internal class MainPresenter : IMainPresenter
 
     private async Task<IReadOnlyList<City>> SearchCitiesAsync(string query)
     {
-        return (await _searchCitiesHandler.HandleAsync(new(query))).Cities;
+        return (await _getCitiesByNameHandler.HandleAsync(new(query))).Cities;
     }
 
     private async void OnCitySelected(City city)

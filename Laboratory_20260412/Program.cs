@@ -30,10 +30,10 @@ internal static class Program
 
         GetLargestEuropeanCapitals.Handler getLargestEuropeanCapitalsHandler = new(geonamesRepository);
         GetCurrentWeather.Handler getCurrentWeatherHandler = new(forecastRepository);
-        SearchCities.Handler searchCitiesHandler = new(geonamesRepository);
+        GetCitiesByName.Handler getCitiesByNameHandler = new(geonamesRepository);
 
         MainForm view = new();
-        MainPresenter presenter = new(view, getLargestEuropeanCapitalsHandler, searchCitiesHandler, getCurrentWeatherHandler);
+        MainPresenter presenter = new(view, getLargestEuropeanCapitalsHandler, getCitiesByNameHandler, getCurrentWeatherHandler);
 
         view.Presenter = presenter;
 

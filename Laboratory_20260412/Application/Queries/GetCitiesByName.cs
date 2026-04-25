@@ -4,7 +4,7 @@ using Laboratory_20260412.Domain.Entities;
 
 namespace Laboratory_20260412.Application.Queries;
 
-public static class SearchCities
+public static class GetCitiesByName
 {
     public sealed record Query(string Name) : IRequest<Response>;
 
