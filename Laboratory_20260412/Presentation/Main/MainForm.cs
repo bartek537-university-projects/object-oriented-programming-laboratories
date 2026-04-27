@@ -56,8 +56,8 @@ internal partial class MainForm : Form, IMainView
         // when updating cbSearch.DataSource.
         if (!string.IsNullOrWhiteSpace(query))
         {
-            cbSearch.Text = query;
             cbSearch.DroppedDown = true;
+            cbSearch.Text = query;
         }
 
         cbSearch.SelectionStart = selectionStart;
